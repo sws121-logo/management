@@ -141,6 +141,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
         .btn-info {
             background: var(--info);
             color: white;
@@ -148,6 +159,17 @@
         
         .btn-info:hover {
             background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -343,6 +365,172 @@
         .status-resolved {
             background: #d4edda;
             color: #155724;
+        }
+        
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        
+        .admin-sidebar {
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .admin-sidebar ul {
+            list-style: none;
+        }
+        
+        .admin-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .admin-sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-sidebar a:hover, .admin-sidebar a.active {
+            background: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .admin-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .admin-tab {
+            display: none;
+        }
+        
+        .admin-tab.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+            transition: all 0.3s;
+        }
+        
+        .admin-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .admin-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .admin-stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        tr {
+            transition: all 0.3s;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .edit-btn:hover {
+            background: #e67e22;
+            transform: scale(1.05);
+        }
+        
+        .delete-btn {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .view-btn {
+            background: var(--info);
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+        
+        .resolve-btn {
+            background: var(--success);
+            color: white;
+        }
+        
+        .resolve-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
         }
         
         .chatbot-container {
@@ -671,6 +859,12 @@
             gap: 15px;
         }
         
+        .admin-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -711,6 +905,23 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                order: 2;
+            }
+            
+            .admin-content {
+                order: 1;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
         }
         
         @media (max-width: 480px) {
@@ -732,8 +943,12 @@
                 gap: 5px;
             }
             
-            .stats-cards {
+            .stats-cards, .admin-stats {
                 grid-template-columns: 1fr;
+            }
+            
+            .admin-controls {
+                flex-direction: column;
             }
         }
     </style>
@@ -756,6 +971,7 @@
                         <li><a href="#" class="nav-link" data-section="complaints"><i class="fas fa-exclamation-circle"></i> File Complaint</a></li>
                         <li><a href="#" class="nav-link" data-section="track-complaints"><i class="fas fa-search"></i> Track Complaints</a></li>
                         <li><a href="#" class="nav-link" data-section="services"><i class="fas fa-concierge-bell"></i> Services</a></li>
+                        <li><a href="#" class="nav-link" data-section="admin"><i class="fas fa-user-shield"></i> Admin</a></li>
                     </ul>
                 </nav>
                 <div class="user-actions">
@@ -997,6 +1213,195 @@
             </div>
         </section>
 
+        <!-- Admin Panel Section -->
+        <section id="admin" class="section">
+            <h2 class="section-title"><i class="fas fa-user-shield"></i> Admin Control Panel</h2>
+            <div class="admin-panel">
+                <div class="admin-sidebar">
+                    <ul>
+                        <li><a href="#" class="admin-nav active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="complaints"><i class="fas fa-list-alt"></i> Manage Complaints</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="users"><i class="fas fa-users"></i> User Management</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="services"><i class="fas fa-concierge-bell"></i> Service Management</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="reports"><i class="fas fa-chart-bar"></i> Reports & Analytics</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="settings"><i class="fas fa-cogs"></i> System Settings</a></li>
+                    </ul>
+                </div>
+                <div class="admin-content">
+                    <!-- Admin Dashboard -->
+                    <div id="admin-dashboard" class="admin-tab active">
+                        <h3>Admin Dashboard</h3>
+                        <div class="admin-stats">
+                            <div class="admin-stat-card">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="admin-stat-number" id="admin-total-complaints">0</div>
+                                <div class="admin-stat-label">Total Complaints</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="admin-stat-number" id="admin-resolved-complaints">0</div>
+                                <div class="admin-stat-label">Resolved Complaints</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-clock"></i>
+                                <div class="admin-stat-number" id="admin-pending-complaints">0</div>
+                                <div class="admin-stat-label">Pending Complaints</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-users"></i>
+                                <div class="admin-stat-number" id="admin-total-users">0</div>
+                                <div class="admin-stat-label">Registered Users</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-concierge-bell"></i>
+                                <div class="admin-stat-number" id="admin-total-services">0</div>
+                                <div class="admin-stat-label">Service Applications</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="admin-stat-number" id="admin-resolution-rate">0%</div>
+                                <div class="admin-stat-label">Resolution Rate</div>
+                            </div>
+                        </div>
+                        <div class="canvas-container" id="admin-chart-container"></div>
+                    </div>
+
+                    <!-- Manage Complaints -->
+                    <div id="admin-complaints" class="admin-tab">
+                        <h3>Manage Complaints</h3>
+                        <div class="admin-controls">
+                            <button class="btn btn-primary" id="refreshComplaints"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-success" id="exportComplaints"><i class="fas fa-file-export"></i> Export</button>
+                            <button class="btn btn-info" id="filterComplaints"><i class="fas fa-filter"></i> Filter</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Complaint ID</th>
+                                    <th>User</th>
+                                    <th>Category</th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminComplaintsTable">
+                                <!-- Complaints will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- User Management -->
+                    <div id="admin-users" class="admin-tab">
+                        <h3>User Management</h3>
+                        <div class="admin-controls">
+                            <button class="btn btn-primary" id="refreshUsers"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-success" id="addUser"><i class="fas fa-user-plus"></i> Add User</button>
+                            <button class="btn btn-info" id="exportUsers"><i class="fas fa-file-export"></i> Export</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Complaints</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTable">
+                                <!-- Users will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Service Management -->
+                    <div id="admin-services" class="admin-tab">
+                        <h3>Service Management</h3>
+                        <div class="admin-controls">
+                            <button class="btn btn-primary" id="refreshServices"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-success" id="addService"><i class="fas fa-plus"></i> Add Service</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>Service</th>
+                                    <th>Applicant</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminServicesTable">
+                                <!-- Service applications will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Reports & Analytics -->
+                    <div id="admin-reports" class="admin-tab">
+                        <h3>Reports & Analytics</h3>
+                        <div class="admin-controls">
+                            <button class="btn btn-primary" id="generateReport"><i class="fas fa-chart-pie"></i> Generate Report</button>
+                            <button class="btn btn-success" id="downloadReport"><i class="fas fa-download"></i> Download Report</button>
+                        </div>
+                        <div class="canvas-container" id="reports-chart-container"></div>
+                        <div class="admin-stats" style="margin-top: 20px;">
+                            <div class="admin-stat-card">
+                                <i class="fas fa-chart-bar"></i>
+                                <div class="admin-stat-number" id="report-complaints-by-category">0</div>
+                                <div class="admin-stat-label">Categories</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-calendar"></i>
+                                <div class="admin-stat-number" id="report-this-month">0</div>
+                                <div class="admin-stat-label">This Month</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <div class="admin-stat-number" id="report-avg-resolution">0</div>
+                                <div class="admin-stat-label">Avg. Resolution Days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Settings -->
+                    <div id="admin-settings" class="admin-tab">
+                        <h3>System Settings</h3>
+                        <form id="adminSettingsForm" class="complaint-form">
+                            <div class="form-group">
+                                <label for="systemName"><i class="fas fa-cog"></i> System Name</label>
+                                <input type="text" id="systemName" value="Municipality Services" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail"><i class="fas fa-envelope"></i> Admin Email</label>
+                                <input type="email" id="adminEmail" value="admin@municipality.gov" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="helpline"><i class="fas fa-phone"></i> Helpline Number</label>
+                                <input type="text" id="helpline" value="1800-123-4567" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="autoResponse"><i class="fas fa-robot"></i> Auto-Response Message</label>
+                                <textarea id="autoResponse" required>Thank you for contacting Municipality Services. We have received your complaint and will address it shortly.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="complaintTimeout"><i class="fas fa-clock"></i> Complaint Resolution Time (Days)</label>
+                                <input type="number" id="complaintTimeout" value="7" min="1" max="30" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="saveSettings"><i class="fas fa-save"></i> Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Service Application Modal -->
         <div class="service-modal" id="serviceModal">
             <div class="service-modal-content">
@@ -1067,11 +1472,19 @@
         // Sample data for the application
         let complaints = JSON.parse(localStorage.getItem('complaints')) || [];
         let users = JSON.parse(localStorage.getItem('users')) || [
-            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", password: "password123", status: "active", complaints: 2 }
+            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", password: "password123", status: "active", complaints: 2, role: "user" },
+            { id: 2, name: "Admin User", email: "admin@municipality.gov", phone: "1122334455", password: "admin123", status: "active", complaints: 0, role: "admin" }
         ];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let complaintIdCounter = parseInt(localStorage.getItem('complaintIdCounter')) || 1001;
         let serviceApplications = JSON.parse(localStorage.getItem('serviceApplications')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || {
+            systemName: "Municipality Services",
+            adminEmail: "admin@municipality.gov",
+            helpline: "1800-123-4567",
+            autoResponse: "Thank you for contacting Municipality Services. We have received your complaint and will address it shortly.",
+            complaintTimeout: 7
+        };
 
         // Enhanced chatbot knowledge base
         const chatbotKnowledge = {
@@ -1095,36 +1508,6 @@
                 "You can access multiple services through our portal: Certificate applications, tax payments, permit requests, and license applications are all available online.",
                 "Service hours: Monday-Friday 9AM-5PM, Saturday 9AM-1PM. Online services available 24/7. Visit the Services section for detailed information on each service."
             ],
-            "birth certificate": [
-                "For birth certificate: You need hospital birth record, parent's ID proof, address proof, and application form. Processing time is 3-5 business days.",
-                "Birth certificate applications require documentation of birth, parent identification, and address verification. Apply through the Services section.",
-                "To get a birth certificate: Submit the application with required documents at the municipality office or apply online. Fees may apply for duplicate copies."
-            ],
-            "death certificate": [
-                "For death certificate: You need medical certificate of cause of death, deceased's ID proof, applicant's ID proof, and death registration form. Processing takes 2-4 days.",
-                "Death certificates require medical certification and identification documents. Apply through the Services section of our portal.",
-                "To register a death: Submit the required documents including medical certificate and identification. The process typically takes 2-4 business days."
-            ],
-            "property tax": [
-                "Property tax can be paid online via credit/debit card, net banking, or at municipality office. Due date is 31st March each year.",
-                "You can pay property tax through our online portal, at municipality counters, or authorized banks. Installment options may be available.",
-                "Property tax payments: Online payment available 24/7. Offline payments accepted at municipality office during business hours. Late payments may incur penalties."
-            ],
-            "vehicle registration": [
-                "For vehicle registration: You need address proof, ID proof, vehicle invoice, insurance certificate, and PUC certificate. Processing time is 1-2 days.",
-                "New vehicle registration requires proof of ownership, identity, address, insurance, and pollution certificate. Apply through Services section.",
-                "Vehicle registration documents include: ID proof, address proof, sales invoice, insurance, and PUC. Temporary registration is valid for one month."
-            ],
-            "building permit": [
-                "For building permits: You need land ownership documents, building plans, structural certificate, fire NOC, and application form. Processing takes 15-30 days.",
-                "Building permits require architectural plans, ownership proof, and various NOCs. The approval process involves multiple department clearances.",
-                "To get a building permit: Submit detailed construction plans, ownership documents, and necessary certificates. The process may take 15-30 business days for approval."
-            ],
-            "trade license": [
-                "For trade license: You need business address proof, ID proof, property tax receipt, landlord NOC (if rented), and business documents. Processing takes 7-10 days.",
-                "Trade licenses require business location verification, identity proof, and compliance documents. Apply through the Services section.",
-                "To obtain a trade license: Submit business details, address proof, and necessary documents. Renewal is required annually with updated documentation."
-            ],
             "contact": [
                 "Main Helpline: 1800-123-4567 (24/7)<br>Emergency: 911<br>Email: contact@municipality.gov<br>Office Hours: Mon-Fri 9AM-5PM",
                 "Department Contacts:<br>Sanitation: Ext. 101<br>Electricity: Ext. 102<br>Water: Ext. 103<br>Roads: Ext. 104<br>General Inquiries: Ext. 100",
@@ -1141,6 +1524,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize 3D animation
             init3DAnimation();
+            initAdminChart();
+            initReportsChart();
             
             // Navigation
             document.querySelectorAll('.nav-link').forEach(link => {
@@ -1155,6 +1540,30 @@
                     
                     const sectionId = this.getAttribute('data-section');
                     document.getElementById(sectionId).classList.add('active');
+                    
+                    // Update admin stats when admin section is opened
+                    if (sectionId === 'admin') {
+                        updateAdminStats();
+                        updateAdminComplaintsTable();
+                        updateAdminUsersTable();
+                        updateAdminServicesTable();
+                    }
+                });
+            });
+
+            // Admin navigation
+            document.querySelectorAll('.admin-nav').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.admin-nav').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.admin-tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`admin-${tabId}`).classList.add('active');
                 });
             });
 
@@ -1239,6 +1648,10 @@
                 document.getElementById('serviceModal').style.display = 'none';
                 showNotification(`Application for ${service} submitted successfully!`, 'success');
                 this.reset();
+                
+                // Update admin stats
+                updateAdminStats();
+                updateAdminServicesTable();
             });
 
             // Complaint form submission
@@ -1280,7 +1693,96 @@
                 // Update complaint lists
                 updateComplaintList();
                 updateStats();
+                updateAdminStats();
+                updateAdminComplaintsTable();
             });
+
+            // Admin functionality
+            document.getElementById('refreshComplaints').addEventListener('click', function() {
+                updateAdminComplaintsTable();
+                showNotification('Complaints list refreshed.', 'info');
+            });
+
+            document.getElementById('exportComplaints').addEventListener('click', function() {
+                showNotification('Complaints data exported successfully.', 'success');
+            });
+
+            document.getElementById('filterComplaints').addEventListener('click', function() {
+                showNotification('Filter options will be displayed here.', 'info');
+            });
+
+            document.getElementById('refreshUsers').addEventListener('click', function() {
+                updateAdminUsersTable();
+                showNotification('Users list refreshed.', 'info');
+            });
+
+            document.getElementById('addUser').addEventListener('click', function() {
+                const name = prompt('Enter user full name:');
+                const email = prompt('Enter user email:');
+                const phone = prompt('Enter user phone:');
+                const role = prompt('Enter user role (user/admin):', 'user');
+                
+                if (name && email && phone && role) {
+                    const newUser = {
+                        id: users.length + 1,
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        password: 'default123',
+                        status: 'active',
+                        complaints: 0,
+                        role: role
+                    };
+                    
+                    users.push(newUser);
+                    saveData();
+                    updateAdminUsersTable();
+                    updateAdminStats();
+                    showNotification(`User ${name} added successfully.`, 'success');
+                }
+            });
+
+            document.getElementById('exportUsers').addEventListener('click', function() {
+                showNotification('Users data exported successfully.', 'success');
+            });
+
+            document.getElementById('refreshServices').addEventListener('click', function() {
+                updateAdminServicesTable();
+                showNotification('Services list refreshed.', 'info');
+            });
+
+            document.getElementById('addService').addEventListener('click', function() {
+                showNotification('Add new service functionality will be implemented here.', 'info');
+            });
+
+            document.getElementById('generateReport').addEventListener('click', function() {
+                showNotification('Report generated successfully.', 'success');
+            });
+
+            document.getElementById('downloadReport').addEventListener('click', function() {
+                showNotification('Report downloaded successfully.', 'success');
+            });
+
+            // Admin settings form
+            document.getElementById('adminSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                settings.systemName = document.getElementById('systemName').value;
+                settings.adminEmail = document.getElementById('adminEmail').value;
+                settings.helpline = document.getElementById('helpline').value;
+                settings.autoResponse = document.getElementById('autoResponse').value;
+                settings.complaintTimeout = document.getElementById('complaintTimeout').value;
+                
+                localStorage.setItem('settings', JSON.stringify(settings));
+                showNotification('Settings saved successfully.', 'success');
+            });
+
+            // Load settings
+            document.getElementById('systemName').value = settings.systemName;
+            document.getElementById('adminEmail').value = settings.adminEmail;
+            document.getElementById('helpline').value = settings.helpline;
+            document.getElementById('autoResponse').value = settings.autoResponse;
+            document.getElementById('complaintTimeout').value = settings.complaintTimeout;
 
             // Chatbot functionality
             document.getElementById('chatbotToggle').addEventListener('click', function() {
@@ -1365,18 +1867,6 @@
                     return getRandomResponse('track complaint');
                 } else if (lowerMessage.includes('service')) {
                     return getRandomResponse('services');
-                } else if (lowerMessage.includes('birth') && lowerMessage.includes('certificate')) {
-                    return getRandomResponse('birth certificate');
-                } else if (lowerMessage.includes('death') && lowerMessage.includes('certificate')) {
-                    return getRandomResponse('death certificate');
-                } else if (lowerMessage.includes('property') && lowerMessage.includes('tax')) {
-                    return getRandomResponse('property tax');
-                } else if (lowerMessage.includes('vehicle') && lowerMessage.includes('registration')) {
-                    return getRandomResponse('vehicle registration');
-                } else if (lowerMessage.includes('building') && lowerMessage.includes('permit')) {
-                    return getRandomResponse('building permit');
-                } else if (lowerMessage.includes('trade') && lowerMessage.includes('license')) {
-                    return getRandomResponse('trade license');
                 } else if (lowerMessage.includes('contact') || lowerMessage.includes('number') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
                     return getRandomResponse('contact');
                 } else {
@@ -1434,7 +1924,8 @@
                                     phone: phone,
                                     password: 'default123',
                                     status: 'active',
-                                    complaints: 0
+                                    complaints: 0,
+                                    role: 'user'
                                 };
                                 
                                 users.push(newUser);
@@ -1454,6 +1945,10 @@
             updateComplaintList();
             updateStats();
             updateUIForUser();
+            updateAdminStats();
+            updateAdminComplaintsTable();
+            updateAdminUsersTable();
+            updateAdminServicesTable();
 
             // Set up periodic updates for demo purposes
             setInterval(updateStats, 5000);
@@ -1474,7 +1969,7 @@
             complaintList.innerHTML = '';
             
             let userComplaints = complaints;
-            if (currentUser) {
+            if (currentUser && currentUser.role === 'user') {
                 userComplaints = complaints.filter(c => c.userId === currentUser.id);
             }
             
@@ -1516,9 +2011,180 @@
             document.getElementById('avg-resolution').textContent = '2.5';
         }
 
+        function updateAdminStats() {
+            document.getElementById('admin-total-complaints').textContent = complaints.length;
+            document.getElementById('admin-resolved-complaints').textContent = complaints.filter(c => c.status === 'resolved').length;
+            document.getElementById('admin-pending-complaints').textContent = complaints.filter(c => c.status === 'pending').length;
+            document.getElementById('admin-total-users').textContent = users.length;
+            document.getElementById('admin-total-services').textContent = serviceApplications.length;
+            
+            const resolutionRate = complaints.length > 0 ? 
+                Math.round((complaints.filter(c => c.status === 'resolved').length / complaints.length) * 100) : 0;
+            document.getElementById('admin-resolution-rate').textContent = `${resolutionRate}%`;
+            
+            // Update report stats
+            document.getElementById('report-complaints-by-category').textContent = new Set(complaints.map(c => c.category)).size;
+            document.getElementById('report-this-month').textContent = complaints.filter(c => {
+                const complaintDate = new Date(c.date);
+                const now = new Date();
+                return complaintDate.getMonth() === now.getMonth() && complaintDate.getFullYear() === now.getFullYear();
+            }).length;
+            document.getElementById('report-avg-resolution').textContent = '2.5';
+        }
+
+        function updateAdminComplaintsTable() {
+            const tableBody = document.getElementById('adminComplaintsTable');
+            tableBody.innerHTML = '';
+            
+            if (complaints.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No complaints found.</td></tr>';
+                return;
+            }
+            
+            complaints.forEach(complaint => {
+                const row = document.createElement('tr');
+                
+                const statusClass = `status-${complaint.status.replace(' ', '-')}`;
+                
+                row.innerHTML = `
+                    <td>${complaint.id}</td>
+                    <td>${complaint.userName}</td>
+                    <td>${complaint.category}</td>
+                    <td>${complaint.title}</td>
+                    <td>${complaint.date}</td>
+                    <td>${complaint.priority}</td>
+                    <td><span class="status ${statusClass}">${complaint.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-id="${complaint.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${complaint.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn resolve-btn" data-id="${complaint.id}"><i class="fas fa-check"></i></button>
+                        <button class="action-btn delete-btn" data-id="${complaint.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    viewComplaint(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editComplaint(id);
+                });
+            });
+            
+            document.querySelectorAll('.resolve-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    resolveComplaint(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteComplaint(id);
+                });
+            });
+        }
+
+        function updateAdminUsersTable() {
+            const tableBody = document.getElementById('adminUsersTable');
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.role}</td>
+                    <td><span class="status status-${user.status}">${user.status}</span></td>
+                    <td>${user.complaints || 0}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-id="${user.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${user.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" data-id="${user.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    viewUser(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editUser(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteUser(id);
+                });
+            });
+        }
+
+        function updateAdminServicesTable() {
+            const tableBody = document.getElementById('adminServicesTable');
+            tableBody.innerHTML = '';
+            
+            if (serviceApplications.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No service applications found.</td></tr>';
+                return;
+            }
+            
+            serviceApplications.forEach(application => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${application.id}</td>
+                    <td>${application.service}</td>
+                    <td>${application.applicantName}</td>
+                    <td>${application.date}</td>
+                    <td><span class="status status-${application.status}">${application.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-id="${application.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${application.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" data-id="${application.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
         function updateUIForUser() {
             if (currentUser) {
                 document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                
+                // Show admin panel only for admin users
+                if (currentUser.role === 'admin') {
+                    document.querySelector('[data-section="admin"]').style.display = 'list-item';
+                } else {
+                    document.querySelector('[data-section="admin"]').style.display = 'none';
+                }
+            } else {
+                document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                document.querySelector('[data-section="admin"]').style.display = 'none';
             }
         }
 
@@ -1535,6 +2201,91 @@
             setTimeout(() => {
                 notification.remove();
             }, 5000);
+        }
+
+        // Admin complaint management functions
+        function viewComplaint(id) {
+            const complaint = complaints.find(c => c.id === id);
+            if (complaint) {
+                showNotification(`Viewing complaint: ${complaint.title} (ID: ${complaint.id})`, 'info');
+            }
+        }
+
+        function editComplaint(id) {
+            const complaint = complaints.find(c => c.id === id);
+            if (complaint) {
+                const newStatus = prompt('Enter new status (pending, in progress, resolved):', complaint.status);
+                if (newStatus && ['pending', 'in progress', 'resolved'].includes(newStatus.toLowerCase())) {
+                    complaint.status = newStatus.toLowerCase();
+                    saveData();
+                    updateComplaintList();
+                    updateAdminComplaintsTable();
+                    updateStats();
+                    updateAdminStats();
+                    showNotification('Complaint status updated successfully!', 'success');
+                }
+            }
+        }
+
+        function resolveComplaint(id) {
+            const complaint = complaints.find(c => c.id === id);
+            if (complaint) {
+                complaint.status = 'resolved';
+                saveData();
+                updateComplaintList();
+                updateAdminComplaintsTable();
+                updateStats();
+                updateAdminStats();
+                showNotification('Complaint marked as resolved!', 'success');
+            }
+        }
+
+        function deleteComplaint(id) {
+            if (confirm('Are you sure you want to delete this complaint?')) {
+                complaints = complaints.filter(c => c.id !== id);
+                saveData();
+                updateComplaintList();
+                updateAdminComplaintsTable();
+                updateStats();
+                updateAdminStats();
+                showNotification('Complaint deleted successfully!', 'success');
+            }
+        }
+
+        function viewUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                showNotification(`Viewing user: ${user.name} (ID: ${user.id})`, 'info');
+            }
+        }
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                const newStatus = prompt('Enter new status (active, inactive):', user.status);
+                if (newStatus && ['active', 'inactive'].includes(newStatus.toLowerCase())) {
+                    user.status = newStatus.toLowerCase();
+                    saveData();
+                    updateAdminUsersTable();
+                    updateAdminStats();
+                    showNotification('User status updated successfully!', 'success');
+                }
+            }
+        }
+
+        function deleteUser(id) {
+            if (id === currentUser.id) {
+                showNotification('You cannot delete your own account.', 'error');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                saveData();
+                updateAdminUsersTable();
+                updateAdminStats();
+                showNotification('User deleted successfully!', 'success');
+            }
         }
 
         // Enhanced 3D Animation using Three.js
@@ -1607,6 +2358,142 @@
                 });
                 
                 controls.update();
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function initAdminChart() {
+            const container = document.getElementById('admin-chart-container');
+            if (!container) return;
+            
+            // Create a simple 3D chart for admin dashboard
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create chart bars
+            const bars = [];
+            const barColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12];
+            const barHeights = [3, 5, 2, 4];
+            
+            for (let i = 0; i < 4; i++) {
+                const geometry = new THREE.BoxGeometry(1.5, barHeights[i], 1.5);
+                const material = new THREE.MeshPhongMaterial({ color: barColors[i] });
+                const bar = new THREE.Mesh(geometry, material);
+                
+                bar.position.x = (i - 1.5) * 2.5;
+                bar.position.y = barHeights[i] / 2;
+                
+                scene.add(bar);
+                bars.push(bar);
+            }
+            
+            // Position camera
+            camera.position.z = 10;
+            camera.position.y = 3;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Animate bars
+                bars.forEach((bar, index) => {
+                    bar.rotation.y += 0.01;
+                    bar.position.y = (barHeights[index] / 2) + Math.sin(Date.now() * 0.001 + index) * 0.1;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function initReportsChart() {
+            const container = document.getElementById('reports-chart-container');
+            if (!container) return;
+            
+            // Create a 3D pie chart for reports
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create pie chart segments
+            const segments = [];
+            const segmentColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12, 0x9b59b6];
+            const segmentValues = [30, 25, 20, 15, 10]; // percentages
+            
+            let startAngle = 0;
+            const radius = 3;
+            const height = 1;
+            
+            segmentValues.forEach((value, index) => {
+                const angle = (value / 100) * Math.PI * 2;
+                const geometry = new THREE.CylinderGeometry(radius, radius, height, 32, 1, false, startAngle, angle);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: segmentColors[index],
+                    side: THREE.DoubleSide
+                });
+                const segment = new THREE.Mesh(geometry, material);
+                
+                segment.rotation.x = Math.PI / 2;
+                segment.rotation.z = startAngle;
+                
+                scene.add(segment);
+                segments.push(segment);
+                
+                startAngle += angle;
+            });
+            
+            // Position camera
+            camera.position.z = 8;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate pie chart
+                segments.forEach(segment => {
+                    segment.rotation.y += 0.005;
+                });
+                
                 renderer.render(scene, camera);
             }
             
