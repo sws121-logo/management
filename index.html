@@ -1906,23 +1906,30 @@
                     if (email) {
                         let user = users.find(u => u.email === email);
                         if (user) {
-                            currentUser = user;
-                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                            this.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-                            showNotification(`Welcome back, ${user.name}!`, 'success');
-                            updateComplaintList();
+                            const password = prompt('Enter your password:');
+                            if (password === user.password) {
+                                currentUser = user;
+                                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                                this.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                                showNotification(`Welcome back, ${user.name}!`, 'success');
+                                updateComplaintList();
+                                updateUIForUser();
+                            } else {
+                                showNotification('Invalid password.', 'error');
+                            }
                         } else {
                             // Auto-register if user doesn't exist
                             const name = prompt('New user detected. Enter your full name:');
                             const phone = prompt('Enter your phone number:');
+                            const password = prompt('Create a password:');
                             
-                            if (name && phone) {
+                            if (name && phone && password) {
                                 const newUser = {
                                     id: users.length + 1,
                                     name: name,
                                     email: email,
                                     phone: phone,
-                                    password: 'default123',
+                                    password: password,
                                     status: 'active',
                                     complaints: 0,
                                     role: 'user'
@@ -1935,6 +1942,7 @@
                                 this.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
                                 showNotification(`Registration successful! Welcome, ${name}.`, 'success');
                                 updateComplaintList();
+                                updateUIForUser();
                             }
                         }
                     }
@@ -1959,6 +1967,8 @@
             localStorage.setItem('complaints', JSON.stringify(complaints));
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('complaintIdCounter', complaintIdCounter.toString());
+            localStorage.setItem('serviceApplications', JSON.stringify(serviceApplications));
+            localStorage.setItem('settings', JSON.stringify(settings));
             if (currentUser) {
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
             }
