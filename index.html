@@ -6,6 +6,7 @@
     <title>Municipality Complaint Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -15,6 +16,7 @@
             --dark: #2c3e50;
             --success: #2ecc71;
             --warning: #f39c12;
+            --info: #17a2b8;
         }
         
         * {
@@ -28,6 +30,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             color: var(--dark);
+            overflow-x: hidden;
         }
         
         .container {
@@ -80,11 +83,12 @@
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 5px;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         
         nav a:hover, nav a.active {
             background: var(--secondary);
+            transform: translateY(-2px);
         }
         
         .user-actions {
@@ -99,6 +103,9 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .btn-primary {
@@ -109,6 +116,7 @@
         .btn-primary:hover {
             background: #2980b9;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .btn-secondary {
@@ -119,6 +127,40 @@
         .btn-secondary:hover {
             background: #c0392b;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .section {
@@ -128,6 +170,8 @@
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             display: none;
+            position: relative;
+            overflow: hidden;
         }
         
         .section.active {
@@ -145,6 +189,9 @@
             padding-bottom: 10px;
             border-bottom: 2px solid var(--light);
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .complaint-categories {
@@ -160,13 +207,15 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             cursor: pointer;
             border-left: 4px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
         }
         
         .category-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
         
@@ -174,6 +223,12 @@
             font-size: 2.5rem;
             color: var(--secondary);
             margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+            color: var(--accent);
         }
         
         .complaint-form {
@@ -197,6 +252,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
         }
         
         textarea {
@@ -218,6 +280,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .complaint-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .complaint-info h3 {
@@ -272,11 +342,19 @@
             font-size: 1.5rem;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         .chatbot-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(10deg);
+            background: var(--accent);
         }
         
         .chatbot-window {
@@ -291,6 +369,12 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .chatbot-header {
@@ -316,6 +400,12 @@
             border-radius: 18px;
             max-width: 80%;
             line-height: 1.4;
+            animation: messageAppear 0.3s ease;
+        }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .bot-message {
@@ -353,6 +443,12 @@
             width: 40px;
             height: 40px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chatbot-input button:hover {
+            background: var(--accent);
+            transform: rotate(15deg);
         }
         
         .admin-panel {
@@ -382,11 +478,15 @@
             display: block;
             padding: 10px;
             border-radius: 5px;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .admin-sidebar a:hover, .admin-sidebar a.active {
             background: var(--secondary);
+            transform: translateX(5px);
         }
         
         .admin-content {
@@ -411,8 +511,13 @@
             font-weight: 600;
         }
         
+        tr {
+            transition: all 0.3s;
+        }
+        
         tr:hover {
             background: #f8f9fa;
+            transform: scale(1.01);
         }
         
         .action-buttons {
@@ -426,6 +531,7 @@
             border-radius: 3px;
             cursor: pointer;
             font-size: 0.8rem;
+            transition: all 0.3s;
         }
         
         .edit-btn {
@@ -433,9 +539,29 @@
             color: white;
         }
         
+        .edit-btn:hover {
+            background: #e67e22;
+            transform: scale(1.05);
+        }
+        
         .delete-btn {
             background: var(--accent);
             color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .view-btn {
+            background: var(--info);
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #138496;
+            transform: scale(1.05);
         }
         
         .canvas-container {
@@ -444,6 +570,7 @@
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 20px;
+            position: relative;
         }
         
         .stats-cards {
@@ -460,6 +587,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             border-top: 4px solid var(--secondary);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
         
         .stat-number {
@@ -474,12 +609,131 @@
             font-size: 0.9rem;
         }
         
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalAppear 0.3s ease;
+        }
+        
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
             margin-top: 40px;
             color: #7f8c8d;
             border-top: 1px solid #eee;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideInRight 0.3s ease;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification-success {
+            background: var(--success);
+        }
+        
+        .notification-error {
+            background: var(--accent);
+        }
+        
+        .notification-info {
+            background: var(--info);
+        }
+        
+        .floating-animation {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .floating-animation:nth-child(2) {
+            width: 30px;
+            height: 30px;
+            background: rgba(231, 76, 60, 0.1);
+            animation-delay: 1s;
+            top: 20%;
+            left: 10%;
+        }
+        
+        .floating-animation:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            background: rgba(46, 204, 113, 0.1);
+            animation-delay: 2s;
+            top: 60%;
+            left: 80%;
+        }
+        
+        .floating-animation:nth-child(4) {
+            width: 25px;
+            height: 25px;
+            background: rgba(243, 156, 18, 0.1);
+            animation-delay: 3s;
+            top: 80%;
+            left: 20%;
         }
         
         @media (max-width: 768px) {
@@ -500,12 +754,22 @@
             .chatbot-window {
                 width: 300px;
             }
+            
+            .complaint-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-city"></i>
@@ -513,23 +777,23 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
-                        <li><a href="#" class="nav-link" data-section="complaints">File Complaint</a></li>
-                        <li><a href="#" class="nav-link" data-section="track-complaints">Track Complaints</a></li>
-                        <li><a href="#" class="nav-link" data-section="services">Services</a></li>
-                        <li><a href="#" class="nav-link" data-section="admin">Admin Panel</a></li>
+                        <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#" class="nav-link" data-section="complaints"><i class="fas fa-exclamation-circle"></i> File Complaint</a></li>
+                        <li><a href="#" class="nav-link" data-section="track-complaints"><i class="fas fa-search"></i> Track Complaints</a></li>
+                        <li><a href="#" class="nav-link" data-section="services"><i class="fas fa-concierge-bell"></i> Services</a></li>
+                        <li><a href="#" class="nav-link" data-section="admin"><i class="fas fa-user-shield"></i> Admin Panel</a></li>
                     </ul>
                 </nav>
                 <div class="user-actions">
-                    <button class="btn btn-primary" id="loginBtn">Login</button>
-                    <button class="btn btn-secondary" id="registerBtn">Register</button>
+                    <button class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="btn btn-secondary" id="registerBtn"><i class="fas fa-user-plus"></i> Register</button>
                 </div>
             </div>
         </header>
 
         <!-- Home Section -->
         <section id="home" class="section active">
-            <h2 class="section-title">Welcome to Municipality Services</h2>
+            <h2 class="section-title"><i class="fas fa-home"></i> Welcome to Municipality Services</h2>
             <div class="canvas-container" id="animation-container"></div>
             <div class="stats-cards">
                 <div class="stat-card">
@@ -589,10 +853,10 @@
 
         <!-- File Complaint Section -->
         <section id="complaints" class="section">
-            <h2 class="section-title">File a Complaint</h2>
+            <h2 class="section-title"><i class="fas fa-exclamation-circle"></i> File a Complaint</h2>
             <form id="complaintForm" class="complaint-form">
                 <div class="form-group">
-                    <label for="category">Complaint Category</label>
+                    <label for="category"><i class="fas fa-tag"></i> Complaint Category</label>
                     <select id="category" required>
                         <option value="">Select a category</option>
                         <option value="garbage">Garbage Dumping</option>
@@ -604,19 +868,19 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="title">Complaint Title</label>
+                    <label for="title"><i class="fas fa-heading"></i> Complaint Title</label>
                     <input type="text" id="title" placeholder="Brief title of your complaint" required>
                 </div>
                 <div class="form-group">
-                    <label for="description">Complaint Description</label>
+                    <label for="description"><i class="fas fa-align-left"></i> Complaint Description</label>
                     <textarea id="description" placeholder="Please describe your issue in detail..." required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="location">Location</label>
+                    <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
                     <input type="text" id="location" placeholder="Where is the issue located?" required>
                 </div>
                 <div class="form-group">
-                    <label for="priority">Priority</label>
+                    <label for="priority"><i class="fas fa-exclamation-triangle"></i> Priority</label>
                     <select id="priority" required>
                         <option value="low">Low</option>
                         <option value="medium" selected>Medium</option>
@@ -624,13 +888,13 @@
                         <option value="urgent">Urgent</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Complaint</button>
             </form>
         </section>
 
         <!-- Track Complaints Section -->
         <section id="track-complaints" class="section">
-            <h2 class="section-title">Track Your Complaints</h2>
+            <h2 class="section-title"><i class="fas fa-search"></i> Track Your Complaints</h2>
             <div class="complaint-list" id="complaintList">
                 <!-- Complaint items will be dynamically added here -->
             </div>
@@ -638,52 +902,58 @@
 
         <!-- Services Section -->
         <section id="services" class="section">
-            <h2 class="section-title">Municipality Services</h2>
+            <h2 class="section-title"><i class="fas fa-concierge-bell"></i> Municipality Services</h2>
             <div class="complaint-categories">
                 <div class="category-card">
                     <i class="fas fa-id-card category-icon"></i>
                     <h3>Birth/Death Certificate</h3>
                     <p>Apply for birth and death certificates</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">Learn More</button>
                 </div>
                 <div class="category-card">
                     <i class="fas fa-home category-icon"></i>
                     <h3>Property Tax</h3>
                     <p>Pay property tax and related services</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">Learn More</button>
                 </div>
                 <div class="category-card">
                     <i class="fas fa-car category-icon"></i>
                     <h3>Vehicle Registration</h3>
                     <p>Vehicle registration and related services</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">Learn More</button>
                 </div>
                 <div class="category-card">
                     <i class="fas fa-tree category-icon"></i>
                     <h3>Park Maintenance</h3>
                     <p>Maintenance of public parks and gardens</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">Learn More</button>
                 </div>
                 <div class="category-card">
                     <i class="fas fa-hard-hat category-icon"></i>
                     <h3>Building Permits</h3>
                     <p>Apply for building permits and approvals</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">Learn More</button>
                 </div>
                 <div class="category-card">
                     <i class="fas fa-phone-alt category-icon"></i>
                     <h3>Helpline Numbers</h3>
                     <p>Emergency and service helpline numbers</p>
+                    <button class="btn btn-info btn-sm" style="margin-top: 10px;">View Contacts</button>
                 </div>
             </div>
         </section>
 
         <!-- Admin Panel Section -->
         <section id="admin" class="section">
-            <h2 class="section-title">Admin Panel</h2>
+            <h2 class="section-title"><i class="fas fa-user-shield"></i> Admin Panel</h2>
             <div class="admin-panel">
                 <div class="admin-sidebar">
                     <ul>
-                        <li><a href="#" class="admin-nav active" data-tab="dashboard">Dashboard</a></li>
-                        <li><a href="#" class="admin-nav" data-tab="complaints-management">Complaints Management</a></li>
-                        <li><a href="#" class="admin-nav" data-tab="user-management">User Management</a></li>
-                        <li><a href="#" class="admin-nav" data-tab="reports">Reports & Analytics</a></li>
-                        <li><a href="#" class="admin-nav" data-tab="settings">Settings</a></li>
+                        <li><a href="#" class="admin-nav active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="complaints-management"><i class="fas fa-list-alt"></i> Complaints Management</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="user-management"><i class="fas fa-users"></i> User Management</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="reports"><i class="fas fa-chart-bar"></i> Reports & Analytics</a></li>
+                        <li><a href="#" class="admin-nav" data-tab="settings"><i class="fas fa-cogs"></i> Settings</a></li>
                     </ul>
                 </div>
                 <div class="admin-content">
@@ -711,9 +981,14 @@
                                 <div class="stat-label">Registered Users</div>
                             </div>
                         </div>
+                        <div class="canvas-container" id="admin-chart-container"></div>
                     </div>
                     <div id="admin-complaints-management" class="admin-tab">
                         <h3>Complaints Management</h3>
+                        <div class="action-buttons" style="margin-bottom: 15px;">
+                            <button class="btn btn-primary" id="refreshComplaints"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-success" id="exportComplaints"><i class="fas fa-file-export"></i> Export</button>
+                        </div>
                         <table>
                             <thead>
                                 <tr>
@@ -733,6 +1008,10 @@
                     </div>
                     <div id="admin-user-management" class="admin-tab">
                         <h3>User Management</h3>
+                        <div class="action-buttons" style="margin-bottom: 15px;">
+                            <button class="btn btn-primary" id="refreshUsers"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-success" id="addUser"><i class="fas fa-user-plus"></i> Add User</button>
+                        </div>
                         <table>
                             <thead>
                                 <tr>
@@ -752,11 +1031,29 @@
                     </div>
                     <div id="admin-reports" class="admin-tab">
                         <h3>Reports & Analytics</h3>
-                        <p>Complaint analytics and reports will be displayed here.</p>
+                        <div class="canvas-container" id="reports-chart-container"></div>
+                        <div class="action-buttons" style="margin-top: 20px;">
+                            <button class="btn btn-primary" id="generateReport"><i class="fas fa-chart-pie"></i> Generate Report</button>
+                            <button class="btn btn-success" id="downloadReport"><i class="fas fa-download"></i> Download Report</button>
+                        </div>
                     </div>
                     <div id="admin-settings" class="admin-tab">
                         <h3>Settings</h3>
-                        <p>System settings and configuration options will be displayed here.</p>
+                        <div class="complaint-form">
+                            <div class="form-group">
+                                <label for="systemName"><i class="fas fa-cog"></i> System Name</label>
+                                <input type="text" id="systemName" value="Municipality Services" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail"><i class="fas fa-envelope"></i> Admin Email</label>
+                                <input type="email" id="adminEmail" value="admin@municipality.gov" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="helpline"><i class="fas fa-phone"></i> Helpline Number</label>
+                                <input type="text" id="helpline" value="1800-123-4567" required>
+                            </div>
+                            <button class="btn btn-primary" id="saveSettings"><i class="fas fa-save"></i> Save Settings</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -784,24 +1081,88 @@
             </div>
         </div>
 
+        <!-- Modals -->
+        <div class="modal" id="loginModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-sign-in-alt"></i> User Login</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal" id="registerModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> User Registration</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+                </form>
+            </div>
+        </div>
+
         <footer>
             <p>&copy; 2023 Municipality Services. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // Sample data for the application
+        // Enhanced sample data for the application
         let complaints = JSON.parse(localStorage.getItem('complaints')) || [];
         let users = JSON.parse(localStorage.getItem('users')) || [
-            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", status: "active", complaints: 2 },
-            { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", status: "active", complaints: 1 }
+            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", password: "password123", status: "active", complaints: 2, role: "user" },
+            { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", password: "password123", status: "active", complaints: 1, role: "user" },
+            { id: 3, name: "Admin User", email: "admin@municipality.gov", phone: "1122334455", password: "admin123", status: "active", complaints: 0, role: "admin" }
         ];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let complaintIdCounter = parseInt(localStorage.getItem('complaintIdCounter')) || 1001;
-        let userIdCounter = parseInt(localStorage.getItem('userIdCounter')) || 3;
+        let userIdCounter = parseInt(localStorage.getItem('userIdCounter')) || 4;
+        let settings = JSON.parse(localStorage.getItem('settings')) || {
+            systemName: "Municipality Services",
+            adminEmail: "admin@municipality.gov",
+            helpline: "1800-123-4567"
+        };
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize 3D animations
+            init3DAnimation();
+            initAdminChart();
+            initReportsChart();
+            
             // Navigation
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -853,12 +1214,22 @@
                 });
             });
 
+            // Service category buttons
+            document.querySelectorAll('.btn-info.btn-sm').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const service = this.closest('.category-card').querySelector('h3').textContent;
+                    showNotification(`More information about ${service} will be displayed here.`, 'info');
+                });
+            });
+
             // Complaint form submission
             document.getElementById('complaintForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 if (!currentUser) {
-                    alert('Please login to submit a complaint.');
+                    showNotification('Please login to submit a complaint.', 'error');
+                    document.getElementById('loginModal').style.display = 'flex';
                     return;
                 }
                 
@@ -886,13 +1257,15 @@
                     users[userIndex].complaints = (users[userIndex].complaints || 0) + 1;
                 }
                 
-                alert(`Complaint submitted successfully! Your complaint ID is: ${complaint.id}`);
+                showNotification(`Complaint submitted successfully! Your complaint ID is: ${complaint.id}`, 'success');
                 this.reset();
                 
                 // Update complaint lists
                 updateComplaintList();
                 updateAdminComplaintsTable();
                 updateStats();
+                updateAdminChart();
+                updateReportsChart();
             });
 
             // Chatbot functionality
@@ -955,7 +1328,7 @@
                 } else if (lowerMessage.includes('water')) {
                     return "For water supply issues, please specify whether it's about water quality, low pressure, or no water supply when filing your complaint.";
                 } else if (lowerMessage.includes('helpline') || lowerMessage.includes('contact')) {
-                    return "Our main helpline number is 1800-123-4567. For emergencies, you can call 911. Department-specific contacts are listed in the Services section.";
+                    return `Our main helpline number is ${settings.helpline}. For emergencies, you can call 911. Department-specific contacts are listed in the Services section.`;
                 } else if (lowerMessage.includes('thank')) {
                     return "You're welcome! Is there anything else I can help you with?";
                 } else {
@@ -963,68 +1336,123 @@
                 }
             }
 
-            // Login/Register functionality
+            // Modal functionality
             document.getElementById('loginBtn').addEventListener('click', function() {
-                const email = prompt('Enter your email:');
-                if (email) {
-                    // Simple authentication - in a real app, this would be more secure
-                    let user = users.find(u => u.email === email);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        alert(`Welcome back, ${user.name}!`);
-                        updateUIForUser();
-                    } else {
-                        alert('User not found. Please register.');
-                    }
-                }
+                document.getElementById('loginModal').style.display = 'flex';
             });
 
             document.getElementById('registerBtn').addEventListener('click', function() {
-                const name = prompt('Enter your full name:');
-                const email = prompt('Enter your email:');
-                const phone = prompt('Enter your phone number:');
+                document.getElementById('registerModal').style.display = 'flex';
+            });
+
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+
+            // Login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
                 
-                if (name && email && phone) {
-                    const newUser = {
-                        id: userIdCounter++,
-                        name: name,
-                        email: email,
-                        phone: phone,
-                        status: 'active',
-                        complaints: 0
-                    };
-                    
-                    users.push(newUser);
-                    currentUser = newUser;
-                    saveData();
-                    
-                    alert(`Registration successful! Welcome, ${name}.`);
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    document.getElementById('loginModal').style.display = 'none';
+                    showNotification(`Welcome back, ${user.name}!`, 'success');
                     updateUIForUser();
+                    this.reset();
+                } else {
+                    showNotification('Invalid email or password. Please try again.', 'error');
                 }
             });
 
-            function updateUIForUser() {
-                if (currentUser) {
-                    document.getElementById('loginBtn').textContent = 'Logout';
-                    document.getElementById('registerBtn').style.display = 'none';
-                    
-                    document.getElementById('loginBtn').onclick = function() {
-                        currentUser = null;
-                        localStorage.removeItem('currentUser');
-                        alert('You have been logged out.');
-                        location.reload();
-                    };
+            // Register form submission
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('regName').value;
+                const email = document.getElementById('regEmail').value;
+                const phone = document.getElementById('regPhone').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match. Please try again.', 'error');
+                    return;
                 }
-            }
+                
+                if (users.find(u => u.email === email)) {
+                    showNotification('User with this email already exists.', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: userIdCounter++,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    status: 'active',
+                    complaints: 0,
+                    role: 'user'
+                };
+                
+                users.push(newUser);
+                currentUser = newUser;
+                saveData();
+                
+                document.getElementById('registerModal').style.display = 'none';
+                showNotification(`Registration successful! Welcome, ${name}.`, 'success');
+                updateUIForUser();
+                this.reset();
+            });
+
+            // Admin functionality
+            document.getElementById('refreshComplaints').addEventListener('click', function() {
+                updateAdminComplaintsTable();
+                showNotification('Complaints list refreshed.', 'info');
+            });
+
+            document.getElementById('exportComplaints').addEventListener('click', function() {
+                showNotification('Complaints data exported successfully.', 'success');
+            });
+
+            document.getElementById('refreshUsers').addEventListener('click', function() {
+                updateAdminUsersTable();
+                showNotification('Users list refreshed.', 'info');
+            });
+
+            document.getElementById('addUser').addEventListener('click', function() {
+                document.getElementById('registerModal').style.display = 'flex';
+            });
+
+            document.getElementById('generateReport').addEventListener('click', function() {
+                showNotification('Report generated successfully.', 'success');
+            });
+
+            document.getElementById('downloadReport').addEventListener('click', function() {
+                showNotification('Report downloaded successfully.', 'success');
+            });
+
+            document.getElementById('saveSettings').addEventListener('click', function() {
+                settings.systemName = document.getElementById('systemName').value;
+                settings.adminEmail = document.getElementById('adminEmail').value;
+                settings.helpline = document.getElementById('helpline').value;
+                
+                localStorage.setItem('settings', JSON.stringify(settings));
+                showNotification('Settings saved successfully.', 'success');
+            });
 
             // Initialize UI
             updateComplaintList();
             updateAdminComplaintsTable();
             updateAdminUsersTable();
             updateStats();
-            init3DAnimation();
             updateUIForUser();
+            loadSettings();
 
             // Set up periodic updates for demo purposes
             setInterval(updateStats, 5000);
@@ -1046,7 +1474,7 @@
             complaintList.innerHTML = '';
             
             let userComplaints = complaints;
-            if (currentUser) {
+            if (currentUser && currentUser.role === 'user') {
                 userComplaints = complaints.filter(c => c.userId === currentUser.id);
             }
             
@@ -1069,6 +1497,7 @@
                             <span><i class="fas fa-calendar"></i> ${complaint.date}</span>
                             <span><i class="fas fa-map-marker-alt"></i> ${complaint.location}</span>
                             <span><i class="fas fa-tag"></i> ${complaint.category}</span>
+                            <span><i class="fas fa-flag"></i> ${complaint.priority}</span>
                         </div>
                     </div>
                     <div class="complaint-status">
@@ -1102,8 +1531,9 @@
                     <td>${complaint.date}</td>
                     <td><span class="status ${statusClass}">${complaint.status}</span></td>
                     <td class="action-buttons">
-                        <button class="action-btn edit-btn" data-id="${complaint.id}">Edit</button>
-                        <button class="action-btn delete-btn" data-id="${complaint.id}">Delete</button>
+                        <button class="action-btn view-btn" data-id="${complaint.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${complaint.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" data-id="${complaint.id}"><i class="fas fa-trash"></i></button>
                     </td>
                 `;
                 
@@ -1111,6 +1541,13 @@
             });
             
             // Add event listeners for action buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    viewComplaint(id);
+                });
+            });
+            
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.getAttribute('data-id'));
@@ -1141,12 +1578,35 @@
                     <td>${user.complaints || 0}</td>
                     <td><span class="status status-${user.status}">${user.status}</span></td>
                     <td class="action-buttons">
-                        <button class="action-btn edit-btn" data-id="${user.id}">Edit</button>
-                        <button class="action-btn delete-btn" data-id="${user.id}">Delete</button>
+                        <button class="action-btn view-btn" data-id="${user.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${user.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" data-id="${user.id}"><i class="fas fa-trash"></i></button>
                     </td>
                 `;
                 
                 tableBody.appendChild(row);
+            });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    viewUser(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editUser(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteUser(id);
+                });
             });
         }
 
@@ -1164,6 +1624,44 @@
             document.getElementById('admin-total-users').textContent = users.length;
         }
 
+        function updateUIForUser() {
+            if (currentUser) {
+                document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                document.getElementById('registerBtn').style.display = 'none';
+                
+                document.getElementById('loginBtn').onclick = function() {
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                    showNotification('You have been logged out.', 'info');
+                    location.reload();
+                };
+                
+                // Show admin panel only for admin users
+                if (currentUser.role === 'admin') {
+                    document.querySelector('[data-section="admin"]').style.display = 'list-item';
+                } else {
+                    document.querySelector('[data-section="admin"]').style.display = 'none';
+                }
+            } else {
+                document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                document.getElementById('registerBtn').style.display = 'inline-block';
+                document.querySelector('[data-section="admin"]').style.display = 'none';
+            }
+        }
+
+        function loadSettings() {
+            document.getElementById('systemName').value = settings.systemName;
+            document.getElementById('adminEmail').value = settings.adminEmail;
+            document.getElementById('helpline').value = settings.helpline;
+        }
+
+        function viewComplaint(id) {
+            const complaint = complaints.find(c => c.id === id);
+            if (complaint) {
+                showNotification(`Viewing complaint: ${complaint.title} (ID: ${complaint.id})`, 'info');
+            }
+        }
+
         function editComplaint(id) {
             const complaint = complaints.find(c => c.id === id);
             if (complaint) {
@@ -1174,7 +1672,9 @@
                     updateComplaintList();
                     updateAdminComplaintsTable();
                     updateStats();
-                    alert('Complaint status updated successfully!');
+                    updateAdminChart();
+                    updateReportsChart();
+                    showNotification('Complaint status updated successfully!', 'success');
                 }
             }
         }
@@ -1186,77 +1686,268 @@
                 updateComplaintList();
                 updateAdminComplaintsTable();
                 updateStats();
-                alert('Complaint deleted successfully!');
+                updateAdminChart();
+                updateReportsChart();
+                showNotification('Complaint deleted successfully!', 'success');
             }
         }
 
-        // 3D Animation using Three.js
+        function viewUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                showNotification(`Viewing user: ${user.name} (ID: ${user.id})`, 'info');
+            }
+        }
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                const newStatus = prompt('Enter new status (active, inactive):', user.status);
+                if (newStatus && ['active', 'inactive'].includes(newStatus.toLowerCase())) {
+                    user.status = newStatus.toLowerCase();
+                    saveData();
+                    updateAdminUsersTable();
+                    updateStats();
+                    showNotification('User status updated successfully!', 'success');
+                }
+            }
+        }
+
+        function deleteUser(id) {
+            if (id === currentUser.id) {
+                showNotification('You cannot delete your own account.', 'error');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                saveData();
+                updateAdminUsersTable();
+                updateStats();
+                showNotification('User deleted successfully!', 'success');
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Enhanced 3D Animation using Three.js
         function init3DAnimation() {
             const container = document.getElementById('animation-container');
+            if (!container) return;
             
             // Create scene
             const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf5f7fa);
             const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
             
             // Add lights
-            const ambientLight = new THREE.AmbientLight(0x404040);
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
             scene.add(ambientLight);
             
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
             
-            // Create city buildings
-            const buildings = [];
-            const buildingColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12, 0x9b59b6];
+            const pointLight = new THREE.PointLight(0x3498db, 0.5, 100);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
             
-            for (let i = 0; i < 15; i++) {
+            // Create city buildings with different colors and materials
+            const buildings = [];
+            const buildingColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12, 0x9b59b6, 0x1abc9c];
+            const buildingMaterials = [];
+            
+            buildingColors.forEach(color => {
+                buildingMaterials.push(new THREE.MeshPhongMaterial({ 
+                    color: color,
+                    shininess: 30,
+                    specular: 0x222222
+                }));
+            });
+            
+            for (let i = 0; i < 20; i++) {
                 const width = Math.random() * 2 + 1;
-                const height = Math.random() * 3 + 2;
+                const height = Math.random() * 4 + 2;
                 const depth = Math.random() * 2 + 1;
                 
                 const geometry = new THREE.BoxGeometry(width, height, depth);
-                const color = buildingColors[Math.floor(Math.random() * buildingColors.length)];
-                const material = new THREE.MeshPhongMaterial({ color: color });
+                const material = buildingMaterials[Math.floor(Math.random() * buildingMaterials.length)];
                 const building = new THREE.Mesh(geometry, material);
                 
-                building.position.x = (Math.random() - 0.5) * 20;
-                building.position.z = (Math.random() - 0.5) * 20;
+                building.position.x = (Math.random() - 0.5) * 25;
+                building.position.z = (Math.random() - 0.5) * 25;
                 building.position.y = height / 2;
+                
+                // Add windows to buildings
+                const windowGeometry = new THREE.BoxGeometry(0.2, 0.4, 0.1);
+                const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xf1c40f });
+                
+                for (let j = 0; j < 4; j++) {
+                    const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                    window.position.x = (Math.random() - 0.5) * (width - 0.3);
+                    window.position.y = (Math.random() - 0.5) * (height - 0.6) + 0.5;
+                    window.position.z = depth / 2 + 0.05;
+                    building.add(window);
+                }
                 
                 scene.add(building);
                 buildings.push(building);
             }
             
-            // Add ground
-            const groundGeometry = new THREE.PlaneGeometry(30, 30);
-            const groundMaterial = new THREE.MeshPhongMaterial({ color: 0x95a5a6, side: THREE.DoubleSide });
+            // Add animated vehicles
+            const vehicles = [];
+            const vehicleColors = [0xe74c3c, 0x3498db, 0x2ecc71, 0xf39c12];
+            
+            for (let i = 0; i < 5; i++) {
+                const vehicleGeometry = new THREE.BoxGeometry(0.8, 0.3, 0.4);
+                const vehicleMaterial = new THREE.MeshPhongMaterial({ 
+                    color: vehicleColors[Math.floor(Math.random() * vehicleColors.length)]
+                });
+                const vehicle = new THREE.Mesh(vehicleGeometry, vehicleMaterial);
+                
+                vehicle.position.x = (Math.random() - 0.5) * 20;
+                vehicle.position.z = (Math.random() - 0.5) * 20;
+                vehicle.position.y = 0.2;
+                
+                scene.add(vehicle);
+                vehicles.push(vehicle);
+            }
+            
+            // Add ground with texture
+            const groundGeometry = new THREE.PlaneGeometry(30, 30, 10, 10);
+            const groundMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x95a5a6,
+                side: THREE.DoubleSide,
+                wireframe: false
+            });
             const ground = new THREE.Mesh(groundGeometry, groundMaterial);
             ground.rotation.x = Math.PI / 2;
             ground.position.y = -1;
             scene.add(ground);
             
+            // Add road markings
+            const roadMarkingGeometry = new THREE.PlaneGeometry(0.2, 2);
+            const roadMarkingMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            for (let i = -12; i <= 12; i += 4) {
+                const roadMarking = new THREE.Mesh(roadMarkingGeometry, roadMarkingMaterial);
+                roadMarking.rotation.x = Math.PI / 2;
+                roadMarking.position.set(i, -0.9, 0);
+                scene.add(roadMarking);
+            }
+            
             // Position camera
             camera.position.z = 15;
-            camera.position.y = 5;
+            camera.position.y = 8;
+            
+            // Add orbit controls for interactive viewing
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 0.5;
             
             // Animation loop
             function animate() {
                 requestAnimationFrame(animate);
                 
-                // Rotate buildings slightly
+                // Rotate buildings slightly for dynamic effect
                 buildings.forEach(building => {
-                    building.rotation.y += 0.005;
+                    building.rotation.y += 0.002;
                 });
                 
-                // Rotate camera around the scene
-                const time = Date.now() * 0.0005;
-                camera.position.x = Math.sin(time) * 15;
-                camera.position.z = Math.cos(time) * 15;
-                camera.lookAt(0, 0, 0);
+                // Move vehicles
+                vehicles.forEach(vehicle => {
+                    vehicle.position.x += 0.02;
+                    if (vehicle.position.x > 15) {
+                        vehicle.position.x = -15;
+                    }
+                });
+                
+                // Rotate point light for dynamic lighting
+                pointLight.position.x = Math.sin(Date.now() * 0.001) * 10;
+                pointLight.position.z = Math.cos(Date.now() * 0.001) * 10;
+                
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function initAdminChart() {
+            const container = document.getElementById('admin-chart-container');
+            if (!container) return;
+            
+            // Create a simple 3D chart for admin dashboard
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create chart bars
+            const bars = [];
+            const barColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12];
+            const barHeights = [3, 5, 2, 4];
+            const barLabels = ['Pending', 'In Progress', 'Resolved', 'Urgent'];
+            
+            for (let i = 0; i < 4; i++) {
+                const geometry = new THREE.BoxGeometry(1.5, barHeights[i], 1.5);
+                const material = new THREE.MeshPhongMaterial({ color: barColors[i] });
+                const bar = new THREE.Mesh(geometry, material);
+                
+                bar.position.x = (i - 1.5) * 2.5;
+                bar.position.y = barHeights[i] / 2;
+                
+                scene.add(bar);
+                bars.push(bar);
+            }
+            
+            // Position camera
+            camera.position.z = 10;
+            camera.position.y = 3;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Animate bars
+                bars.forEach((bar, index) => {
+                    bar.rotation.y += 0.01;
+                    bar.position.y = (barHeights[index] / 2) + Math.sin(Date.now() * 0.001 + index) * 0.1;
+                });
                 
                 renderer.render(scene, camera);
             }
@@ -1269,6 +1960,90 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(container.clientWidth, container.clientHeight);
             });
+        }
+
+        function initReportsChart() {
+            const container = document.getElementById('reports-chart-container');
+            if (!container) return;
+            
+            // Create a 3D pie chart for reports
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create pie chart segments
+            const segments = [];
+            const segmentColors = [0x3498db, 0x2ecc71, 0xe74c3c, 0xf39c12, 0x9b59b6];
+            const segmentValues = [30, 25, 20, 15, 10]; // percentages
+            
+            let startAngle = 0;
+            const radius = 3;
+            const height = 1;
+            
+            segmentValues.forEach((value, index) => {
+                const angle = (value / 100) * Math.PI * 2;
+                const geometry = new THREE.CylinderGeometry(radius, radius, height, 32, 1, false, startAngle, angle);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: segmentColors[index],
+                    side: THREE.DoubleSide
+                });
+                const segment = new THREE.Mesh(geometry, material);
+                
+                segment.rotation.x = Math.PI / 2;
+                segment.rotation.z = startAngle;
+                
+                scene.add(segment);
+                segments.push(segment);
+                
+                startAngle += angle;
+            });
+            
+            // Position camera
+            camera.position.z = 8;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate pie chart
+                segments.forEach(segment => {
+                    segment.rotation.y += 0.005;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function updateAdminChart() {
+            // In a real application, this would update the chart data
+            // For this demo, we'll just log the update
+            console.log("Admin chart updated with latest data");
+        }
+
+        function updateReportsChart() {
+            // In a real application, this would update the reports chart data
+            // For this demo, we'll just log the update
+            console.log("Reports chart updated with latest data");
         }
     </script>
 </body>
