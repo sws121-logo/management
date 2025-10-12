@@ -131,6 +131,16 @@
             transform: translateY(-2px);
         }
         
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
         .section {
             background: white;
             border-radius: 10px;
@@ -623,6 +633,110 @@
             color: #7f8c8d;
         }
         
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .admin-login-btn {
+            background: var(--warning);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .chatbot-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .quick-action-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .quick-action-btn:hover {
+            background: #2980b9;
+        }
+        
+        .service-steps {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .service-steps h4 {
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .service-steps ol {
+            padding-left: 20px;
+        }
+        
+        .service-steps li {
+            margin-bottom: 5px;
+        }
+        
+        .document-list {
+            background: #fff3cd;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        
+        .document-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .apply-now-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -981,6 +1095,45 @@
             </div>
         </div>
 
+        <!-- Login Modal -->
+        <div class="login-modal" id="loginModal">
+            <div class="login-form">
+                <h2>User Login</h2>
+                <form id="userLoginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                <button class="btn admin-login-btn" id="adminLoginBtn" style="width: 100%; margin-top: 10px;">Admin Login</button>
+                <button class="btn btn-secondary" id="closeLoginModal" style="width: 100%; margin-top: 10px;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div class="login-modal" id="adminLoginModal">
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminUsername">Username</label>
+                        <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning" style="width: 100%;">Login as Admin</button>
+                </form>
+                <button class="btn btn-secondary" id="closeAdminLoginModal" style="width: 100%; margin-top: 10px;">Cancel</button>
+            </div>
+        </div>
+
         <footer>
             <p>&copy; 2023 Municipality Services Portal. All rights reserved.</p>
         </footer>
@@ -994,8 +1147,15 @@
             { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", status: "active", applications: 1 }
         ];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let isAdmin = JSON.parse(localStorage.getItem('isAdmin')) || false;
         let applicationIdCounter = parseInt(localStorage.getItem('applicationIdCounter')) || 1001;
         let userIdCounter = parseInt(localStorage.getItem('userIdCounter')) || 3;
+
+        // Admin credentials
+        const adminCredentials = {
+            username: "admin",
+            password: "admin123"
+        };
 
         // Service-specific documentation requirements
         const documentationRequirements = {
@@ -1772,7 +1932,7 @@
                 updateStats();
             }
 
-            // Chatbot functionality
+            // Enhanced chatbot functionality
             document.getElementById('chatbotToggle').addEventListener('click', function() {
                 document.getElementById('chatbotWindow').style.display = 'flex';
             });
@@ -1800,7 +1960,49 @@
                     // Generate bot response
                     setTimeout(() => {
                         const response = generateBotResponse(message);
-                        addMessage(response, 'bot');
+                        addMessage(response.text, 'bot');
+                        
+                        // Add details if available
+                        if (response.details) {
+                            const detailsElement = document.createElement('div');
+                            detailsElement.className = 'message bot-message';
+                            detailsElement.innerHTML = response.details;
+                            
+                            // Add apply button if action is specified
+                            if (response.action) {
+                                const applyButton = document.createElement('button');
+                                applyButton.className = 'apply-now-btn';
+                                applyButton.textContent = 'Apply Now';
+                                applyButton.onclick = function() {
+                                    applyForService(response.action);
+                                    document.getElementById('chatbotWindow').style.display = 'none';
+                                };
+                                detailsElement.appendChild(applyButton);
+                            }
+                            
+                            document.getElementById('chatbotMessages').appendChild(detailsElement);
+                        }
+                        
+                        // Add quick actions if available
+                        if (response.quickActions) {
+                            const quickActionsContainer = document.createElement('div');
+                            quickActionsContainer.className = 'chatbot-quick-actions';
+                            
+                            response.quickActions.forEach(action => {
+                                const actionButton = document.createElement('button');
+                                actionButton.className = 'quick-action-btn';
+                                actionButton.textContent = action;
+                                actionButton.onclick = function() {
+                                    document.getElementById('chatbotInput').value = action;
+                                    sendMessage();
+                                };
+                                quickActionsContainer.appendChild(actionButton);
+                            });
+                            
+                            document.getElementById('chatbotMessages').appendChild(quickActionsContainer);
+                        }
+                        
+                        document.getElementById('chatbotMessages').scrollTop = document.getElementById('chatbotMessages').scrollHeight;
                     }, 500);
                 }
             }
@@ -1817,45 +2019,518 @@
             function generateBotResponse(message) {
                 const lowerMessage = message.toLowerCase();
                 
-                if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-                    return "Hello! How can I assist you with municipality services today?";
-                } else if (lowerMessage.includes('document') || lowerMessage.includes('require')) {
-                    return "You can find detailed documentation requirements for each service in the 'Documentation' section. Is there a specific service you need information about?";
-                } else if (lowerMessage.includes('license')) {
-                    return "For license applications, you'll typically need proof of identity, proof of address, passport photos, and any relevant qualification certificates. Check the Documentation section for complete details.";
-                } else if (lowerMessage.includes('property tax')) {
-                    return "For property tax payments, you'll need your property ID, ownership documents, and identification. You can pay instantly through our portal.";
-                } else if (lowerMessage.includes('vehicle')) {
-                    return "Vehicle registration requires the vehicle invoice, chassis number, engine number, and owner identification documents.";
-                } else if (lowerMessage.includes('trade')) {
-                    return "Trade license applications need business details, address proof, and owner identification documents.";
-                } else if (lowerMessage.includes('building')) {
-                    return "Building permits require property documents, building plans, and identification documents.";
-                } else if (lowerMessage.includes('birth') || lowerMessage.includes('death')) {
-                    return "For birth or death certificates, you'll need hospital records, identification of parents/applicants, and other relevant documents.";
-                } else if (lowerMessage.includes('status') || lowerMessage.includes('track')) {
-                    return "You can track your applications in the 'My Applications' section. All your submitted applications with their current status will be displayed there.";
-                } else if (lowerMessage.includes('thank')) {
-                    return "You're welcome! Is there anything else I can help you with?";
-                } else {
-                    return "I'm here to help with municipality services. You can ask me about documentation requirements, application processes, or status tracking. How can I assist you?";
+                // Greeting responses
+                if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                    return {
+                        text: "Hello! I'm your municipality assistant. I can help you with:",
+                        quickActions: [
+                            "License Application",
+                            "Property Tax Payment", 
+                            "Vehicle Registration",
+                            "Trade License",
+                            "Building Permit",
+                            "Birth Certificate",
+                            "Death Certificate",
+                            "Document Requirements"
+                        ]
+                    };
+                }
+                
+                // License application information
+                if (lowerMessage.includes('license') && lowerMessage.includes('apply')) {
+                    return {
+                        text: "For License Application, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>License Application Process:</h4>
+                                <ol>
+                                    <li>Fill out the license application form with personal details</li>
+                                    <li>Select the type of license (Business, Professional, Trade, Vehicle)</li>
+                                    <li>Upload required documents including Aadhar card front and back</li>
+                                    <li>Submit the application for processing</li>
+                                    <li>Track application status in 'My Applications' section</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of Identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of Address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Passport-sized Photographs (2 copies)</li>
+                                    <li>Educational qualification certificates (if applicable)</li>
+                                    <li>Experience certificates (if applicable)</li>
+                                    <li>No objection certificate from property owner (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "license"
+                    };
+                }
+                
+                // License renewal information
+                if (lowerMessage.includes('license') && lowerMessage.includes('renew')) {
+                    return {
+                        text: "For License Renewal, here's the process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>License Renewal Process:</h4>
+                                <ol>
+                                    <li>Enter your existing license number</li>
+                                    <li>Select renewal type (Annual, Biannual, Lifetime)</li>
+                                    <li>Update any changed information</li>
+                                    <li>Upload existing license copy and updated documents</li>
+                                    <li>Pay renewal fee and submit application</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Existing license certificate</li>
+                                    <li>Updated proof of identity</li>
+                                    <li>Updated proof of address</li>
+                                    <li>Recent passport-sized photographs</li>
+                                    <li>Payment receipt of renewal fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "license-renewal"
+                    };
+                }
+                
+                // Property tax information
+                if (lowerMessage.includes('property tax') || lowerMessage.includes('tax payment')) {
+                    return {
+                        text: "For Property Tax Payment, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Property Tax Payment Process:</h4>
+                                <ol>
+                                    <li>Enter your Property ID</li>
+                                    <li>Verify property owner details</li>
+                                    <li>Check tax amount due</li>
+                                    <li>Select payment method (Credit Card, Debit Card, UPI, Net Banking)</li>
+                                    <li>Upload property documents for verification</li>
+                                    <li>Make instant payment</li>
+                                    <li>Receive payment confirmation</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Property ownership documents</li>
+                                    <li>Previous tax payment receipts (if any)</li>
+                                    <li>Proof of identity</li>
+                                    <li>Property measurement details</li>
+                                    <li>Building plan approval (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "property-tax"
+                    };
+                }
+                
+                // Vehicle registration information
+                if (lowerMessage.includes('vehicle') || lowerMessage.includes('registration')) {
+                    return {
+                        text: "For Vehicle Registration, here's the complete process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Vehicle Registration Process:</h4>
+                                <ol>
+                                    <li>Select vehicle type (Two Wheeler, Four Wheeler, Commercial)</li>
+                                    <li>Enter vehicle details (Model, Manufacture Year, Chassis No, Engine No)</li>
+                                    <li>Provide owner information and address</li>
+                                    <li>Upload required documents including vehicle invoice</li>
+                                    <li>Submit application for processing</li>
+                                    <li>Pay registration fees</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Vehicle purchase invoice</li>
+                                    <li>Vehicle insurance certificate</li>
+                                    <li>Pollution under control certificate</li>
+                                    <li>Road tax payment receipt</li>
+                                    <li>Proof of identity and address</li>
+                                    <li>Vehicle fitness certificate (for commercial vehicles)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "vehicle-registration"
+                    };
+                }
+                
+                // Trade license information
+                if (lowerMessage.includes('trade license') || lowerMessage.includes('business license')) {
+                    return {
+                        text: "For Trade License Application, here's what you need:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Trade License Process:</h4>
+                                <ol>
+                                    <li>Enter business name and type</li>
+                                    <li>Provide business address details</li>
+                                    <li>Enter owner information</li>
+                                    <li>Upload business proof and identification documents</li>
+                                    <li>Submit application for approval</li>
+                                    <li>Track application status</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Business address proof</li>
+                                    <li>Partnership deed (if applicable)</li>
+                                    <li>Company incorporation certificate (if applicable)</li>
+                                    <li>No objection certificate from property owner</li>
+                                    <li>Site plan of business premises</li>
+                                    <li>Proof of identity and address of owner</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "trade-license"
+                    };
+                }
+                
+                // Building permit information
+                if (lowerMessage.includes('building permit') || lowerMessage.includes('construction')) {
+                    return {
+                        text: "For Building Permit Application, here's the procedure:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Building Permit Process:</h4>
+                                <ol>
+                                    <li>Provide property location details</li>
+                                    <li>Select building type (Residential, Commercial, Industrial)</li>
+                                    <li>Enter building specifications (Area, Floors)</li>
+                                    <li>Provide owner and architect details</li>
+                                    <li>Upload site plan and building drawings</li>
+                                    <li>Submit for municipal approval</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Land ownership documents</li>
+                                    <li>Site plan and building drawings</li>
+                                    <li>Structural stability certificate</li>
+                                    <li>No objection certificate from neighbors (if required)</li>
+                                    <li>Environmental clearance (if applicable)</li>
+                                    <li>Proof of identity and address</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "building-permit"
+                    };
+                }
+                
+                // Birth certificate information
+                if (lowerMessage.includes('birth certificate') || lowerMessage.includes('birth')) {
+                    return {
+                        text: "For Birth Certificate Application, here's the process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Birth Certificate Process:</h4>
+                                <ol>
+                                    <li>Enter child's details (Name, Gender, Date of Birth)</li>
+                                    <li>Provide place of birth information</li>
+                                    <li>Enter parents' details</li>
+                                    <li>Upload hospital birth record and parent documents</li>
+                                    <li>Submit application for certificate issuance</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Hospital birth record or delivery slip</li>
+                                    <li>Proof of identity of parents</li>
+                                    <li>Proof of address of parents</li>
+                                    <li>Marriage certificate of parents</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "birth-certificate"
+                    };
+                }
+                
+                // Death certificate information
+                if (lowerMessage.includes('death certificate') || lowerMessage.includes('death')) {
+                    return {
+                        text: "For Death Certificate Application, here's what you need:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Death Certificate Process:</h4>
+                                <ol>
+                                    <li>Enter deceased person's details</li>
+                                    <li>Provide date and place of death information</li>
+                                    <li>Enter cause of death</li>
+                                    <li>Provide applicant details and relationship</li>
+                                    <li>Upload hospital death record and identification</li>
+                                    <li>Submit application for certificate</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Hospital death record or medical certificate</li>
+                                    <li>Proof of identity of applicant</li>
+                                    <li>Proof of address of applicant</li>
+                                    <li>Proof of identity of deceased</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "death-certificate"
+                    };
+                }
+                
+                // Document upload information
+                if (lowerMessage.includes('document') || lowerMessage.includes('upload') || lowerMessage.includes('aadhar')) {
+                    return {
+                        text: "For Document Upload, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Document Upload Process:</h4>
+                                <ol>
+                                    <li>Click on the file upload area for each required document</li>
+                                    <li>Select the file from your device</li>
+                                    <li>Supported formats: JPG, PNG, PDF (Images are preferred for quick verification)</li>
+                                    <li>For Aadhar Card: Upload both front and back sides clearly</li>
+                                    <li>Ensure documents are clear and readable</li>
+                                    <li>Maximum file size: 5MB per document</li>
+                                    <li>You can preview uploaded documents before submission</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>General Document Requirements:</h4>
+                                <ul>
+                                    <li><strong>Aadhar Card:</strong> Both front and back sides required</li>
+                                    <li><strong>Passport Photo:</strong> Recent white background photo</li>
+                                    <li><strong>Address Proof:</strong> Utility bill, rental agreement, etc.</li>
+                                    <li><strong>Property Documents:</strong> Clear copies of ownership papers</li>
+                                    <li><strong>Educational Certificates:</strong> If required for license</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Application status and tracking
+                if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('application status')) {
+                    return {
+                        text: "For Application Tracking, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Application Tracking:</h4>
+                                <ol>
+                                    <li>Go to 'My Applications' section after login</li>
+                                    <li>View all your submitted applications</li>
+                                    <li>Check current status (Pending, In Progress, Approved, Rejected)</li>
+                                    <li>Click 'View Details' for detailed information</li>
+                                    <li>Admin notes will be visible if application is processed</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Status Meanings:</h4>
+                                <ul>
+                                    <li><strong>Pending:</strong> Application submitted, awaiting review</li>
+                                    <li><strong>In Progress:</strong> Under processing by municipality</li>
+                                    <li><strong>Approved:</strong> Application approved, certificate ready</li>
+                                    <li><strong>Rejected:</strong> Application rejected with reasons provided</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Admin panel information
+                if (lowerMessage.includes('admin') || lowerMessage.includes('manage')) {
+                    return {
+                        text: "For Admin Panel Access, here's what you can do:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Admin Panel Features:</h4>
+                                <ol>
+                                    <li><strong>Dashboard:</strong> View overall statistics and metrics</li>
+                                    <li><strong>Applications Management:</strong> Review, approve, or reject applications</li>
+                                    <li><strong>User Management:</strong> Manage registered users</li>
+                                    <li><strong>Reports:</strong> Generate analytics and reports</li>
+                                    <li><strong>Settings:</strong> Configure system settings</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Admin Login:</h4>
+                                <ul>
+                                    <li>Use admin credentials to access the panel</li>
+                                    <li>Manage all user applications efficiently</li>
+                                    <li>Update application status with notes</li>
+                                    <li>Monitor system performance</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // General documentation requirements
+                if (lowerMessage.includes('document') || lowerMessage.includes('require') || lowerMessage.includes('need')) {
+                    return {
+                        text: "For general documentation requirements:",
+                        details: `
+                            <div class="document-list">
+                                <h4>Common Documents Required for Most Services:</h4>
+                                <ul>
+                                    <li><strong>Proof of Identity:</strong> Aadhar Card, Passport, Voter ID, Driving License</li>
+                                    <li><strong>Proof of Address:</strong> Aadhar Card, Utility Bill, Rental Agreement</li>
+                                    <li><strong>Photographs:</strong> Recent passport-sized photos (2 copies)</li>
+                                    <li><strong>Existing Certificates:</strong> Any relevant existing licenses or certificates</li>
+                                    <li><strong>Payment Receipts:</strong> For applicable fees and charges</li>
+                                </ul>
+                            </div>
+                            <p>For specific service requirements, ask about that particular service like "license documents" or "vehicle registration documents".</p>
+                        `
+                    };
+                }
+                
+                // Help and support
+                if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('contact')) {
+                    return {
+                        text: "I'm here to help you with municipality services!",
+                        details: `
+                            <div class="service-steps">
+                                <h4>How I can assist you:</h4>
+                                <ol>
+                                    <li>Provide information about all municipality services</li>
+                                    <li>Explain documentation requirements</li>
+                                    <li>Guide through application processes</li>
+                                    <li>Help with document upload procedures</li>
+                                    <li>Explain application tracking</li>
+                                    <li>Provide admin panel information</li>
+                                </ol>
+                            </div>
+                            <p>You can ask me about:</p>
+                            <ul>
+                                <li>License applications and renewals</li>
+                                <li>Property tax payments</li>
+                                <li>Vehicle registration</li>
+                                <li>Trade licenses</li>
+                                <li>Building permits</li>
+                                <li>Birth and death certificates</li>
+                                <li>Document requirements</li>
+                                <li>Application status</li>
+                            </ul>
+                        `
+                    };
+                }
+                
+                // Default response
+                return {
+                    text: "I'm here to help with municipality services. You can ask me about:",
+                    details: `
+                        <div class="service-steps">
+                            <ul>
+                                <li>License applications and renewals</li>
+                                <li>Property tax payment process</li>
+                                <li>Vehicle registration requirements</li>
+                                <li>Trade license documentation</li>
+                                <li>Building permit procedures</li>
+                                <li>Birth and death certificate applications</li>
+                                <li>Document upload requirements</li>
+                                <li>Application tracking and status</li>
+                                <li>Admin panel features</li>
+                            </ul>
+                        </div>
+                        <p>Or use the quick action buttons below for specific services!</p>
+                    `,
+                    quickActions: [
+                        "License Application",
+                        "Property Tax", 
+                        "Vehicle Registration",
+                        "Trade License",
+                        "Building Permit",
+                        "Birth Certificate",
+                        "Death Certificate",
+                        "Document Upload"
+                    ]
+                };
+            }
+
+            // Initialize chatbot with welcome message and quick actions
+            function initializeChatbot() {
+                const welcomeResponse = generateBotResponse('hello');
+                addMessage(welcomeResponse.text, 'bot');
+                
+                if (welcomeResponse.quickActions) {
+                    const quickActionsContainer = document.createElement('div');
+                    quickActionsContainer.className = 'chatbot-quick-actions';
+                    
+                    welcomeResponse.quickActions.forEach(action => {
+                        const actionButton = document.createElement('button');
+                        actionButton.className = 'quick-action-btn';
+                        actionButton.textContent = action;
+                        actionButton.onclick = function() {
+                            document.getElementById('chatbotInput').value = action;
+                            sendMessage();
+                        };
+                        quickActionsContainer.appendChild(actionButton);
+                    });
+                    
+                    document.getElementById('chatbotMessages').appendChild(quickActionsContainer);
                 }
             }
 
             // Login/Register functionality
             document.getElementById('loginBtn').addEventListener('click', function() {
-                const email = prompt('Enter your email:');
-                if (email) {
-                    // Simple authentication - in a real app, this would be more secure
-                    let user = users.find(u => u.email === email);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        alert(`Welcome back, ${user.name}!`);
-                        updateUIForUser();
-                    } else {
-                        alert('User not found. Please register.');
-                    }
+                document.getElementById('loginModal').style.display = 'flex';
+            });
+
+            document.getElementById('closeLoginModal').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'none';
+            });
+
+            document.getElementById('adminLoginBtn').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminLoginModal').style.display = 'flex';
+            });
+
+            document.getElementById('closeAdminLoginModal').addEventListener('click', function() {
+                document.getElementById('adminLoginModal').style.display = 'none';
+            });
+
+            document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simple authentication - in a real app, this would be more secure
+                let user = users.find(u => u.email === email);
+                if (user) {
+                    currentUser = user;
+                    isAdmin = false;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+                    document.getElementById('loginModal').style.display = 'none';
+                    alert(`Welcome back, ${user.name}!`);
+                    updateUIForUser();
+                } else {
+                    alert('User not found. Please register.');
+                }
+            });
+
+            document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('adminUsername').value;
+                const password = document.getElementById('adminPassword').value;
+                
+                if (username === adminCredentials.username && password === adminCredentials.password) {
+                    isAdmin = true;
+                    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+                    document.getElementById('adminLoginModal').style.display = 'none';
+                    alert('Welcome, Admin!');
+                    updateUIForUser();
+                } else {
+                    alert('Invalid admin credentials. Please try again.');
                 }
             });
 
@@ -1876,6 +2551,7 @@
                     
                     users.push(newUser);
                     currentUser = newUser;
+                    isAdmin = false;
                     saveData();
                     
                     alert(`Registration successful! Welcome, ${name}.`);
@@ -1884,13 +2560,15 @@
             });
 
             function updateUIForUser() {
-                if (currentUser) {
+                if (currentUser || isAdmin) {
                     document.getElementById('loginBtn').textContent = 'Logout';
                     document.getElementById('registerBtn').style.display = 'none';
                     
                     document.getElementById('loginBtn').onclick = function() {
                         currentUser = null;
+                        isAdmin = false;
                         localStorage.removeItem('currentUser');
+                        localStorage.removeItem('isAdmin');
                         alert('You have been logged out.');
                         location.reload();
                     };
@@ -1913,6 +2591,7 @@
             updateStats();
             init3DAnimation();
             updateUIForUser();
+            initializeChatbot();
 
             // Set up periodic updates for demo purposes
             setInterval(updateStats, 5000);
@@ -1927,6 +2606,7 @@
             if (currentUser) {
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
             }
+            localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
         }
 
         function updateApplicationList() {
@@ -2111,6 +2791,21 @@
                 
                 tableBody.appendChild(row);
             });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editUser(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteUser(id);
+                });
+            });
         }
 
         function updateStats() {
@@ -2158,6 +2853,29 @@
                 updateAdminApplicationsTable();
                 updateStats();
                 alert('Application deleted successfully!');
+            }
+        }
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                const newStatus = prompt('Enter new status (active, inactive):', user.status);
+                if (newStatus && ['active', 'inactive'].includes(newStatus.toLowerCase())) {
+                    user.status = newStatus.toLowerCase();
+                    saveData();
+                    updateAdminUsersTable();
+                    alert('User status updated successfully!');
+                }
+            }
+        }
+
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                saveData();
+                updateAdminUsersTable();
+                updateStats();
+                alert('User deleted successfully!');
             }
         }
 
