@@ -623,6 +623,44 @@
             color: #7f8c8d;
         }
         
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .admin-login-btn {
+            background: var(--warning);
+            color: white;
+            margin-top: 10px;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -981,6 +1019,45 @@
             </div>
         </div>
 
+        <!-- Login Modal -->
+        <div class="login-modal" id="loginModal">
+            <div class="login-form">
+                <h2>User Login</h2>
+                <form id="userLoginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                <button class="btn admin-login-btn" id="adminLoginBtn" style="width: 100%; margin-top: 10px;">Admin Login</button>
+                <button class="btn btn-secondary" id="closeLoginModal" style="width: 100%; margin-top: 10px;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div class="login-modal" id="adminLoginModal">
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminUsername">Username</label>
+                        <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning" style="width: 100%;">Login as Admin</button>
+                </form>
+                <button class="btn btn-secondary" id="closeAdminLoginModal" style="width: 100%; margin-top: 10px;">Cancel</button>
+            </div>
+        </div>
+
         <footer>
             <p>&copy; 2023 Municipality Services Portal. All rights reserved.</p>
         </footer>
@@ -994,8 +1071,15 @@
             { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", status: "active", applications: 1 }
         ];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let isAdmin = JSON.parse(localStorage.getItem('isAdmin')) || false;
         let applicationIdCounter = parseInt(localStorage.getItem('applicationIdCounter')) || 1001;
         let userIdCounter = parseInt(localStorage.getItem('userIdCounter')) || 3;
+
+        // Admin credentials
+        const adminCredentials = {
+            username: "admin",
+            password: "admin123"
+        };
 
         // Service-specific documentation requirements
         const documentationRequirements = {
@@ -1844,18 +1928,55 @@
 
             // Login/Register functionality
             document.getElementById('loginBtn').addEventListener('click', function() {
-                const email = prompt('Enter your email:');
-                if (email) {
-                    // Simple authentication - in a real app, this would be more secure
-                    let user = users.find(u => u.email === email);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        alert(`Welcome back, ${user.name}!`);
-                        updateUIForUser();
-                    } else {
-                        alert('User not found. Please register.');
-                    }
+                document.getElementById('loginModal').style.display = 'flex';
+            });
+
+            document.getElementById('closeLoginModal').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'none';
+            });
+
+            document.getElementById('adminLoginBtn').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminLoginModal').style.display = 'flex';
+            });
+
+            document.getElementById('closeAdminLoginModal').addEventListener('click', function() {
+                document.getElementById('adminLoginModal').style.display = 'none';
+            });
+
+            document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simple authentication - in a real app, this would be more secure
+                let user = users.find(u => u.email === email);
+                if (user) {
+                    currentUser = user;
+                    isAdmin = false;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+                    document.getElementById('loginModal').style.display = 'none';
+                    alert(`Welcome back, ${user.name}!`);
+                    updateUIForUser();
+                } else {
+                    alert('User not found. Please register.');
+                }
+            });
+
+            document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('adminUsername').value;
+                const password = document.getElementById('adminPassword').value;
+                
+                if (username === adminCredentials.username && password === adminCredentials.password) {
+                    isAdmin = true;
+                    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+                    document.getElementById('adminLoginModal').style.display = 'none';
+                    alert('Welcome, Admin!');
+                    updateUIForUser();
+                } else {
+                    alert('Invalid admin credentials. Please try again.');
                 }
             });
 
@@ -1876,6 +1997,7 @@
                     
                     users.push(newUser);
                     currentUser = newUser;
+                    isAdmin = false;
                     saveData();
                     
                     alert(`Registration successful! Welcome, ${name}.`);
@@ -1884,13 +2006,15 @@
             });
 
             function updateUIForUser() {
-                if (currentUser) {
+                if (currentUser || isAdmin) {
                     document.getElementById('loginBtn').textContent = 'Logout';
                     document.getElementById('registerBtn').style.display = 'none';
                     
                     document.getElementById('loginBtn').onclick = function() {
                         currentUser = null;
+                        isAdmin = false;
                         localStorage.removeItem('currentUser');
+                        localStorage.removeItem('isAdmin');
                         alert('You have been logged out.');
                         location.reload();
                     };
@@ -1927,6 +2051,7 @@
             if (currentUser) {
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
             }
+            localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
         }
 
         function updateApplicationList() {
