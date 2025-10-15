@@ -32,7 +32,7 @@
         }
         
         .container {
-            max-width: 1800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -40,8 +40,7 @@
         header {
             background: var(--primary);
             color: white;
-            width:100%
-            padding: 20px 20px;
+            padding: 20px 0;
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -2023,7 +2022,7 @@
                 updateStats();
             }
 
-            // Enhanced chatbot functionality
+            // Enhanced chatbot functionality from code1
             document.getElementById('chatbotToggle').addEventListener('click', function() {
                 document.getElementById('chatbotWindow').style.display = 'flex';
             });
@@ -2118,10 +2117,263 @@
                             "License Application",
                             "Property Tax Payment", 
                             "Vehicle Registration",
-                            "File a Complaint",
-                            "Check Application Status",
-                            "Document Requirements"
+                            "Trade License",
+                            "Building Permit",
+                            "Birth Certificate",
+                            "Death Certificate",
+                            "Document Requirements",
+                            "File a Complaint"
                         ]
+                    };
+                }
+                
+                // License application information
+                if (lowerMessage.includes('license') && lowerMessage.includes('apply')) {
+                    return {
+                        text: "For License Application, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>License Application Process:</h4>
+                                <ol>
+                                    <li>Fill out the license application form with personal details</li>
+                                    <li>Select the type of license (Business, Professional, Trade, Vehicle)</li>
+                                    <li>Upload required documents including Aadhar card front and back</li>
+                                    <li>Submit the application for processing</li>
+                                    <li>Track application status in 'My Applications' section</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of Identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of Address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Passport-sized Photographs (2 copies)</li>
+                                    <li>Educational qualification certificates (if applicable)</li>
+                                    <li>Experience certificates (if applicable)</li>
+                                    <li>No objection certificate from property owner (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "license"
+                    };
+                }
+                
+                // License renewal information
+                if (lowerMessage.includes('license') && lowerMessage.includes('renew')) {
+                    return {
+                        text: "For License Renewal, here's the process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>License Renewal Process:</h4>
+                                <ol>
+                                    <li>Enter your existing license number</li>
+                                    <li>Select renewal type (Annual, Biannual, Lifetime)</li>
+                                    <li>Update any changed information</li>
+                                    <li>Upload existing license copy and updated documents</li>
+                                    <li>Pay renewal fee and submit application</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Existing license certificate</li>
+                                    <li>Updated proof of identity</li>
+                                    <li>Updated proof of address</li>
+                                    <li>Recent passport-sized photographs</li>
+                                    <li>Payment receipt of renewal fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "license-renewal"
+                    };
+                }
+                
+                // Property tax information
+                if (lowerMessage.includes('property tax') || lowerMessage.includes('tax payment')) {
+                    return {
+                        text: "For Property Tax Payment, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Property Tax Payment Process:</h4>
+                                <ol>
+                                    <li>Enter your Property ID</li>
+                                    <li>Verify property owner details</li>
+                                    <li>Check tax amount due</li>
+                                    <li>Select payment method (Credit Card, Debit Card, UPI, Net Banking)</li>
+                                    <li>Upload property documents for verification</li>
+                                    <li>Make instant payment</li>
+                                    <li>Receive payment confirmation</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Property ownership documents</li>
+                                    <li>Previous tax payment receipts (if any)</li>
+                                    <li>Proof of identity</li>
+                                    <li>Property measurement details</li>
+                                    <li>Building plan approval (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "property-tax"
+                    };
+                }
+                
+                // Vehicle registration information
+                if (lowerMessage.includes('vehicle') || lowerMessage.includes('registration')) {
+                    return {
+                        text: "For Vehicle Registration, here's the complete process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Vehicle Registration Process:</h4>
+                                <ol>
+                                    <li>Select vehicle type (Two Wheeler, Four Wheeler, Commercial)</li>
+                                    <li>Enter vehicle details (Model, Manufacture Year, Chassis No, Engine No)</li>
+                                    <li>Provide owner information and address</li>
+                                    <li>Upload required documents including vehicle invoice</li>
+                                    <li>Submit application for processing</li>
+                                    <li>Pay registration fees</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Vehicle purchase invoice</li>
+                                    <li>Vehicle insurance certificate</li>
+                                    <li>Pollution under control certificate</li>
+                                    <li>Road tax payment receipt</li>
+                                    <li>Proof of identity and address</li>
+                                    <li>Vehicle fitness certificate (for commercial vehicles)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "vehicle-registration"
+                    };
+                }
+                
+                // Trade license information
+                if (lowerMessage.includes('trade license') || lowerMessage.includes('business license')) {
+                    return {
+                        text: "For Trade License Application, here's what you need:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Trade License Process:</h4>
+                                <ol>
+                                    <li>Enter business name and type</li>
+                                    <li>Provide business address details</li>
+                                    <li>Enter owner information</li>
+                                    <li>Upload business proof and identification documents</li>
+                                    <li>Submit application for approval</li>
+                                    <li>Track application status</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Business address proof</li>
+                                    <li>Partnership deed (if applicable)</li>
+                                    <li>Company incorporation certificate (if applicable)</li>
+                                    <li>No objection certificate from property owner</li>
+                                    <li>Site plan of business premises</li>
+                                    <li>Proof of identity and address of owner</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "trade-license"
+                    };
+                }
+                
+                // Building permit information
+                if (lowerMessage.includes('building permit') || lowerMessage.includes('construction')) {
+                    return {
+                        text: "For Building Permit Application, here's the procedure:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Building Permit Process:</h4>
+                                <ol>
+                                    <li>Provide property location details</li>
+                                    <li>Select building type (Residential, Commercial, Industrial)</li>
+                                    <li>Enter building specifications (Area, Floors)</li>
+                                    <li>Provide owner and architect details</li>
+                                    <li>Upload site plan and building drawings</li>
+                                    <li>Submit for municipal approval</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Land ownership documents</li>
+                                    <li>Site plan and building drawings</li>
+                                    <li>Structural stability certificate</li>
+                                    <li>No objection certificate from neighbors (if required)</li>
+                                    <li>Environmental clearance (if applicable)</li>
+                                    <li>Proof of identity and address</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "building-permit"
+                    };
+                }
+                
+                // Birth certificate information
+                if (lowerMessage.includes('birth certificate') || lowerMessage.includes('birth')) {
+                    return {
+                        text: "For Birth Certificate Application, here's the process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Birth Certificate Process:</h4>
+                                <ol>
+                                    <li>Enter child's details (Name, Gender, Date of Birth)</li>
+                                    <li>Provide place of birth information</li>
+                                    <li>Enter parents' details</li>
+                                    <li>Upload hospital birth record and parent documents</li>
+                                    <li>Submit application for certificate issuance</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Hospital birth record or delivery slip</li>
+                                    <li>Proof of identity of parents</li>
+                                    <li>Proof of address of parents</li>
+                                    <li>Marriage certificate of parents</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "birth-certificate"
+                    };
+                }
+                
+                // Death certificate information
+                if (lowerMessage.includes('death certificate') || lowerMessage.includes('death')) {
+                    return {
+                        text: "For Death Certificate Application, here's what you need:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Death Certificate Process:</h4>
+                                <ol>
+                                    <li>Enter deceased person's details</li>
+                                    <li>Provide date and place of death information</li>
+                                    <li>Enter cause of death</li>
+                                    <li>Provide applicant details and relationship</li>
+                                    <li>Upload hospital death record and identification</li>
+                                    <li>Submit application for certificate</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Hospital death record or medical certificate</li>
+                                    <li>Proof of identity of applicant</li>
+                                    <li>Proof of address of applicant</li>
+                                    <li>Proof of identity of deceased</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "death-certificate"
                     };
                 }
                 
@@ -2152,6 +2404,174 @@
                     };
                 }
                 
+                // Document upload information
+                if (lowerMessage.includes('document') || lowerMessage.includes('upload') || lowerMessage.includes('aadhar')) {
+                    return {
+                        text: "For Document Upload, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Document Upload Process:</h4>
+                                <ol>
+                                    <li>Click on the file upload area for each required document</li>
+                                    <li>Select the file from your device</li>
+                                    <li>Supported formats: JPG, PNG, PDF (Images are preferred for quick verification)</li>
+                                    <li>For Aadhar Card: Upload both front and back sides clearly</li>
+                                    <li>Ensure documents are clear and readable</li>
+                                    <li>Maximum file size: 5MB per document</li>
+                                    <li>You can preview uploaded documents before submission</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>General Document Requirements:</h4>
+                                <ul>
+                                    <li><strong>Aadhar Card:</strong> Both front and back sides required</li>
+                                    <li><strong>Passport Photo:</strong> Recent white background photo</li>
+                                    <li><strong>Address Proof:</strong> Utility bill, rental agreement, etc.</li>
+                                    <li><strong>Property Documents:</strong> Clear copies of ownership papers</li>
+                                    <li><strong>Educational Certificates:</strong> If required for license</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Application status and tracking
+                if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('application status')) {
+                    return {
+                        text: "For Application Tracking, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Application Tracking:</h4>
+                                <ol>
+                                    <li>Go to 'My Applications' section after login</li>
+                                    <li>View all your submitted applications</li>
+                                    <li>Check current status (Pending, In Progress, Approved, Rejected)</li>
+                                    <li>Click 'View Details' for detailed information</li>
+                                    <li>Admin notes will be visible if application is processed</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Status Meanings:</h4>
+                                <ul>
+                                    <li><strong>Pending:</strong> Application submitted, awaiting review</li>
+                                    <li><strong>In Progress:</strong> Under processing by municipality</li>
+                                    <li><strong>Approved:</strong> Application approved, certificate ready</li>
+                                    <li><strong>Rejected:</strong> Application rejected with reasons provided</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Complaint status and tracking
+                if (lowerMessage.includes('complaint status') || lowerMessage.includes('complaint track')) {
+                    return {
+                        text: "For Complaint Tracking, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Complaint Tracking:</h4>
+                                <ol>
+                                    <li>Go to 'My Complaints' section after login</li>
+                                    <li>View all your submitted complaints</li>
+                                    <li>Check current status (Open, Investigation, Resolved, Closed)</li>
+                                    <li>Click 'View Details' for detailed information</li>
+                                    <li>Admin notes will be visible if complaint is processed</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Status Meanings:</h4>
+                                <ul>
+                                    <li><strong>Open:</strong> Complaint submitted, awaiting review</li>
+                                    <li><strong>Investigation:</strong> Under investigation by municipality</li>
+                                    <li><strong>Resolved:</strong> Complaint resolved, issue fixed</li>
+                                    <li><strong>Closed:</strong> Complaint closed with resolution</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Admin panel information
+                if (lowerMessage.includes('admin') || lowerMessage.includes('manage')) {
+                    return {
+                        text: "For Admin Panel Access, here's what you can do:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Admin Panel Features:</h4>
+                                <ol>
+                                    <li><strong>Dashboard:</strong> View overall statistics and metrics</li>
+                                    <li><strong>Applications Management:</strong> Review, approve, or reject applications</li>
+                                    <li><strong>Complaints Management:</strong> Review and update complaint status</li>
+                                    <li><strong>User Management:</strong> Manage registered users</li>
+                                    <li><strong>Reports:</strong> Generate analytics and reports</li>
+                                    <li><strong>Settings:</strong> Configure system settings</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Admin Login:</h4>
+                                <ul>
+                                    <li>Use admin credentials to access the panel</li>
+                                    <li>Manage all user applications efficiently</li>
+                                    <li>Update application and complaint status with notes</li>
+                                    <li>Monitor system performance</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // General documentation requirements
+                if (lowerMessage.includes('document') || lowerMessage.includes('require') || lowerMessage.includes('need')) {
+                    return {
+                        text: "For general documentation requirements:",
+                        details: `
+                            <div class="document-list">
+                                <h4>Common Documents Required for Most Services:</h4>
+                                <ul>
+                                    <li><strong>Proof of Identity:</strong> Aadhar Card, Passport, Voter ID, Driving License</li>
+                                    <li><strong>Proof of Address:</strong> Aadhar Card, Utility Bill, Rental Agreement</li>
+                                    <li><strong>Photographs:</strong> Recent passport-sized photos (2 copies)</li>
+                                    <li><strong>Existing Certificates:</strong> Any relevant existing licenses or certificates</li>
+                                    <li><strong>Payment Receipts:</strong> For applicable fees and charges</li>
+                                </ul>
+                            </div>
+                            <p>For specific service requirements, ask about that particular service like "license documents" or "vehicle registration documents".</p>
+                        `
+                    };
+                }
+                
+                // Help and support
+                if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('contact')) {
+                    return {
+                        text: "I'm here to help you with municipality services!",
+                        details: `
+                            <div class="service-steps">
+                                <h4>How I can assist you:</h4>
+                                <ol>
+                                    <li>Provide information about all municipality services</li>
+                                    <li>Explain documentation requirements</li>
+                                    <li>Guide through application processes</li>
+                                    <li>Help with document upload procedures</li>
+                                    <li>Explain application and complaint tracking</li>
+                                    <li>Provide admin panel information</li>
+                                </ol>
+                            </div>
+                            <p>You can ask me about:</p>
+                            <ul>
+                                <li>License applications and renewals</li>
+                                <li>Property tax payments</li>
+                                <li>Vehicle registration</li>
+                                <li>Trade licenses</li>
+                                <li>Building permits</li>
+                                <li>Birth and death certificates</li>
+                                <li>Filing complaints</li>
+                                <li>Document requirements</li>
+                                <li>Application and complaint status</li>
+                            </ul>
+                        `
+                    };
+                }
+                
                 // Default response
                 return {
                     text: "I'm here to help with municipality services. You can ask me about:",
@@ -2161,9 +2581,13 @@
                                 <li>License applications and renewals</li>
                                 <li>Property tax payment process</li>
                                 <li>Vehicle registration requirements</li>
+                                <li>Trade license documentation</li>
+                                <li>Building permit procedures</li>
+                                <li>Birth and death certificate applications</li>
                                 <li>Filing complaints about municipal issues</li>
                                 <li>Document upload requirements</li>
-                                <li>Application tracking and status</li>
+                                <li>Application and complaint tracking</li>
+                                <li>Admin panel features</li>
                             </ul>
                         </div>
                         <p>Or use the quick action buttons below for specific services!</p>
@@ -2171,9 +2595,13 @@
                     quickActions: [
                         "License Application",
                         "Property Tax", 
+                        "Vehicle Registration",
+                        "Trade License",
+                        "Building Permit",
+                        "Birth Certificate",
+                        "Death Certificate",
                         "File Complaint",
-                        "Check Status",
-                        "Document Requirements"
+                        "Document Upload"
                     ]
                 };
             }
