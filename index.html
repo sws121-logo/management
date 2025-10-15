@@ -32,7 +32,8 @@
         }
         
         .container {
-            width: 2000px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -40,8 +41,8 @@
         header {
             background: var(--primary);
             color: white;
-            width:2000px;;
-            padding: 20px 0;
+            width: 100%;
+            padding: 15px 0;
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -54,12 +55,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+            flex-wrap: wrap;
         }
         
         .logo {
             display: flex;
             align-items: center;
             gap: 15px;
+            margin-bottom: 10px;
         }
         
         .logo i {
@@ -71,18 +74,27 @@
             font-size: 1.8rem;
         }
         
+        nav {
+            width: 100%;
+            order: 3;
+            margin-top: 15px;
+        }
+        
         nav ul {
             display: flex;
             list-style: none;
-            gap: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         nav a {
             color: white;
             text-decoration: none;
-            padding: 8px 15px;
+            padding: 8px 12px;
             border-radius: 5px;
             transition: background 0.3s;
+            font-size: 0.9rem;
         }
         
         nav a:hover, nav a.active {
@@ -91,16 +103,17 @@
         
         .user-actions {
             display: flex;
-            gap: 15px;
+            gap: 10px;
         }
         
         .btn {
-            padding: 10px 20px;
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
         
         .btn-primary {
@@ -146,7 +159,7 @@
         .section {
             background: white;
             border-radius: 10px;
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             display: none;
@@ -298,8 +311,8 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--secondary);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .application-info h3, .complaint-info h3 {
@@ -311,6 +324,7 @@
             gap: 15px;
             color: #7f8c8d;
             font-size: 0.9rem;
+            flex-wrap: wrap;
         }
         
         .status {
@@ -391,6 +405,7 @@
             bottom: 70px;
             right: 0;
             width: 350px;
+            max-width: 90vw;
             height: 450px;
             background: white;
             border-radius: 10px;
@@ -609,7 +624,7 @@
         footer {
             text-align: center;
             padding: 20px;
-            width:2000px;
+            width: 100%;
             margin-top: 40px;
             color: #7f8c8d;
             border-top: 1px solid #eee;
@@ -866,15 +881,49 @@
             margin-top: 15px;
         }
         
-        @media (max-width: 1024px) {
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
             .header-content {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            nav ul {
-                flex-wrap: wrap;
+            .logo {
                 justify-content: center;
+                text-align: center;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            nav a {
+                padding: 10px 15px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .user-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .service-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
             }
             
             .admin-panel {
@@ -896,36 +945,10 @@
             .complaint-categories {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-            
-            .user-actions {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .service-categories {
-                grid-template-columns: 1fr;
-            }
             
             .chatbot-window {
-                width: 300px;
-                right: -20px;
+                width: 95vw;
+                right: -10px;
             }
             
             .modal-content {
@@ -934,6 +957,53 @@
             
             .complaint-actions {
                 flex-direction: column;
+            }
+            
+            .application-item, .complaint-item {
+                flex-direction: column;
+            }
+            
+            .application-status, .complaint-status {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .header-content {
+                flex-wrap: nowrap;
+            }
+            
+            nav {
+                width: auto;
+                order: 2;
+                margin-top: 0;
+            }
+            
+            .user-actions {
+                order: 3;
+            }
+            
+            .service-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .header-content {
+                flex-wrap: nowrap;
+            }
+            
+            nav {
+                width: auto;
+                order: 2;
+                margin-top: 0;
+            }
+            
+            .user-actions {
+                order: 3;
             }
         }
     </style>
@@ -1504,6 +1574,8 @@
             <p>&copy; 2023 Municipality Services Portal. All rights reserved.</p>
         </footer>
     </div>
+
+  
 
     <script>
         // Sample data for the application
