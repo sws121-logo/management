@@ -883,123 +883,6 @@
             margin-top: 15px;
         }
         
-        /* NEW STYLES FOR REGISTRATION FORM */
-        .registration-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .form-full-width {
-            grid-column: 1 / -1;
-        }
-        
-        /* NEW STYLES FOR INFRASTRUCTURE MAPS */
-        .infrastructure-section {
-            margin-bottom: 30px;
-        }
-        
-        .map-container {
-            width: 100%;
-            height: 400px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: var(--primary);
-        }
-        
-        .map-placeholder i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-        
-        .map-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .map-legend {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
-        }
-        
-        .water-level-indicator {
-            background: #3498db;
-            height: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .water-level-fill {
-            background: #1e6ea7;
-            height: 100%;
-            width: 0%;
-            transition: width 1s ease;
-        }
-        
-        .water-level-marks {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 0.8rem;
-            color: #7f8c8d;
-        }
-        
-        .alert-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .alert-low {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .alert-medium {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .alert-high {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
         /* Mobile-first responsive design */
         @media (max-width: 768px) {
             .container {
@@ -1084,14 +967,6 @@
                 align-items: center;
                 margin-top: 10px;
             }
-            
-            .registration-form {
-                grid-template-columns: 1fr;
-            }
-            
-            .map-container {
-                height: 300px;
-            }
         }
         
         @media (min-width: 769px) {
@@ -1128,19 +1003,11 @@
             .service-categories {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
-            .map-container {
-                height: 500px;
-            }
         }
         
         @media (min-width: 1025px) {
             .service-categories {
                 grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .registration-form {
-                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -1157,7 +1024,6 @@
                     <ul>
                         <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
                         <li><a href="#" class="nav-link" data-section="services">Services</a></li>
-                        <li><a href="#" class="nav-link" data-section="infrastructure">Infrastructure</a></li>
                         <li><a href="#" class="nav-link" data-section="complaints">File Complaint</a></li>
                         <li><a href="#" class="nav-link" data-section="my-applications">My Applications</a></li>
                         <li><a href="#" class="nav-link" data-section="my-complaints">My Complaints</a></li>
@@ -1367,116 +1233,6 @@
                     <i class="fas fa-paw category-icon"></i>
                     <h3>Pet License</h3>
                     <p>Register and license your pets with the municipality</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Infrastructure Section -->
-        <section id="infrastructure" class="section">
-            <h2 class="section-title">Infrastructure Monitoring</h2>
-            
-            <div class="infrastructure-section">
-                <h3>River Water Level Monitoring</h3>
-                <p>Track current water levels in the city's rivers to monitor flood risks.</p>
-                
-                <div class="map-controls">
-                    <button class="btn btn-primary" id="refreshWaterLevel">Refresh Data</button>
-                    <select id="riverSelector">
-                        <option value="river1">Main River</option>
-                        <option value="river2">North River</option>
-                        <option value="river3">South River</option>
-                    </select>
-                </div>
-                
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <i class="fas fa-water"></i>
-                        <h3>River Water Level Monitoring</h3>
-                        <p>Interactive map showing current water levels and flood risk areas</p>
-                    </div>
-                </div>
-                
-                <div class="water-level-info">
-                    <h4>Current Water Level: <span id="currentWaterLevel">2.5</span> meters</h4>
-                    <div class="water-level-indicator">
-                        <div class="water-level-fill" id="waterLevelFill"></div>
-                    </div>
-                    <div class="water-level-marks">
-                        <span>0m</span>
-                        <span>2m (Normal)</span>
-                        <span>4m (Warning)</span>
-                        <span>6m (Danger)</span>
-                    </div>
-                    <div class="alert-indicator" id="waterAlert">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Normal Water Level</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="infrastructure-section">
-                <h3>Water Pipeline Network</h3>
-                <p>View the city's water pipeline infrastructure and maintenance status.</p>
-                
-                <div class="map-controls">
-                    <button class="btn btn-primary" id="toggleWaterPipelines">Toggle Pipeline View</button>
-                    <button class="btn btn-secondary" id="showMaintenance">Show Maintenance Areas</button>
-                </div>
-                
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <i class="fas fa-tint"></i>
-                        <h3>Water Pipeline Network</h3>
-                        <p>Interactive map showing water pipeline infrastructure</p>
-                    </div>
-                </div>
-                
-                <div class="map-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #3498db;"></div>
-                        <span>Main Water Lines</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #2980b9;"></div>
-                        <span>Secondary Water Lines</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #e74c3c;"></div>
-                        <span>Maintenance Required</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="infrastructure-section">
-                <h3>Gas Pipeline Network</h3>
-                <p>View the city's gas pipeline infrastructure and safety information.</p>
-                
-                <div class="map-controls">
-                    <button class="btn btn-primary" id="toggleGasPipelines">Toggle Pipeline View</button>
-                    <button class="btn btn-secondary" id="showSafetyZones">Show Safety Zones</button>
-                </div>
-                
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <i class="fas fa-fire"></i>
-                        <h3>Gas Pipeline Network</h3>
-                        <p>Interactive map showing gas pipeline infrastructure</p>
-                    </div>
-                </div>
-                
-                <div class="map-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #e67e22;"></div>
-                        <span>Main Gas Lines</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #d35400;"></div>
-                        <span>Secondary Gas Lines</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #f39c12;"></div>
-                        <span>Safety Zones</span>
-                    </div>
                 </div>
             </div>
         </section>
@@ -1695,7 +1451,6 @@
                         <li><a href="#" class="admin-nav" data-tab="applications-management">Applications Management</a></li>
                         <li><a href="#" class="admin-nav" data-tab="complaints-management">Complaints Management</a></li>
                         <li><a href="#" class="admin-nav" data-tab="user-management">User Management</a></li>
-                        <li><a href="#" class="admin-nav" data-tab="infrastructure-management">Infrastructure Management</a></li>
                         <li><a href="#" class="admin-nav" data-tab="reports">Reports & Analytics</a></li>
                         <li><a href="#" class="admin-nav" data-tab="settings">Settings</a></li>
                     </ul>
@@ -1802,60 +1557,6 @@
                                 <!-- Users will be dynamically added here -->
                             </tbody>
                         </table>
-                    </div>
-                    <div id="admin-infrastructure-management" class="admin-tab">
-                        <h3>Infrastructure Management</h3>
-                        <div class="application-form">
-                            <div class="form-group">
-                                <label for="waterLevelThreshold">Water Level Warning Threshold (meters)</label>
-                                <input type="number" id="waterLevelThreshold" value="4.0" step="0.1" min="0" max="10">
-                            </div>
-                            <div class="form-group">
-                                <label for="waterLevelDanger">Water Level Danger Threshold (meters)</label>
-                                <input type="number" id="waterLevelDanger" value="6.0" step="0.1" min="0" max="10">
-                            </div>
-                            <div class="form-group">
-                                <label for="pipelineInspection">Pipeline Inspection Frequency (days)</label>
-                                <input type="number" id="pipelineInspection" value="90" min="30" max="365">
-                            </div>
-                            <div class="form-group">
-                                <label for="gasSafetyCheck">Gas Pipeline Safety Check Frequency (days)</label>
-                                <input type="number" id="gasSafetyCheck" value="180" min="60" max="365">
-                            </div>
-                            <button class="btn btn-primary">Save Infrastructure Settings</button>
-                        </div>
-                        
-                        <h4 style="margin-top: 30px;">Infrastructure Alerts</h4>
-                        <div class="application-list">
-                            <div class="application-item">
-                                <div class="application-info">
-                                    <h3>Main River Water Level Alert</h3>
-                                    <p>Water level approaching warning threshold. Current level: 3.8m</p>
-                                    <div class="application-meta">
-                                        <span><i class="fas fa-clock"></i> 2 hours ago</span>
-                                        <span><i class="fas fa-map-marker-alt"></i> Main River</span>
-                                    </div>
-                                </div>
-                                <div class="application-status">
-                                    <span class="status status-pending">Pending Review</span>
-                                    <button class="btn btn-primary" style="margin-top: 10px;">Acknowledge</button>
-                                </div>
-                            </div>
-                            <div class="application-item">
-                                <div class="application-info">
-                                    <h3>Water Pipeline Maintenance Required</h3>
-                                    <p>Pipeline inspection overdue in Sector 5. Last inspection: 95 days ago</p>
-                                    <div class="application-meta">
-                                        <span><i class="fas fa-clock"></i> 1 day ago</span>
-                                        <span><i class="fas fa-map-marker-alt"></i> Sector 5</span>
-                                    </div>
-                                </div>
-                                <div class="application-status">
-                                    <span class="status status-in-progress">Scheduled</span>
-                                    <button class="btn btn-primary" style="margin-top: 10px;">View Details</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div id="admin-reports" class="admin-tab">
                         <h3>Reports & Analytics</h3>
@@ -1985,41 +1686,6 @@
             </div>
         </div>
 
-        <!-- Registration Modal -->
-        <div class="login-modal" id="registrationModal">
-            <div class="login-form">
-                <h2>User Registration</h2>
-                <form id="userRegistrationForm" class="registration-form">
-                    <div class="form-group">
-                        <label for="regFullName">Full Name</label>
-                        <input type="text" id="regFullName" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regEmail">Email Address</label>
-                        <input type="email" id="regEmail" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPhone">Phone Number</label>
-                        <input type="tel" id="regPhone" placeholder="Enter your phone number" required>
-                    </div>
-                    <div class="form-group form-full-width">
-                        <label for="regAddress">Full Address</label>
-                        <textarea id="regAddress" placeholder="Enter your complete address with pincode" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">Password</label>
-                        <input type="password" id="regPassword" placeholder="Create a password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regConfirmPassword">Confirm Password</label>
-                        <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary form-full-width">Register</button>
-                </form>
-                <button class="btn btn-secondary" id="closeRegistrationModal" style="width: 100%; margin-top: 10px;">Cancel</button>
-            </div>
-        </div>
-
         <!-- Admin Login Modal -->
         <div class="login-modal" id="adminLoginModal">
             <div class="login-form">
@@ -2049,10 +1715,10 @@
         let applications = JSON.parse(localStorage.getItem('applications')) || [];
         let complaints = JSON.parse(localStorage.getItem('complaints')) || [];
         let users = JSON.parse(localStorage.getItem('users')) || [
-            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", address: "123 Main St, City, State 12345", status: "active", applications: 2, complaints: 1, registrationDate: "2023-01-15" },
-            { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", address: "456 Oak Ave, City, State 12345", status: "active", applications: 1, complaints: 0, registrationDate: "2023-02-20" },
-            { id: 3, name: "Robert Johnson", email: "robert@example.com", phone: "1122334455", address: "789 Pine Rd, City, State 12345", status: "active", applications: 3, complaints: 2, registrationDate: "2023-03-10" },
-            { id: 4, name: "Emily Davis", email: "emily@example.com", phone: "5566778899", address: "321 Elm St, City, State 12345", status: "inactive", applications: 0, complaints: 1, registrationDate: "2023-04-05" }
+            { id: 1, name: "John Doe", email: "john@example.com", phone: "1234567890", status: "active", applications: 2, complaints: 1, registrationDate: "2023-01-15" },
+            { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0987654321", status: "active", applications: 1, complaints: 0, registrationDate: "2023-02-20" },
+            { id: 3, name: "Robert Johnson", email: "robert@example.com", phone: "1122334455", status: "active", applications: 3, complaints: 2, registrationDate: "2023-03-10" },
+            { id: 4, name: "Emily Davis", email: "emily@example.com", phone: "5566778899", status: "inactive", applications: 0, complaints: 1, registrationDate: "2023-04-05" }
         ];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let isAdmin = JSON.parse(localStorage.getItem('isAdmin')) || false;
@@ -2064,13 +1730,6 @@
         const adminCredentials = {
             username: "admin",
             password: "admin123"
-        };
-
-        // Infrastructure data
-        let riverWaterLevels = {
-            river1: 2.5, // Main River
-            river2: 1.8, // North River
-            river3: 3.2  // South River
         };
 
         // Complaint types and categories
@@ -3163,11 +2822,6 @@
                         updateAdminStats();
                         initAdminCharts();
                     }
-                    
-                    // Update infrastructure data when infrastructure section is opened
-                    if (sectionId === 'infrastructure') {
-                        updateWaterLevelDisplay();
-                    }
                 });
             });
 
@@ -3263,19 +2917,6 @@
                         initAdminCharts();
                     }
                 });
-            });
-
-            // Infrastructure controls
-            document.getElementById('refreshWaterLevel').addEventListener('click', function() {
-                // Simulate fetching new water level data
-                const river = document.getElementById('riverSelector').value;
-                const newLevel = riverWaterLevels[river] + (Math.random() * 0.5 - 0.25); // Small random change
-                riverWaterLevels[river] = Math.max(0, Math.min(8, newLevel)); // Keep between 0 and 8 meters
-                updateWaterLevelDisplay();
-            });
-
-            document.getElementById('riverSelector').addEventListener('change', function() {
-                updateWaterLevelDisplay();
             });
 
             // File upload functionality
@@ -3513,33 +3154,7 @@
                 updateAdminStats();
             }
 
-            // Update water level display
-            function updateWaterLevelDisplay() {
-                const river = document.getElementById('riverSelector').value;
-                const waterLevel = riverWaterLevels[river];
-                
-                document.getElementById('currentWaterLevel').textContent = waterLevel.toFixed(1);
-                
-                // Update water level indicator
-                const waterLevelFill = document.getElementById('waterLevelFill');
-                const percentage = Math.min(100, (waterLevel / 8) * 100);
-                waterLevelFill.style.width = `${percentage}%`;
-                
-                // Update alert indicator
-                const waterAlert = document.getElementById('waterAlert');
-                if (waterLevel < 4) {
-                    waterAlert.className = 'alert-indicator alert-low';
-                    waterAlert.innerHTML = '<i class="fas fa-check-circle"></i><span>Normal Water Level</span>';
-                } else if (waterLevel < 6) {
-                    waterAlert.className = 'alert-indicator alert-medium';
-                    waterAlert.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Warning: High Water Level</span>';
-                } else {
-                    waterAlert.className = 'alert-indicator alert-high';
-                    waterAlert.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Danger: Flood Risk</span>';
-                }
-            }
-
-            // Enhanced chatbot functionality
+            // Enhanced chatbot functionality from code1
             document.getElementById('chatbotToggle').addEventListener('click', function() {
                 document.getElementById('chatbotWindow').style.display = 'flex';
             });
@@ -3998,6 +3613,167 @@
                 // Grievance redressal information
                 if (lowerMessage.includes('grievance') || lowerMessage.includes('complaint') || lowerMessage.includes('issue')) {
                     return {
+                        text: "For Grievance Redressal, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Grievance Redressal Process:</h4>
+                                <ol>
+                                    <li>Select grievance type (Service Delay, Staff Behavior, etc.)</li>
+                                    <li>Provide detailed description of the issue</li>
+                                    <li>Mention any related application ID</li>
+                                    <li>Specify preferred resolution</li>
+                                    <li>Upload supporting documents if available</li>
+                                    <li>Submit grievance for investigation</li>
+                                    <li>Track resolution status in 'My Complaints' section</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Supporting documents related to the grievance</li>
+                                    <li>Photographs or evidence (if applicable)</li>
+                                    <li>Previous correspondence (if any)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "grievance-redressal"
+                    };
+                }
+                
+                // Public hall booking information
+                if (lowerMessage.includes('hall') || lowerMessage.includes('booking') || lowerMessage.includes('event')) {
+                    return {
+                        text: "For Public Hall Booking, here's the procedure:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Public Hall Booking Process:</h4>
+                                <ol>
+                                    <li>Fill out the hall booking application form</li>
+                                    <li>Select event type and preferred hall</li>
+                                    <li>Provide event date and time</li>
+                                    <li>Specify expected number of attendees</li>
+                                    <li>Upload required identity and address documents</li>
+                                    <li>Submit booking request</li>
+                                    <li>Pay booking charges</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Event details and purpose</li>
+                                    <li>Expected number of attendees</li>
+                                    <li>Payment receipt of booking charges</li>
+                                    <li>No objection certificate (if required for large gatherings)</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "public-hall-booking"
+                    };
+                }
+                
+                // Encumbrance certificate information
+                if (lowerMessage.includes('encumbrance') || lowerMessage.includes('property certificate')) {
+                    return {
+                        text: "For Encumbrance Certificate Application, here's what you need:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Encumbrance Certificate Process:</h4>
+                                <ol>
+                                    <li>Fill out the encumbrance certificate application form</li>
+                                    <li>Provide complete property details</li>
+                                    <li>Specify the period for which certificate is required</li>
+                                    <li>Mention purpose of certificate</li>
+                                    <li>Upload required property and identity documents</li>
+                                    <li>Submit application for processing</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Property ownership documents</li>
+                                    <li>Property tax receipts</li>
+                                    <li>Previous encumbrance certificates (if any)</li>
+                                    <li>Payment receipt of application fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "encumbrance-certificate"
+                    };
+                }
+                
+                // NOC certificate information
+                if (lowerMessage.includes('noc') || lowerMessage.includes('no objection')) {
+                    return {
+                        text: "For No Objection Certificate (NOC) Application, here's the process:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>NOC Certificate Process:</h4>
+                                <ol>
+                                    <li>Fill out the NOC application form</li>
+                                    <li>Select NOC type (Building Construction, Business Operation, etc.)</li>
+                                    <li>Explain purpose of NOC in detail</li>
+                                    <li>Provide property/event address</li>
+                                    <li>Specify duration of NOC</li>
+                                    <li>Upload required documents</li>
+                                    <li>Submit application for approval</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
+                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Property/Business documents</li>
+                                    <li>Purpose of NOC certificate</li>
+                                    <li>Supporting documents related to the purpose</li>
+                                    <li>Payment receipt of application fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "noc-certificate"
+                    };
+                }
+                
+                // Pet license information
+                if (lowerMessage.includes('pet') || lowerMessage.includes('animal license')) {
+                    return {
+                        text: "For Pet License Application, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Pet License Process:</h4>
+                                <ol>
+                                    <li>Fill out the pet license application form</li>
+                                    <li>Provide owner and pet details</li>
+                                    <li>Specify pet type, breed, age, and color</li>
+                                    <li>Upload required documents including pet photo and vaccination records</li>
+                                    <li>Submit application for processing</li>
+                                    <li>Pay license fee</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
+                                    <li>Owner ID proof (Aadhar Card, Passport, etc.)</li>
+                                    <li>Pet photographs</li>
+                                    <li>Pet vaccination records</li>
+                                    <li>Veterinary health certificate</li>
+                                    <li>Payment receipt of license fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "pet-license"
+                    };
+                }
+                
+                // Complaint filing information
+                if (lowerMessage.includes('complaint') || lowerMessage.includes('issue') || lowerMessage.includes('problem')) {
+                    return {
                         text: "I can help you file a complaint about various municipal issues:",
                         details: `
                             <div class="service-steps">
@@ -4138,53 +3914,6 @@
                     };
                 }
                 
-                // Infrastructure monitoring
-                if (lowerMessage.includes('water level') || lowerMessage.includes('flood') || lowerMessage.includes('river')) {
-                    return {
-                        text: "For River Water Level Monitoring, here's what you can do:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Water Level Monitoring:</h4>
-                                <ol>
-                                    <li>Visit the Infrastructure section to view current water levels</li>
-                                    <li>Select different rivers from the dropdown menu</li>
-                                    <li>View the water level indicator with color-coded alerts</li>
-                                    <li>Check the current alert status (Normal, Warning, Danger)</li>
-                                    <li>Refresh data to get the latest water level readings</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Alert Levels:</h4>
-                                <ul>
-                                    <li><strong>Normal:</strong> Water level below 4 meters</li>
-                                    <li><strong>Warning:</strong> Water level between 4-6 meters</li>
-                                    <li><strong>Danger:</strong> Water level above 6 meters (flood risk)</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Pipeline mapping
-                if (lowerMessage.includes('pipeline') || lowerMessage.includes('water pipe') || lowerMessage.includes('gas pipe')) {
-                    return {
-                        text: "For Pipeline Network Information, here's what's available:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Pipeline Networks:</h4>
-                                <ul>
-                                    <li><strong>Water Pipeline Network:</strong> View the city's water distribution system</li>
-                                    <li><strong>Gas Pipeline Network:</strong> View the city's gas distribution system</li>
-                                    <li>Toggle between different pipeline views</li>
-                                    <li>See maintenance areas and safety zones</li>
-                                    <li>Check pipeline inspection schedules</li>
-                                </ul>
-                            </div>
-                            <p>Visit the Infrastructure section to explore the pipeline networks.</p>
-                        `
-                    };
-                }
-                
                 // General documentation requirements
                 if (lowerMessage.includes('document') || lowerMessage.includes('require') || lowerMessage.includes('need')) {
                     return {
@@ -4219,7 +3948,6 @@
                                     <li>Help with document upload procedures</li>
                                     <li>Explain application and complaint tracking</li>
                                     <li>Provide admin panel information</li>
-                                    <li>Share infrastructure monitoring details</li>
                                 </ol>
                             </div>
                             <p>You can ask me about:</p>
@@ -4238,8 +3966,6 @@
                                 <li>Filing complaints</li>
                                 <li>Document requirements</li>
                                 <li>Application and complaint status</li>
-                                <li>River water levels and flood monitoring</li>
-                                <li>Water and gas pipeline networks</li>
                             </ul>
                         `
                     };
@@ -4266,8 +3992,6 @@
                                 <li>Document upload requirements</li>
                                 <li>Application and complaint tracking</li>
                                 <li>Admin panel features</li>
-                                <li>River water level monitoring</li>
-                                <li>Pipeline network information</li>
                             </ul>
                         </div>
                         <p>Or use the quick action buttons below for specific services!</p>
@@ -4285,8 +4009,7 @@
                         "Electricity Connection",
                         "Public Hall Booking",
                         "File Complaint",
-                        "Document Upload",
-                        "Water Level Info"
+                        "Document Upload"
                     ]
                 };
             }
@@ -4333,14 +4056,6 @@
                 document.getElementById('adminLoginModal').style.display = 'none';
             });
 
-            document.getElementById('registerBtn').addEventListener('click', function() {
-                document.getElementById('registrationModal').style.display = 'flex';
-            });
-
-            document.getElementById('closeRegistrationModal').addEventListener('click', function() {
-                document.getElementById('registrationModal').style.display = 'none';
-            });
-
             document.getElementById('userLoginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const email = document.getElementById('loginEmail').value;
@@ -4361,48 +4076,6 @@
                 }
             });
 
-            document.getElementById('userRegistrationForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const name = document.getElementById('regFullName').value;
-                const email = document.getElementById('regEmail').value;
-                const phone = document.getElementById('regPhone').value;
-                const address = document.getElementById('regAddress').value;
-                const password = document.getElementById('regPassword').value;
-                const confirmPassword = document.getElementById('regConfirmPassword').value;
-                
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match. Please try again.');
-                    return;
-                }
-                
-                // Check if user already exists
-                if (users.find(u => u.email === email)) {
-                    alert('User with this email already exists. Please login instead.');
-                    return;
-                }
-                
-                const newUser = {
-                    id: userIdCounter++,
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    address: address,
-                    status: 'active',
-                    applications: 0,
-                    complaints: 0,
-                    registrationDate: new Date().toISOString().split('T')[0]
-                };
-                
-                users.push(newUser);
-                currentUser = newUser;
-                isAdmin = false;
-                saveData();
-                
-                document.getElementById('registrationModal').style.display = 'none';
-                alert(`Registration successful! Welcome, ${name}.`);
-                updateUIForUser();
-            });
-
             document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('adminUsername').value;
@@ -4416,6 +4089,32 @@
                     updateUIForUser();
                 } else {
                     alert('Invalid admin credentials. Please try again.');
+                }
+            });
+
+            document.getElementById('registerBtn').addEventListener('click', function() {
+                const name = prompt('Enter your full name:');
+                const email = prompt('Enter your email:');
+                const phone = prompt('Enter your phone number:');
+                
+                if (name && email && phone) {
+                    const newUser = {
+                        id: userIdCounter++,
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        status: 'active',
+                        applications: 0,
+                        complaints: 0
+                    };
+                    
+                    users.push(newUser);
+                    currentUser = newUser;
+                    isAdmin = false;
+                    saveData();
+                    
+                    alert(`Registration successful! Welcome, ${name}.`);
+                    updateUIForUser();
                 }
             });
 
@@ -4460,7 +4159,6 @@
             updateAdminUsersTable();
             updateStats();
             updateAdminStats();
-            updateWaterLevelDisplay();
             init3DAnimation();
             updateUIForUser();
             initializeChatbot();
