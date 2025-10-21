@@ -8,8 +8,731 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* All existing CSS styles remain the same */
-        /* Adding new styles for additional services */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+        
+        nav {
+            width: 100%;
+            order: 3;
+            margin-top: 15px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        nav a:hover, nav a.active {
+            background: var(--secondary);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            color: var(--primary);
+        }
+        
+        .service-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .application-form {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .file-upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-container:hover {
+            border-color: var(--secondary);
+            background-color: #f8f9fa;
+        }
+        
+        .file-upload-container i {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .file-preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .file-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .file-preview-item .remove-file {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .application-list, .complaint-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .application-item, .complaint-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .application-info h3, .complaint-info h3 {
+            margin-bottom: 5px;
+        }
+        
+        .application-meta, .complaint-meta {
+            display: flex;
+            gap: 15px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-in-progress {
+            background: #cce7ff;
+            color: #004085;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-resolved {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-open {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-investigation {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-closed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            max-width: 90vw;
+            height: 450px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chatbot-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        
+        .bot-message {
+            background: #f1f1f1;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background: var(--secondary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin-right: 10px;
+        }
+        
+        .chatbot-input button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        /* FIXED ADMIN PANEL STYLES */
+        .admin-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .admin-sidebar {
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        .admin-sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .admin-sidebar li {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .admin-sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            text-align: center;
+        }
+        
+        .admin-sidebar a:hover, .admin-sidebar a.active {
+            background: var(--secondary);
+        }
+        
+        .admin-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .admin-tab {
+            display: none;
+            width: 100%;
+        }
+        
+        .admin-tab.active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .edit-btn {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .view-btn {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .canvas-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .documentation-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .documentation-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .documentation-info ul {
+            padding-left: 20px;
+        }
+        
+        .documentation-info li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            margin-top: 40px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .admin-login-btn {
+            background: var(--warning);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .chatbot-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .quick-action-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .quick-action-btn:hover {
+            background: #2980b9;
+        }
+        
         .service-steps {
             background: #f8f9fa;
             border-radius: 8px;
@@ -53,31 +776,239 @@
             font-size: 0.8rem;
         }
         
-        .chatbot-quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .quick-action-btn {
-            background: var(--secondary);
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .admin-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-button {
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 15px;
-            padding: 5px 10px;
-            font-size: 0.7rem;
+            border-radius: 5px;
+            padding: 8px 15px;
             cursor: pointer;
-            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
-        .quick-action-btn:hover {
-            background: #2980b9;
+        .complaint-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
         
-        /* All other existing CSS styles remain unchanged */
-        /* ... (all previous CSS code) ... */
+        .complaint-category {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--accent);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .complaint-category:hover {
+            transform: translateY(-5px);
+        }
+        
+        .complaint-category h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .complaint-category p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .complaint-form-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .complaint-details {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .complaint-details h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .complaint-details p {
+            margin-bottom: 8px;
+        }
+        
+        .complaint-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            nav a {
+                padding: 10px 15px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .user-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .service-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .admin-sidebar ul {
+                flex-direction: column;
+            }
+            
+            .admin-sidebar li {
+                min-width: 100%;
+            }
+            
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .complaint-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-window {
+                width: 95vw;
+                right: -10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+            
+            .complaint-actions {
+                flex-direction: column;
+            }
+            
+            .application-item, .complaint-item {
+                flex-direction: column;
+            }
+            
+            .application-status, .complaint-status {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .header-content {
+                flex-wrap: nowrap;
+            }
+            
+            nav {
+                width: auto;
+                order: 2;
+                margin-top: 0;
+            }
+            
+            .user-actions {
+                order: 3;
+            }
+            
+            .admin-panel {
+                flex-direction: row;
+            }
+            
+            .admin-sidebar {
+                width: 250px;
+            }
+            
+            .admin-sidebar ul {
+                flex-direction: column;
+            }
+            
+            .admin-sidebar li {
+                min-width: 100%;
+            }
+            
+            .service-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .service-categories {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -173,47 +1104,6 @@
                     <h3>Death Certificate</h3>
                     <p>Apply for death certificates</p>
                 </div>
-                <!-- NEW SERVICES ADDED -->
-                <div class="category-card" data-service="water-connection">
-                    <i class="fas fa-tint category-icon"></i>
-                    <h3>Water Connection</h3>
-                    <p>Apply for new water connection or transfer existing connection</p>
-                </div>
-                <div class="category-card" data-service="electricity-connection">
-                    <i class="fas fa-bolt category-icon"></i>
-                    <h3>Electricity Connection</h3>
-                    <p>Apply for new electricity connection or transfer existing connection</p>
-                </div>
-                <div class="category-card" data-service="marriage-certificate">
-                    <i class="fas fa-ring category-icon"></i>
-                    <h3>Marriage Certificate</h3>
-                    <p>Apply for marriage certificate registration</p>
-                </div>
-                <div class="category-card" data-service="pet-license">
-                    <i class="fas fa-paw category-icon"></i>
-                    <h3>Pet License</h3>
-                    <p>Register and license your pets with the municipality</p>
-                </div>
-                <div class="category-card" data-service="event-permit">
-                    <i class="fas fa-calendar-alt category-icon"></i>
-                    <h3>Event Permit</h3>
-                    <p>Apply for permits for public events and gatherings</p>
-                </div>
-                <div class="category-card" data-service="encumbrance-certificate">
-                    <i class="fas fa-file-contract category-icon"></i>
-                    <h3>Encumbrance Certificate</h3>
-                    <p>Apply for property encumbrance certificates</p>
-                </div>
-                <div class="category-card" data-service="pension">
-                    <i class="fas fa-hand-holding-usd category-icon"></i>
-                    <h3>Pension Services</h3>
-                    <p>Apply for pension and related services</p>
-                </div>
-                <div class="category-card" data-service="public-health">
-                    <i class="fas fa-heartbeat category-icon"></i>
-                    <h3>Public Health Services</h3>
-                    <p>Access public health services and information</p>
-                </div>
             </div>
         </section>
 
@@ -260,47 +1150,6 @@
                     <i class="fas fa-cross category-icon"></i>
                     <h3>Death Certificate</h3>
                     <p>Apply for death certificates</p>
-                </div>
-                <!-- NEW SERVICES ADDED -->
-                <div class="category-card" data-service="water-connection">
-                    <i class="fas fa-tint category-icon"></i>
-                    <h3>Water Connection</h3>
-                    <p>Apply for new water connection or transfer existing connection</p>
-                </div>
-                <div class="category-card" data-service="electricity-connection">
-                    <i class="fas fa-bolt category-icon"></i>
-                    <h3>Electricity Connection</h3>
-                    <p>Apply for new electricity connection or transfer existing connection</p>
-                </div>
-                <div class="category-card" data-service="marriage-certificate">
-                    <i class="fas fa-ring category-icon"></i>
-                    <h3>Marriage Certificate</h3>
-                    <p>Apply for marriage certificate registration</p>
-                </div>
-                <div class="category-card" data-service="pet-license">
-                    <i class="fas fa-paw category-icon"></i>
-                    <h3>Pet License</h3>
-                    <p>Register and license your pets with the municipality</p>
-                </div>
-                <div class="category-card" data-service="event-permit">
-                    <i class="fas fa-calendar-alt category-icon"></i>
-                    <h3>Event Permit</h3>
-                    <p>Apply for permits for public events and gatherings</p>
-                </div>
-                <div class="category-card" data-service="encumbrance-certificate">
-                    <i class="fas fa-file-contract category-icon"></i>
-                    <h3>Encumbrance Certificate</h3>
-                    <p>Apply for property encumbrance certificates</p>
-                </div>
-                <div class="category-card" data-service="pension">
-                    <i class="fas fa-hand-holding-usd category-icon"></i>
-                    <h3>Pension Services</h3>
-                    <p>Apply for pension and related services</p>
-                </div>
-                <div class="category-card" data-service="public-health">
-                    <i class="fas fa-heartbeat category-icon"></i>
-                    <h3>Public Health Services</h3>
-                    <p>Access public health services and information</p>
                 </div>
             </div>
         </section>
@@ -451,55 +1300,6 @@
                     <h3>Death Certificate</h3>
                     <p>Documentation requirements for death certificate</p>
                     <button class="apply-now-btn" data-service="death-certificate">Apply Now</button>
-                </div>
-                <!-- NEW SERVICES DOCUMENTATION -->
-                <div class="category-card" data-doc="water-connection">
-                    <i class="fas fa-tint category-icon"></i>
-                    <h3>Water Connection</h3>
-                    <p>Documentation requirements for water connection</p>
-                    <button class="apply-now-btn" data-service="water-connection">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="electricity-connection">
-                    <i class="fas fa-bolt category-icon"></i>
-                    <h3>Electricity Connection</h3>
-                    <p>Documentation requirements for electricity connection</p>
-                    <button class="apply-now-btn" data-service="electricity-connection">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="marriage-certificate">
-                    <i class="fas fa-ring category-icon"></i>
-                    <h3>Marriage Certificate</h3>
-                    <p>Documentation requirements for marriage certificate</p>
-                    <button class="apply-now-btn" data-service="marriage-certificate">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="pet-license">
-                    <i class="fas fa-paw category-icon"></i>
-                    <h3>Pet License</h3>
-                    <p>Documentation requirements for pet license</p>
-                    <button class="apply-now-btn" data-service="pet-license">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="event-permit">
-                    <i class="fas fa-calendar-alt category-icon"></i>
-                    <h3>Event Permit</h3>
-                    <p>Documentation requirements for event permit</p>
-                    <button class="apply-now-btn" data-service="event-permit">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="encumbrance-certificate">
-                    <i class="fas fa-file-contract category-icon"></i>
-                    <h3>Encumbrance Certificate</h3>
-                    <p>Documentation requirements for encumbrance certificate</p>
-                    <button class="apply-now-btn" data-service="encumbrance-certificate">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="pension">
-                    <i class="fas fa-hand-holding-usd category-icon"></i>
-                    <h3>Pension Services</h3>
-                    <p>Documentation requirements for pension services</p>
-                    <button class="apply-now-btn" data-service="pension">Apply Now</button>
-                </div>
-                <div class="category-card" data-doc="public-health">
-                    <i class="fas fa-heartbeat category-icon"></i>
-                    <h3>Public Health Services</h3>
-                    <p>Documentation requirements for public health services</p>
-                    <button class="apply-now-btn" data-service="public-health">Apply Now</button>
                 </div>
             </div>
         </section>
@@ -778,6 +1578,8 @@
         </footer>
     </div>
 
+  
+
     <script>
         // Sample data for the application
         let applications = JSON.parse(localStorage.getItem('applications')) || [];
@@ -834,7 +1636,7 @@
             }
         };
 
-        // Service-specific documentation requirements - EXTENDED WITH NEW SERVICES
+        // Service-specific documentation requirements
         const documentationRequirements = {
             license: {
                 title: "License Application Documentation",
@@ -931,110 +1733,11 @@
                     "Proof of identity of deceased (Aadhar Card, Passport, etc.)",
                     "Affidavit for delayed registration (if applicable)"
                 ]
-            },
-            // NEW SERVICES DOCUMENTATION
-            "water-connection": {
-                title: "Water Connection Documentation",
-                requirements: [
-                    "Water connection application form",
-                    "Proof of identity (Aadhar Card, Passport, etc.)",
-                    "Proof of address (Aadhar Card, Utility Bill, etc.)",
-                    "Property ownership documents",
-                    "Building plan approval",
-                    "No objection certificate from property owner (if tenant)",
-                    "Previous water bill (for transfer cases)"
-                ]
-            },
-            "electricity-connection": {
-                title: "Electricity Connection Documentation",
-                requirements: [
-                    "Electricity connection application form",
-                    "Proof of identity (Aadhar Card, Passport, etc.)",
-                    "Proof of address (Aadhar Card, Utility Bill, etc.)",
-                    "Property ownership documents",
-                    "Building completion certificate",
-                    "Load calculation details",
-                    "No objection certificate from property owner (if tenant)"
-                ]
-            },
-            "marriage-certificate": {
-                title: "Marriage Certificate Documentation",
-                requirements: [
-                    "Marriage certificate application form",
-                    "Proof of identity of both spouses (Aadhar Card, Passport, etc.)",
-                    "Proof of address of both spouses (Aadhar Card, Utility Bill, etc.)",
-                    "Date of birth proof of both spouses",
-                    "Wedding invitation card or marriage photo",
-                    "Affidavit of marriage",
-                    "Witness details and identity proof"
-                ]
-            },
-            "pet-license": {
-                title: "Pet License Documentation",
-                requirements: [
-                    "Pet license application form",
-                    "Proof of identity of owner (Aadhar Card, Passport, etc.)",
-                    "Proof of address of owner (Aadhar Card, Utility Bill, etc.)",
-                    "Pet vaccination records",
-                    "Pet photograph",
-                    "Veterinary health certificate",
-                    "Proof of sterilization (if applicable)"
-                ]
-            },
-            "event-permit": {
-                title: "Event Permit Documentation",
-                requirements: [
-                    "Event permit application form",
-                    "Proof of identity of organizer (Aadhar Card, Passport, etc.)",
-                    "Event details and schedule",
-                    "Venue permission letter",
-                    "Noise pollution control plan",
-                    "Traffic management plan (if applicable)",
-                    "Security arrangements details",
-                    "Fire safety compliance certificate"
-                ]
-            },
-            "encumbrance-certificate": {
-                title: "Encumbrance Certificate Documentation",
-                requirements: [
-                    "Encumbrance certificate application form",
-                    "Proof of identity (Aadhar Card, Passport, etc.)",
-                    "Proof of address (Aadhar Card, Utility Bill, etc.)",
-                    "Property details and survey number",
-                    "Property tax receipts",
-                    "Previous ownership documents",
-                    "Purpose of certificate request"
-                ]
-            },
-            "pension": {
-                title: "Pension Services Documentation",
-                requirements: [
-                    "Pension application form",
-                    "Proof of identity (Aadhar Card, Passport, etc.)",
-                    "Proof of age/date of birth",
-                    "Service certificate from employer",
-                    "Bank account details",
-                    "Passport-sized photographs",
-                    "Medical certificate (if applicable)",
-                    "Nomination details"
-                ]
-            },
-            "public-health": {
-                title: "Public Health Services Documentation",
-                requirements: [
-                    "Health service request form",
-                    "Proof of identity (Aadhar Card, Passport, etc.)",
-                    "Proof of address (Aadhar Card, Utility Bill, etc.)",
-                    "Medical reports (if applicable)",
-                    "Health insurance details (if applicable)",
-                    "Referral letter from doctor (if applicable)"
-                ]
             }
         };
 
-        // Service-specific forms - EXTENDED WITH NEW SERVICES
+        // Service-specific forms
         const serviceForms = {
-            // Existing forms remain the same
             license: `
                 <h2 class="section-title">License Application</h2>
                 <form id="licenseForm" class="application-form">
@@ -1090,174 +1793,371 @@
                     <button type="submit" class="btn btn-primary">Submit Application</button>
                 </form>
             `,
-            // ... (all existing forms remain the same)
-            
-            // NEW SERVICE FORMS
-            "water-connection": `
-                <h2 class="section-title">Water Connection Application</h2>
-                <form id="waterConnectionForm" class="application-form">
+            "license-renewal": `
+                <h2 class="section-title">License Renewal</h2>
+                <form id="licenseRenewalForm" class="application-form">
                     <div class="form-group">
-                        <label for="connectionType">Connection Type</label>
-                        <select id="connectionType" required>
-                            <option value="">Select Connection Type</option>
-                            <option value="new">New Connection</option>
-                            <option value="transfer">Transfer Connection</option>
-                            <option value="modification">Modification</option>
+                        <label for="existingLicenseNumber">Existing License Number</label>
+                        <input type="text" id="existingLicenseNumber" placeholder="Enter your existing license number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="renewalType">Renewal Type</label>
+                        <select id="renewalType" required>
+                            <option value="">Select Renewal Type</option>
+                            <option value="annual">Annual Renewal</option>
+                            <option value="biannual">Biannual Renewal</option>
+                            <option value="lifetime">Lifetime Renewal</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="propertyType">Property Type</label>
-                        <select id="propertyType" required>
-                            <option value="">Select Property Type</option>
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" placeholder="Enter your complete address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Required Documents</label>
+                        <div class="file-upload-container" id="existingLicenseUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Existing License</p>
+                            <input type="file" id="existingLicense" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="aadharFrontUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Aadhar Card (Front)</p>
+                            <input type="file" id="aadharFront" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="aadharBackUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Aadhar Card (Back)</p>
+                            <input type="file" id="aadharBack" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Renewal Application</button>
+                </form>
+            `,
+            "property-tax": `
+                <h2 class="section-title">Property Tax Payment</h2>
+                <form id="propertyTaxForm" class="application-form">
+                    <div class="form-group">
+                        <label for="propertyId">Property ID</label>
+                        <input type="text" id="propertyId" placeholder="Enter your property ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyOwner">Property Owner Name</label>
+                        <input type="text" id="propertyOwner" placeholder="Enter property owner name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyAddress">Property Address</label>
+                        <textarea id="propertyAddress" placeholder="Enter property address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxAmount">Tax Amount Due</label>
+                        <input type="number" id="taxAmount" placeholder="Enter tax amount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="debit">Debit Card</option>
+                            <option value="upi">UPI</option>
+                            <option value="netbanking">Net Banking</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Property Documents</label>
+                        <div class="file-upload-container" id="propertyDocUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Property Documents</p>
+                            <input type="file" id="propertyDoc" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Pay Property Tax</button>
+                </form>
+            `,
+            "vehicle-registration": `
+                <h2 class="section-title">Vehicle Registration</h2>
+                <form id="vehicleRegistrationForm" class="application-form">
+                    <div class="form-group">
+                        <label for="vehicleType">Vehicle Type</label>
+                        <select id="vehicleType" required>
+                            <option value="">Select Vehicle Type</option>
+                            <option value="two-wheeler">Two Wheeler</option>
+                            <option value="four-wheeler">Four Wheeler</option>
+                            <option value="commercial">Commercial Vehicle</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleModel">Vehicle Model</label>
+                        <input type="text" id="vehicleModel" placeholder="Enter vehicle model" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufactureYear">Manufacture Year</label>
+                        <input type="number" id="manufactureYear" placeholder="Enter manufacture year" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="chassisNumber">Chassis Number</label>
+                        <input type="text" id="chassisNumber" placeholder="Enter chassis number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="engineNumber">Engine Number</label>
+                        <input type="text" id="engineNumber" placeholder="Enter engine number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerName">Owner Name</label>
+                        <input type="text" id="ownerName" placeholder="Enter owner name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerAddress">Owner Address</label>
+                        <textarea id="ownerAddress" placeholder="Enter owner address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Required Documents</label>
+                        <div class="file-upload-container" id="vehicleInvoiceUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Vehicle Invoice</p>
+                            <input type="file" id="vehicleInvoice" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="insuranceUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Insurance Certificate</p>
+                            <input type="file" id="insurance" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="aadharUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Aadhar Card</p>
+                            <input type="file" id="aadhar" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Registration</button>
+                </form>
+            `,
+            "trade-license": `
+                <h2 class="section-title">Trade License Application</h2>
+                <form id="tradeLicenseForm" class="application-form">
+                    <div class="form-group">
+                        <label for="businessName">Business Name</label>
+                        <input type="text" id="businessName" placeholder="Enter business name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType" required>
+                            <option value="">Select Business Type</option>
+                            <option value="retail">Retail</option>
+                            <option value="wholesale">Wholesale</option>
+                            <option value="service">Service</option>
+                            <option value="manufacturing">Manufacturing</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessAddress">Business Address</label>
+                        <textarea id="businessAddress" placeholder="Enter business address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerName">Owner Name</label>
+                        <input type="text" id="ownerName" placeholder="Enter owner name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerPhone">Owner Phone</label>
+                        <input type="tel" id="ownerPhone" placeholder="Enter owner phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerEmail">Owner Email</label>
+                        <input type="email" id="ownerEmail" placeholder="Enter owner email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Required Documents</label>
+                        <div class="file-upload-container" id="businessProofUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Business Proof</p>
+                            <input type="file" id="businessProof" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="aadharUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Aadhar Card</p>
+                            <input type="file" id="aadhar" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="nocUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload No Objection Certificate</p>
+                            <input type="file" id="noc" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </form>
+            `,
+            "building-permit": `
+                <h2 class="section-title">Building Permit Application</h2>
+                <form id="buildingPermitForm" class="application-form">
+                    <div class="form-group">
+                        <label for="propertyLocation">Property Location</label>
+                        <input type="text" id="propertyLocation" placeholder="Enter property location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buildingType">Building Type</label>
+                        <select id="buildingType" required>
+                            <option value="">Select Building Type</option>
                             <option value="residential">Residential</option>
                             <option value="commercial">Commercial</option>
                             <option value="industrial">Industrial</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="applicantName">Applicant Name</label>
-                        <input type="text" id="applicantName" placeholder="Enter applicant name" required>
+                        <label for="buildingArea">Building Area (sq ft)</label>
+                        <input type="number" id="buildingArea" placeholder="Enter building area" required>
                     </div>
                     <div class="form-group">
-                        <label for="propertyAddress">Property Address</label>
-                        <textarea id="propertyAddress" placeholder="Enter property address" required></textarea>
+                        <label for="numberOfFloors">Number of Floors</label>
+                        <input type="number" id="numberOfFloors" placeholder="Enter number of floors" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="Enter your phone number" required>
+                        <label for="ownerName">Owner Name</label>
+                        <input type="text" id="ownerName" placeholder="Enter owner name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="Enter your email address" required>
+                        <label for="architectName">Architect Name</label>
+                        <input type="text" id="architectName" placeholder="Enter architect name" required>
                     </div>
                     <div class="form-group">
                         <label>Upload Required Documents</label>
-                        <div class="file-upload-container" id="idProofUpload">
+                        <div class="file-upload-container" id="sitePlanUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload ID Proof</p>
-                            <input type="file" id="idProof" accept="image/*" style="display: none;">
+                            <p>Click to upload Site Plan</p>
+                            <input type="file" id="sitePlan" accept="image/*" style="display: none;">
                         </div>
-                        <div class="file-upload-container" id="addressProofUpload">
+                        <div class="file-upload-container" id="buildingDrawingUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Address Proof</p>
-                            <input type="file" id="addressProof" accept="image/*" style="display: none;">
+                            <p>Click to upload Building Drawings</p>
+                            <input type="file" id="buildingDrawing" accept="image/*" style="display: none;">
                         </div>
-                        <div class="file-upload-container" id="propertyDocUpload">
+                        <div class="file-upload-container" id="ownershipDocUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Property Documents</p>
-                            <input type="file" id="propertyDoc" accept="image/*" style="display: none;">
+                            <p>Click to upload Ownership Documents</p>
+                            <input type="file" id="ownershipDoc" accept="image/*" style="display: none;">
                         </div>
                         <div class="file-preview" id="filePreview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Application</button>
                 </form>
             `,
-            "electricity-connection": `
-                <h2 class="section-title">Electricity Connection Application</h2>
-                <form id="electricityConnectionForm" class="application-form">
+            "birth-certificate": `
+                <h2 class="section-title">Birth Certificate Application</h2>
+                <form id="birthCertificateForm" class="application-form">
                     <div class="form-group">
-                        <label for="connectionType">Connection Type</label>
-                        <select id="connectionType" required>
-                            <option value="">Select Connection Type</option>
-                            <option value="domestic">Domestic</option>
-                            <option value="commercial">Commercial</option>
-                            <option value="industrial">Industrial</option>
-                            <option value="agricultural">Agricultural</option>
+                        <label for="childName">Child's Name</label>
+                        <input type="text" id="childName" placeholder="Enter child's name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="loadRequired">Load Required (in kW)</label>
-                        <input type="number" id="loadRequired" placeholder="Enter required load" required>
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="placeOfBirth">Place of Birth</label>
+                        <input type="text" id="placeOfBirth" placeholder="Enter place of birth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fatherName">Father's Name</label>
+                        <input type="text" id="fatherName" placeholder="Enter father's name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="motherName">Mother's Name</label>
+                        <input type="text" id="motherName" placeholder="Enter mother's name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Required Documents</label>
+                        <div class="file-upload-container" id="birthRecordUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Hospital Birth Record</p>
+                            <input type="file" id="birthRecord" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="parentIdUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Parent's ID Proof</p>
+                            <input type="file" id="parentId" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-upload-container" id="marriageCertUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload Marriage Certificate</p>
+                            <input type="file" id="marriageCert" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </form>
+            `,
+            "death-certificate": `
+                <h2 class="section-title">Death Certificate Application</h2>
+                <form id="deathCertificateForm" class="application-form">
+                    <div class="form-group">
+                        <label for="deceasedName">Deceased Person's Name</label>
+                        <input type="text" id="deceasedName" placeholder="Enter deceased person's name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfDeath">Date of Death</label>
+                        <input type="date" id="dateOfDeath" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="placeOfDeath">Place of Death</label>
+                        <input type="text" id="placeOfDeath" placeholder="Enter place of death" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="causeOfDeath">Cause of Death</label>
+                        <input type="text" id="causeOfDeath" placeholder="Enter cause of death" required>
                     </div>
                     <div class="form-group">
                         <label for="applicantName">Applicant Name</label>
                         <input type="text" id="applicantName" placeholder="Enter applicant name" required>
                     </div>
                     <div class="form-group">
-                        <label for="propertyAddress">Property Address</label>
-                        <textarea id="propertyAddress" placeholder="Enter property address" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="Enter your phone number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="Enter your email address" required>
+                        <label for="relationship">Relationship to Deceased</label>
+                        <input type="text" id="relationship" placeholder="Enter relationship" required>
                     </div>
                     <div class="form-group">
                         <label>Upload Required Documents</label>
-                        <div class="file-upload-container" id="idProofUpload">
+                        <div class="file-upload-container" id="deathRecordUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload ID Proof</p>
-                            <input type="file" id="idProof" accept="image/*" style="display: none;">
+                            <p>Click to upload Hospital Death Record</p>
+                            <input type="file" id="deathRecord" accept="image/*" style="display: none;">
                         </div>
-                        <div class="file-upload-container" id="addressProofUpload">
+                        <div class="file-upload-container" id="applicantIdUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Address Proof</p>
-                            <input type="file" id="addressProof" accept="image/*" style="display: none;">
+                            <p>Click to upload Applicant's ID Proof</p>
+                            <input type="file" id="applicantId" accept="image/*" style="display: none;">
                         </div>
-                        <div class="file-upload-container" id="propertyDocUpload">
+                        <div class="file-upload-container" id="deceasedIdUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Property Documents</p>
-                            <input type="file" id="propertyDoc" accept="image/*" style="display: none;">
+                            <p>Click to upload Deceased's ID Proof</p>
+                            <input type="file" id="deceasedId" accept="image/*" style="display: none;">
                         </div>
                         <div class="file-preview" id="filePreview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Application</button>
                 </form>
-            `,
-            "marriage-certificate": `
-                <h2 class="section-title">Marriage Certificate Application</h2>
-                <form id="marriageCertificateForm" class="application-form">
-                    <div class="form-group">
-                        <label for="groomName">Groom's Full Name</label>
-                        <input type="text" id="groomName" placeholder="Enter groom's full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="brideName">Bride's Full Name</label>
-                        <input type="text" id="brideName" placeholder="Enter bride's full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="marriageDate">Marriage Date</label>
-                        <input type="date" id="marriageDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="marriagePlace">Place of Marriage</label>
-                        <input type="text" id="marriagePlace" placeholder="Enter place of marriage" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="groomAddress">Groom's Address</label>
-                        <textarea id="groomAddress" placeholder="Enter groom's address" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="brideAddress">Bride's Address</label>
-                        <textarea id="brideAddress" placeholder="Enter bride's address" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Upload Required Documents</label>
-                        <div class="file-upload-container" id="groomIdUpload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Groom's ID Proof</p>
-                            <input type="file" id="groomId" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="file-upload-container" id="brideIdUpload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Bride's ID Proof</p>
-                            <input type="file" id="brideId" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="file-upload-container" id="marriageProofUpload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload Marriage Proof</p>
-                            <input type="file" id="marriageProof" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="file-preview" id="filePreview"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Application</button>
-                </form>
-            `,
-            // Additional forms for other new services would follow the same pattern
-            // ... (other new service forms)
+            `
         };
 
         // Initialize the application
@@ -1593,7 +2493,7 @@
                 updateStats();
             }
 
-            // Enhanced chatbot functionality
+            // Enhanced chatbot functionality from code1
             document.getElementById('chatbotToggle').addEventListener('click', function() {
                 document.getElementById('chatbotWindow').style.display = 'flex';
             });
@@ -1692,14 +2592,6 @@
                             "Building Permit",
                             "Birth Certificate",
                             "Death Certificate",
-                            "Water Connection",
-                            "Electricity Connection",
-                            "Marriage Certificate",
-                            "Pet License",
-                            "Event Permit",
-                            "Encumbrance Certificate",
-                            "Pension Services",
-                            "Public Health Services",
                             "Document Requirements",
                             "File a Complaint"
                         ]
@@ -1737,260 +2629,417 @@
                     };
                 }
                 
-                // Water connection information
-                if (lowerMessage.includes('water') && (lowerMessage.includes('connection') || lowerMessage.includes('supply'))) {
+                // License renewal information
+                if (lowerMessage.includes('license') && lowerMessage.includes('renew')) {
                     return {
-                        text: "For Water Connection, here's the process:",
+                        text: "For License Renewal, here's the process:",
                         details: `
                             <div class="service-steps">
-                                <h4>Water Connection Process:</h4>
+                                <h4>License Renewal Process:</h4>
                                 <ol>
-                                    <li>Select connection type (New, Transfer, Modification)</li>
-                                    <li>Specify property type (Residential, Commercial, Industrial)</li>
-                                    <li>Provide applicant details and property address</li>
-                                    <li>Upload required documents including ID and property proof</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Pay connection charges if applicable</li>
+                                    <li>Enter your existing license number</li>
+                                    <li>Select renewal type (Annual, Biannual, Lifetime)</li>
+                                    <li>Update any changed information</li>
+                                    <li>Upload existing license copy and updated documents</li>
+                                    <li>Pay renewal fee and submit application</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of Identity (Aadhar Card, Passport, etc.)</li>
-                                    <li>Proof of Address (Aadhar Card, Utility Bill, etc.)</li>
+                                    <li>Existing license certificate</li>
+                                    <li>Updated proof of identity</li>
+                                    <li>Updated proof of address</li>
+                                    <li>Recent passport-sized photographs</li>
+                                    <li>Payment receipt of renewal fee</li>
+                                </ul>
+                            </div>
+                        `,
+                        action: "license-renewal"
+                    };
+                }
+                
+                // Property tax information
+                if (lowerMessage.includes('property tax') || lowerMessage.includes('tax payment')) {
+                    return {
+                        text: "For Property Tax Payment, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Property Tax Payment Process:</h4>
+                                <ol>
+                                    <li>Enter your Property ID</li>
+                                    <li>Verify property owner details</li>
+                                    <li>Check tax amount due</li>
+                                    <li>Select payment method (Credit Card, Debit Card, UPI, Net Banking)</li>
+                                    <li>Upload property documents for verification</li>
+                                    <li>Make instant payment</li>
+                                    <li>Receive payment confirmation</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Required Documents:</h4>
+                                <ul>
                                     <li>Property ownership documents</li>
-                                    <li>Building plan approval</li>
-                                    <li>No objection certificate from property owner (if tenant)</li>
-                                    <li>Previous water bill (for transfer cases)</li>
+                                    <li>Previous tax payment receipts (if any)</li>
+                                    <li>Proof of identity</li>
+                                    <li>Property measurement details</li>
+                                    <li>Building plan approval (if applicable)</li>
                                 </ul>
                             </div>
                         `,
-                        action: "water-connection"
+                        action: "property-tax"
                     };
                 }
                 
-                // Electricity connection information
-                if (lowerMessage.includes('electricity') && lowerMessage.includes('connection')) {
+                // Vehicle registration information
+                if (lowerMessage.includes('vehicle') || lowerMessage.includes('registration')) {
                     return {
-                        text: "For Electricity Connection, here's what you need:",
+                        text: "For Vehicle Registration, here's the complete process:",
                         details: `
                             <div class="service-steps">
-                                <h4>Electricity Connection Process:</h4>
+                                <h4>Vehicle Registration Process:</h4>
                                 <ol>
-                                    <li>Select connection type (Domestic, Commercial, Industrial, Agricultural)</li>
-                                    <li>Specify required load in kW</li>
-                                    <li>Provide applicant details and property address</li>
-                                    <li>Upload required documents including ID and property proof</li>
+                                    <li>Select vehicle type (Two Wheeler, Four Wheeler, Commercial)</li>
+                                    <li>Enter vehicle details (Model, Manufacture Year, Chassis No, Engine No)</li>
+                                    <li>Provide owner information and address</li>
+                                    <li>Upload required documents including vehicle invoice</li>
                                     <li>Submit application for processing</li>
-                                    <li>Pay connection charges and security deposit</li>
+                                    <li>Pay registration fees</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of Identity (Aadhar Card, Passport, etc.)</li>
-                                    <li>Proof of Address (Aadhar Card, Utility Bill, etc.)</li>
-                                    <li>Property ownership documents</li>
-                                    <li>Building completion certificate</li>
-                                    <li>Load calculation details</li>
-                                    <li>No objection certificate from property owner (if tenant)</li>
+                                    <li>Vehicle purchase invoice</li>
+                                    <li>Vehicle insurance certificate</li>
+                                    <li>Pollution under control certificate</li>
+                                    <li>Road tax payment receipt</li>
+                                    <li>Proof of identity and address</li>
+                                    <li>Vehicle fitness certificate (for commercial vehicles)</li>
                                 </ul>
                             </div>
                         `,
-                        action: "electricity-connection"
+                        action: "vehicle-registration"
                     };
                 }
                 
-                // Marriage certificate information
-                if (lowerMessage.includes('marriage') || lowerMessage.includes('wedding')) {
+                // Trade license information
+                if (lowerMessage.includes('trade license') || lowerMessage.includes('business license')) {
                     return {
-                        text: "For Marriage Certificate Registration, here's the procedure:",
+                        text: "For Trade License Application, here's what you need:",
                         details: `
                             <div class="service-steps">
-                                <h4>Marriage Certificate Process:</h4>
+                                <h4>Trade License Process:</h4>
                                 <ol>
-                                    <li>Provide groom and bride details</li>
-                                    <li>Enter marriage date and place</li>
-                                    <li>Provide addresses of both spouses</li>
-                                    <li>Upload required documents including ID proofs and marriage proof</li>
-                                    <li>Submit application for registration</li>
-                                    <li>Collect certificate after verification</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Proof of identity of both spouses</li>
-                                    <li>Proof of address of both spouses</li>
-                                    <li>Date of birth proof of both spouses</li>
-                                    <li>Wedding invitation card or marriage photo</li>
-                                    <li>Affidavit of marriage</li>
-                                    <li>Witness details and identity proof</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "marriage-certificate"
-                    };
-                }
-                
-                // Pet license information
-                if (lowerMessage.includes('pet') || lowerMessage.includes('dog') || lowerMessage.includes('cat')) {
-                    return {
-                        text: "For Pet License Registration, here's what you need:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Pet License Process:</h4>
-                                <ol>
-                                    <li>Fill out pet license application form</li>
-                                    <li>Provide owner details and pet information</li>
-                                    <li>Upload required documents including vaccination records</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Pay license fee</li>
-                                    <li>Receive pet license tag</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Proof of identity of owner</li>
-                                    <li>Proof of address of owner</li>
-                                    <li>Pet vaccination records</li>
-                                    <li>Pet photograph</li>
-                                    <li>Veterinary health certificate</li>
-                                    <li>Proof of sterilization (if applicable)</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "pet-license"
-                    };
-                }
-                
-                // Event permit information
-                if (lowerMessage.includes('event') || lowerMessage.includes('permit') || lowerMessage.includes('gathering')) {
-                    return {
-                        text: "For Event Permit Application, here's the process:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Event Permit Process:</h4>
-                                <ol>
-                                    <li>Fill out event permit application form</li>
-                                    <li>Provide event details and schedule</li>
-                                    <li>Specify venue and expected attendance</li>
-                                    <li>Upload required documents including venue permission</li>
+                                    <li>Enter business name and type</li>
+                                    <li>Provide business address details</li>
+                                    <li>Enter owner information</li>
+                                    <li>Upload business proof and identification documents</li>
                                     <li>Submit application for approval</li>
-                                    <li>Pay permit fee if applicable</li>
+                                    <li>Track application status</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of identity of organizer</li>
-                                    <li>Event details and schedule</li>
-                                    <li>Venue permission letter</li>
-                                    <li>Noise pollution control plan</li>
-                                    <li>Traffic management plan (if applicable)</li>
-                                    <li>Security arrangements details</li>
-                                    <li>Fire safety compliance certificate</li>
+                                    <li>Business address proof</li>
+                                    <li>Partnership deed (if applicable)</li>
+                                    <li>Company incorporation certificate (if applicable)</li>
+                                    <li>No objection certificate from property owner</li>
+                                    <li>Site plan of business premises</li>
+                                    <li>Proof of identity and address of owner</li>
                                 </ul>
                             </div>
                         `,
-                        action: "event-permit"
+                        action: "trade-license"
                     };
                 }
                 
-                // Encumbrance certificate information
-                if (lowerMessage.includes('encumbrance') || lowerMessage.includes('property certificate')) {
+                // Building permit information
+                if (lowerMessage.includes('building permit') || lowerMessage.includes('construction')) {
                     return {
-                        text: "For Encumbrance Certificate, here's what you need:",
+                        text: "For Building Permit Application, here's the procedure:",
                         details: `
                             <div class="service-steps">
-                                <h4>Encumbrance Certificate Process:</h4>
+                                <h4>Building Permit Process:</h4>
                                 <ol>
-                                    <li>Fill out encumbrance certificate application form</li>
-                                    <li>Provide property details and survey number</li>
-                                    <li>Specify period for which certificate is required</li>
-                                    <li>Upload required documents including property details</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Pay applicable fees</li>
+                                    <li>Provide property location details</li>
+                                    <li>Select building type (Residential, Commercial, Industrial)</li>
+                                    <li>Enter building specifications (Area, Floors)</li>
+                                    <li>Provide owner and architect details</li>
+                                    <li>Upload site plan and building drawings</li>
+                                    <li>Submit for municipal approval</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of identity</li>
-                                    <li>Proof of address</li>
-                                    <li>Property details and survey number</li>
-                                    <li>Property tax receipts</li>
-                                    <li>Previous ownership documents</li>
-                                    <li>Purpose of certificate request</li>
+                                    <li>Land ownership documents</li>
+                                    <li>Site plan and building drawings</li>
+                                    <li>Structural stability certificate</li>
+                                    <li>No objection certificate from neighbors (if required)</li>
+                                    <li>Environmental clearance (if applicable)</li>
+                                    <li>Proof of identity and address</li>
                                 </ul>
                             </div>
                         `,
-                        action: "encumbrance-certificate"
+                        action: "building-permit"
                     };
                 }
                 
-                // Pension services information
-                if (lowerMessage.includes('pension') || lowerMessage.includes('retirement')) {
+                // Birth certificate information
+                if (lowerMessage.includes('birth certificate') || lowerMessage.includes('birth')) {
                     return {
-                        text: "For Pension Services, here's the application process:",
+                        text: "For Birth Certificate Application, here's the process:",
                         details: `
                             <div class="service-steps">
-                                <h4>Pension Application Process:</h4>
+                                <h4>Birth Certificate Process:</h4>
                                 <ol>
-                                    <li>Fill out pension application form</li>
-                                    <li>Provide personal and employment details</li>
-                                    <li>Specify type of pension and eligibility</li>
-                                    <li>Upload required documents including service certificate</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Provide bank account details for disbursement</li>
+                                    <li>Enter child's details (Name, Gender, Date of Birth)</li>
+                                    <li>Provide place of birth information</li>
+                                    <li>Enter parents' details</li>
+                                    <li>Upload hospital birth record and parent documents</li>
+                                    <li>Submit application for certificate issuance</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of identity</li>
-                                    <li>Proof of age/date of birth</li>
-                                    <li>Service certificate from employer</li>
-                                    <li>Bank account details</li>
-                                    <li>Passport-sized photographs</li>
-                                    <li>Medical certificate (if applicable)</li>
-                                    <li>Nomination details</li>
+                                    <li>Hospital birth record or delivery slip</li>
+                                    <li>Proof of identity of parents</li>
+                                    <li>Proof of address of parents</li>
+                                    <li>Marriage certificate of parents</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
                                 </ul>
                             </div>
                         `,
-                        action: "pension"
+                        action: "birth-certificate"
                     };
                 }
                 
-                // Public health services information
-                if (lowerMessage.includes('health') || lowerMessage.includes('medical') || lowerMessage.includes('hospital')) {
+                // Death certificate information
+                if (lowerMessage.includes('death certificate') || lowerMessage.includes('death')) {
                     return {
-                        text: "For Public Health Services, here's how to access them:",
+                        text: "For Death Certificate Application, here's what you need:",
                         details: `
                             <div class="service-steps">
-                                <h4>Public Health Services Process:</h4>
+                                <h4>Death Certificate Process:</h4>
                                 <ol>
-                                    <li>Fill out health service request form</li>
-                                    <li>Specify type of health service required</li>
-                                    <li>Provide personal and health details</li>
-                                    <li>Upload required documents if applicable</li>
-                                    <li>Submit request for processing</li>
-                                    <li>Receive service details and appointment if needed</li>
+                                    <li>Enter deceased person's details</li>
+                                    <li>Provide date and place of death information</li>
+                                    <li>Enter cause of death</li>
+                                    <li>Provide applicant details and relationship</li>
+                                    <li>Upload hospital death record and identification</li>
+                                    <li>Submit application for certificate</li>
                                 </ol>
                             </div>
                             <div class="document-list">
                                 <h4>Required Documents:</h4>
                                 <ul>
-                                    <li>Proof of identity</li>
-                                    <li>Proof of address</li>
-                                    <li>Medical reports (if applicable)</li>
-                                    <li>Health insurance details (if applicable)</li>
-                                    <li>Referral letter from doctor (if applicable)</li>
+                                    <li>Hospital death record or medical certificate</li>
+                                    <li>Proof of identity of applicant</li>
+                                    <li>Proof of address of applicant</li>
+                                    <li>Proof of identity of deceased</li>
+                                    <li>Affidavit for delayed registration (if applicable)</li>
                                 </ul>
                             </div>
                         `,
-                        action: "public-health"
+                        action: "death-certificate"
+                    };
+                }
+                
+                // Complaint filing information
+                if (lowerMessage.includes('complaint') || lowerMessage.includes('issue') || lowerMessage.includes('problem')) {
+                    return {
+                        text: "I can help you file a complaint about various municipal issues:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Complaint Categories:</h4>
+                                <ul>
+                                    <li><strong>Sanitation Issues:</strong> Garbage collection, unclean areas</li>
+                                    <li><strong>Road & Infrastructure:</strong> Potholes, street lights, traffic</li>
+                                    <li><strong>Water Supply:</strong> Water issues, leakages, quality</li>
+                                    <li><strong>Electricity Issues:</strong> Power outages, electrical hazards</li>
+                                    <li><strong>Parks & Public Spaces:</strong> Park maintenance, facilities</li>
+                                    <li><strong>Noise Pollution:</strong> Excessive noise complaints</li>
+                                </ul>
+                            </div>
+                            <p>You can file a complaint by visiting the "File Complaint" section.</p>
+                        `,
+                        quickActions: [
+                            "Sanitation Complaint",
+                            "Road Issue",
+                            "Water Problem",
+                            "Electricity Issue"
+                        ]
+                    };
+                }
+                
+                // Document upload information
+                if (lowerMessage.includes('document') || lowerMessage.includes('upload') || lowerMessage.includes('aadhar')) {
+                    return {
+                        text: "For Document Upload, here's what you need to know:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Document Upload Process:</h4>
+                                <ol>
+                                    <li>Click on the file upload area for each required document</li>
+                                    <li>Select the file from your device</li>
+                                    <li>Supported formats: JPG, PNG, PDF (Images are preferred for quick verification)</li>
+                                    <li>For Aadhar Card: Upload both front and back sides clearly</li>
+                                    <li>Ensure documents are clear and readable</li>
+                                    <li>Maximum file size: 5MB per document</li>
+                                    <li>You can preview uploaded documents before submission</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>General Document Requirements:</h4>
+                                <ul>
+                                    <li><strong>Aadhar Card:</strong> Both front and back sides required</li>
+                                    <li><strong>Passport Photo:</strong> Recent white background photo</li>
+                                    <li><strong>Address Proof:</strong> Utility bill, rental agreement, etc.</li>
+                                    <li><strong>Property Documents:</strong> Clear copies of ownership papers</li>
+                                    <li><strong>Educational Certificates:</strong> If required for license</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Application status and tracking
+                if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('application status')) {
+                    return {
+                        text: "For Application Tracking, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Application Tracking:</h4>
+                                <ol>
+                                    <li>Go to 'My Applications' section after login</li>
+                                    <li>View all your submitted applications</li>
+                                    <li>Check current status (Pending, In Progress, Approved, Rejected)</li>
+                                    <li>Click 'View Details' for detailed information</li>
+                                    <li>Admin notes will be visible if application is processed</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Status Meanings:</h4>
+                                <ul>
+                                    <li><strong>Pending:</strong> Application submitted, awaiting review</li>
+                                    <li><strong>In Progress:</strong> Under processing by municipality</li>
+                                    <li><strong>Approved:</strong> Application approved, certificate ready</li>
+                                    <li><strong>Rejected:</strong> Application rejected with reasons provided</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Complaint status and tracking
+                if (lowerMessage.includes('complaint status') || lowerMessage.includes('complaint track')) {
+                    return {
+                        text: "For Complaint Tracking, here's how it works:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Complaint Tracking:</h4>
+                                <ol>
+                                    <li>Go to 'My Complaints' section after login</li>
+                                    <li>View all your submitted complaints</li>
+                                    <li>Check current status (Open, Investigation, Resolved, Closed)</li>
+                                    <li>Click 'View Details' for detailed information</li>
+                                    <li>Admin notes will be visible if complaint is processed</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Status Meanings:</h4>
+                                <ul>
+                                    <li><strong>Open:</strong> Complaint submitted, awaiting review</li>
+                                    <li><strong>Investigation:</strong> Under investigation by municipality</li>
+                                    <li><strong>Resolved:</strong> Complaint resolved, issue fixed</li>
+                                    <li><strong>Closed:</strong> Complaint closed with resolution</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // Admin panel information
+                if (lowerMessage.includes('admin') || lowerMessage.includes('manage')) {
+                    return {
+                        text: "For Admin Panel Access, here's what you can do:",
+                        details: `
+                            <div class="service-steps">
+                                <h4>Admin Panel Features:</h4>
+                                <ol>
+                                    <li><strong>Dashboard:</strong> View overall statistics and metrics</li>
+                                    <li><strong>Applications Management:</strong> Review, approve, or reject applications</li>
+                                    <li><strong>Complaints Management:</strong> Review and update complaint status</li>
+                                    <li><strong>User Management:</strong> Manage registered users</li>
+                                    <li><strong>Reports:</strong> Generate analytics and reports</li>
+                                    <li><strong>Settings:</strong> Configure system settings</li>
+                                </ol>
+                            </div>
+                            <div class="document-list">
+                                <h4>Admin Login:</h4>
+                                <ul>
+                                    <li>Use admin credentials to access the panel</li>
+                                    <li>Manage all user applications efficiently</li>
+                                    <li>Update application and complaint status with notes</li>
+                                    <li>Monitor system performance</li>
+                                </ul>
+                            </div>
+                        `
+                    };
+                }
+                
+                // General documentation requirements
+                if (lowerMessage.includes('document') || lowerMessage.includes('require') || lowerMessage.includes('need')) {
+                    return {
+                        text: "For general documentation requirements:",
+                        details: `
+                            <div class="document-list">
+                                <h4>Common Documents Required for Most Services:</h4>
+                                <ul>
+                                    <li><strong>Proof of Identity:</strong> Aadhar Card, Passport, Voter ID, Driving License</li>
+                                    <li><strong>Proof of Address:</strong> Aadhar Card, Utility Bill, Rental Agreement</li>
+                                    <li><strong>Photographs:</strong> Recent passport-sized photos (2 copies)</li>
+                                    <li><strong>Existing Certificates:</strong> Any relevant existing licenses or certificates</li>
+                                    <li><strong>Payment Receipts:</strong> For applicable fees and charges</li>
+                                </ul>
+                            </div>
+                            <p>For specific service requirements, ask about that particular service like "license documents" or "vehicle registration documents".</p>
+                        `
+                    };
+                }
+                
+                // Help and support
+                if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('contact')) {
+                    return {
+                        text: "I'm here to help you with municipality services!",
+                        details: `
+                            <div class="service-steps">
+                                <h4>How I can assist you:</h4>
+                                <ol>
+                                    <li>Provide information about all municipality services</li>
+                                    <li>Explain documentation requirements</li>
+                                    <li>Guide through application processes</li>
+                                    <li>Help with document upload procedures</li>
+                                    <li>Explain application and complaint tracking</li>
+                                    <li>Provide admin panel information</li>
+                                </ol>
+                            </div>
+                            <p>You can ask me about:</p>
+                            <ul>
+                                <li>License applications and renewals</li>
+                                <li>Property tax payments</li>
+                                <li>Vehicle registration</li>
+                                <li>Trade licenses</li>
+                                <li>Building permits</li>
+                                <li>Birth and death certificates</li>
+                                <li>Filing complaints</li>
+                                <li>Document requirements</li>
+                                <li>Application and complaint status</li>
+                            </ul>
+                        `
                     };
                 }
                 
@@ -2006,16 +3055,10 @@
                                 <li>Trade license documentation</li>
                                 <li>Building permit procedures</li>
                                 <li>Birth and death certificate applications</li>
-                                <li>Water and electricity connections</li>
-                                <li>Marriage certificate registration</li>
-                                <li>Pet licensing</li>
-                                <li>Event permits</li>
-                                <li>Encumbrance certificates</li>
-                                <li>Pension services</li>
-                                <li>Public health services</li>
                                 <li>Filing complaints about municipal issues</li>
                                 <li>Document upload requirements</li>
                                 <li>Application and complaint tracking</li>
+                                <li>Admin panel features</li>
                             </ul>
                         </div>
                         <p>Or use the quick action buttons below for specific services!</p>
@@ -2028,15 +3071,8 @@
                         "Building Permit",
                         "Birth Certificate",
                         "Death Certificate",
-                        "Water Connection",
-                        "Electricity Connection",
-                        "Marriage Certificate",
-                        "Pet License",
-                        "Event Permit",
-                        "Encumbrance Certificate",
-                        "Pension Services",
-                        "Public Health Services",
-                        "File Complaint"
+                        "File Complaint",
+                        "Document Upload"
                     ]
                 };
             }
@@ -2311,15 +3347,7 @@
                 'trade-license': 'Trade License',
                 'building-permit': 'Building Permit',
                 'birth-certificate': 'Birth Certificate',
-                'death-certificate': 'Death Certificate',
-                'water-connection': 'Water Connection',
-                'electricity-connection': 'Electricity Connection',
-                'marriage-certificate': 'Marriage Certificate',
-                'pet-license': 'Pet License',
-                'event-permit': 'Event Permit',
-                'encumbrance-certificate': 'Encumbrance Certificate',
-                'pension': 'Pension Services',
-                'public-health': 'Public Health Services'
+                'death-certificate': 'Death Certificate'
             };
             
             return displayNames[serviceType] || serviceType;
