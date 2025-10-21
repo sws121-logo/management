@@ -4431,58 +4431,58 @@
         }
 
         function updateAdminComplaintsTable() {
-    const tableBody = document.getElementById('adminComplaintsTable');
-    tableBody.innerHTML = '';
-    
-    if (complaints.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No complaints found.</td></tr>';
-        return;
-    }
-    
-    complaints.forEach(complaint => {
-        const row = document.createElement('tr');
-        
-        const statusClass = `status-${complaint.status}`;
-        
-        row.innerHTML = `
-            <td>${complaint.id}</td>
-            <td>${complaint.userName}</td>
-            <td>${complaintCategories[complaint.type].title}</td>
-            <td>${complaint.title}</td>
-            <td>${complaint.date}</td>
-            <td><span class="status ${statusClass}">${complaint.status}</span></td>
-            <td class="action-buttons">
-                <button class="action-btn view-btn" data-id="${complaint.id}" data-type="complaint">View</button>
-                <button class="action-btn edit-btn" data-id="${complaint.id}" data-type="complaint">Edit</button>
-                <button class="action-btn delete-btn" data-id="${complaint.id}" data-type="complaint">Delete</button>
-            </td>
-        `;
-        
-        tableBody.appendChild(row);
-    });
-    
-    // Add event listeners for action buttons - FIXED VERSION
-    document.querySelectorAll('.view-btn[data-type="complaint"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = parseInt(this.getAttribute('data-id'));
-            viewComplaintDetails(id);
-        });
-    });
-    
-    document.querySelectorAll('.edit-btn[data-type="complaint"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = parseInt(this.getAttribute('data-id'));
-            editComplaint(id);
-        });
-    });
-    
-    document.querySelectorAll('.delete-btn[data-type="complaint"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = parseInt(this.getAttribute('data-id'));
-            deleteComplaint(id);
-        });
-    });
-}
+            const tableBody = document.getElementById('adminComplaintsTable');
+            tableBody.innerHTML = '';
+            
+            if (complaints.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No complaints found.</td></tr>';
+                return;
+            }
+            
+            complaints.forEach(complaint => {
+                const row = document.createElement('tr');
+                
+                const statusClass = `status-${complaint.status}`;
+                
+                row.innerHTML = `
+                    <td>${complaint.id}</td>
+                    <td>${complaint.userName}</td>
+                    <td>${complaintCategories[complaint.type].title}</td>
+                    <td>${complaint.title}</td>
+                    <td>${complaint.date}</td>
+                    <td><span class="status ${statusClass}">${complaint.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-id="${complaint.id}" data-type="complaint">View</button>
+                        <button class="action-btn edit-btn" data-id="${complaint.id}" data-type="complaint">Edit</button>
+                        <button class="action-btn delete-btn" data-id="${complaint.id}" data-type="complaint">Delete</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.view-btn[data-type="complaint"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    viewComplaintDetails(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-btn[data-type="complaint"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editComplaint(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn[data-type="complaint"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteComplaint(id);
+                });
+            });
+        }
 
         function updateAdminUsersTable() {
             const tableBody = document.getElementById('adminUsersTable');
