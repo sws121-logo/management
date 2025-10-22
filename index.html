@@ -139,190 +139,6 @@
             transform: translateY(-2px);
         }
         
-       /* NEW STYLES FOR ADMIN LOGIN AND SIDEBAR */
-        .admin-login-container {
-           position: relative;
-        }
-
-        .admin-login-btn {
-          background: var(--warning);
-          color: white;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .admin-login-btn:hover {
-          background: #e67e22;
-         }
-
-        .admin-login-form {
-           display: none;
-           position: fixed;
-           top: 50%;
-           left: 50%;
-           transform: translate(-50%, -50%);
-           background: white;
-           border-radius: 8px;
-           padding: 20px;
-           box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-           z-index: 1002;
-           width: 280px;
-             }
-
-         .admin-login-form.active {
-           display: block;
-           animation: fadeIn 0.3s ease;
-           }
-
-         .admin-login-form h3 {
-           margin-bottom: 15px;
-           color: var(--primary);
-           text-align: center;
-              }
-
-          .admin-login-form .form-group {
-            margin-bottom: 15px;
-       }
-
-          .admin-login-form label {
-             display: block;
-             margin-bottom: 5px;
-             font-weight: 600;
-             color: var(--dark);
-                }
-
-          .admin-login-form input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-           }
-
-          .admin-login-form button {
-             width: 100%;
-             padding: 10px;
-             background: var(--warning);
-             color: white;
-             border: none;
-             border-radius: 5px;
-             cursor: pointer;
-             font-weight: 600;
-         }
-
-          .admin-login-form button:hover {
-             background: #e67e22;
-             }
-
-           .admin-login-form .close-form {
-             position: absolute;
-             top: 10px;
-             right: 10px;
-             background: none;
-             border: none;
-             font-size: 1.2rem;
-             cursor: pointer;
-             color: #7f8c8d;
-                }
-   
-        
-        /* NEW STYLES FOR SIDEBAR */
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 300px;
-            height: 100%;
-            background: var(--primary);
-            color: white;
-            transition: left 0.3s ease;
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-        }
-        
-        .sidebar.active {
-            left: 0;
-        }
-        
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h2 {
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .close-sidebar {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .sidebar-nav ul {
-            list-style: none;
-        }
-        
-        .sidebar-nav li {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        
-        .sidebar-nav a:hover, .sidebar-nav a.active {
-            background: var(--secondary);
-        }
-        
-        .sidebar-nav i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-        
-        .sidebar-overlay.active {
-            display: block;
-        }
-        
-        /* Rest of your existing CSS styles remain the same */
         .section {
             background: white;
             border-radius: 10px;
@@ -1306,20 +1122,6 @@
             .map-container {
                 height: 300px;
             }
-            
-            /* NEW STYLES FOR MOBILE SIDEBAR */
-            .sidebar-toggle {
-                display: block;
-            }
-            
-            nav {
-                display: none;
-            }
-            
-            .admin-login-form {
-                width: 250px;
-                right: -50px;
-            }
         }
         
         @media (min-width: 769px) {
@@ -1331,7 +1133,6 @@
                 width: auto;
                 order: 2;
                 margin-top: 0;
-                display: block !important;
             }
             
             .user-actions {
@@ -1361,11 +1162,6 @@
             .map-container {
                 height: 500px;
             }
-            
-            /* NEW STYLES FOR DESKTOP SIDEBAR */
-            .sidebar-toggle {
-                display: none;
-            }
         }
         
         @media (min-width: 1025px) {
@@ -1387,12 +1183,6 @@
                     <i class="fas fa-city"></i>
                     <h1>MSP</h1>
                 </div>
-                
-                <!-- NEW SIDEBAR TOGGLE BUTTON -->
-                <button class="sidebar-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
                 <nav>
                     <ul>
                         <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
@@ -1402,84 +1192,17 @@
                         <li><a href="#" class="nav-link" data-section="my-applications">My Applications</a></li>
                         <li><a href="#" class="nav-link" data-section="my-complaints">My Complaints</a></li>
                         <li><a href="#" class="nav-link" data-section="documentation">Documentation</a></li>
-                        <!-- REMOVED Admin Panel link from navigation -->
+                        <li><a href="#" class="nav-link" data-section="admin">Admin Panel</a></li>
                     </ul>
                 </nav>
                 <div class="user-actions">
                     <button class="btn btn-primary" id="loginBtn">Login</button>
                     <button class="btn btn-secondary" id="registerBtn">Register</button>
-                    
-                    <!-- NEW ADMIN LOGIN BUTTON AND FORM - KEEPING ONLY ONE ADMIN BUTTON -->
-                    <div class="admin-login-container">
-                        <button class="btn admin-login-btn" id="adminHeaderBtn">
-                            <i class="fas fa-user-shield"></i> Admin
-                        </button>
-                        <div class="admin-login-form" id="adminLoginForm">
-                            <button class="close-form" id="closeAdminForm">&times;</button>
-                            <h3>Admin Login</h3>
-                            <form id="headerAdminLoginForm">
-                                <div class="form-group">
-                                    <label for="headerAdminUsername">Username</label>
-                                    <input type="text" id="headerAdminUsername" placeholder="Enter admin username" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="headerAdminPassword">Password</label>
-                                    <input type="password" id="headerAdminPassword" placeholder="Enter admin password" required>
-                                </div>
-                                <button type="submit">Login as Admin</button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </header>
-         <!-- Admin Interface (shown only when admin is logged in) -->
-        <div class="admin-interface" id="adminInterface">
-            <div class="admin-header">
-                <div class="logo">
-                    <i class="fas fa-city"></i>
-                    <h1>MSP - Admin Panel</h1>
-                </div>
-                <button class="admin-logout-btn" id="adminLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-        <!-- NEW SIDEBAR -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-city"></i> MSP</h2>
-                <button class="close-sidebar" id="closeSidebar">&times;</button>
-            </div>
-            <div class="sidebar-nav">
-                <ul>
-                    <li><a href="#" class="sidebar-link active" data-section="home">
-                        <i class="fas fa-home"></i> Home
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="services">
-                        <i class="fas fa-concierge-bell"></i> Services
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="infrastructure">
-                        <i class="fas fa-road"></i> Infrastructure
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="complaints">
-                        <i class="fas fa-exclamation-circle"></i> File Complaint
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="my-applications">
-                        <i class="fas fa-file-alt"></i> My Applications
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="my-complaints">
-                        <i class="fas fa-comments"></i> My Complaints
-                    </a></li>
-                    <li><a href="#" class="sidebar-link" data-section="documentation">
-                        <i class="fas fa-file-contract"></i> Documentation
-                    </a></li>
-                    <!-- REMOVED Admin Panel link from sidebar -->
-                </ul>
-            </div>
-        </div>
 
-<!-- Home Section -->
+        <!-- Home Section -->
         <section id="home" class="section active">
             <h2 class="section-title">Welcome to Municipality Services Portal</h2>
             <div class="canvas-container" id="animation-container"></div>
@@ -1980,7 +1703,7 @@
             <!-- Documentation details will be dynamically loaded here -->
         </section>
 
-        <!-- Admin Panel Section - HIDDEN FROM NORMAL USERS -->
+        <!-- Admin Panel Section -->
         <section id="admin" class="section">
             <h2 class="section-title">Admin Panel</h2>
             <div class="admin-panel">
@@ -2248,7 +1971,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
                 </form>
-                <!-- REMOVED Admin Login button from user login form -->
+                <button class="btn admin-login-btn" id="adminLoginBtn" style="width: 100%; margin-top: 10px;">Admin Login</button>
                 <button class="btn btn-secondary" id="closeLoginModal" style="width: 100%; margin-top: 10px;">Cancel</button>
             </div>
         </div>
@@ -2288,7 +2011,7 @@
             </div>
         </div>
 
-        <!-- Admin Login Modal - KEEPING FOR ADMIN ACCESS -->
+        <!-- Admin Login Modal -->
         <div class="login-modal" id="adminLoginModal">
             <div class="login-form">
                 <h2>Admin Login</h2>
@@ -3538,157 +3261,21 @@
             `
         };
 
+       // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if admin is already logged in
-            if (isAdmin) {
-                activateAdminInterface();
-            }
-
-            // Admin login form in header
-            const adminHeaderBtn = document.getElementById('adminHeaderBtn');
-            const adminLoginForm = document.getElementById('adminLoginForm');
-            const closeAdminForm = document.getElementById('closeAdminForm');
-            const headerAdminLoginForm = document.getElementById('headerAdminLoginForm');
-            
-            // Toggle admin login form
-            adminHeaderBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                adminLoginForm.classList.toggle('active');
-            });
-            
-            // Close admin login form
-            closeAdminForm.addEventListener('click', function() {
-                adminLoginForm.classList.remove('active');
-            });
-            
-            // Close admin login form when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!adminLoginForm.contains(e.target) && e.target !== adminHeaderBtn) {
-                    adminLoginForm.classList.remove('active');
-                }
-            });
-            
-            // Handle admin login from header form - MODIFIED
-            headerAdminLoginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('headerAdminUsername').value;
-                const password = document.getElementById('headerAdminPassword').value;
-                
-                if (username === "admin" && password === "admin123") {
-                    isAdmin = true;
-                    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
-                    adminLoginForm.classList.remove('active');
-                    alert('Welcome, Admin!');
-                    
-                    // Activate admin interface
-                    activateAdminInterface();
-                } else {
-                    alert('Invalid admin credentials. Please try again.');
-                }
-            });
-
-            // Admin logout functionality - NEW
-            document.getElementById('adminLogoutBtn').addEventListener('click', function() {
-                isAdmin = false;
-                localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
-                deactivateAdminInterface();
-                alert('You have been logged out from admin panel.');
-                
-                // Navigate to home section
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById('home').classList.add('active');
-                
-                // Update navigation
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                document.querySelector('[data-section="home"]').classList.add('active');
-            });
-
-            // Function to activate admin interface - NEW
-            function activateAdminInterface() {
-                document.body.classList.add('admin-mode');
-                document.getElementById('adminInterface').classList.add('active');
-                
-                // Hide all regular sections
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                // Show admin section
-                document.getElementById('admin').classList.add('active');
-                
-                // Update admin panel data
-                updateAdminApplicationsTable();
-                updateAdminComplaintsTable();
-                updateAdminUsersTable();
-                updateAdminStats();
-                initAdminCharts();
-                updateInfrastructureAlerts();
-            }
-
-            // Function to deactivate admin interface - NEW
-            function deactivateAdminInterface() {
-                document.body.classList.remove('admin-mode');
-                document.getElementById('adminInterface').classList.remove('active');
-            }
-            
-            // Sidebar functionality
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            const sidebar = document.getElementById('sidebar');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const sidebarLinks = document.querySelectorAll('.sidebar-link');
-            
-            // Open sidebar
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.add('active');
-                sidebarOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // Close sidebar
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-                sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-            
-            // Close sidebar when clicking on overlay
-            sidebarOverlay.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-                sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-            
-            // Handle sidebar navigation
-            sidebarLinks.forEach(link => {
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
-                    // Update active state
-                    sidebarLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Navigate to section
-                    const sectionId = this.getAttribute('data-section');
-                    
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+                    this.classList.add('active');
                     
                     document.querySelectorAll('.section').forEach(section => {
                         section.classList.remove('active');
                     });
-                    document.getElementById(sectionId).classList.add('active');
                     
-                    // Close sidebar on mobile
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                        sidebarOverlay.classList.remove('active');
-                        document.body.style.overflow = 'auto';
-                    }
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
                     
                     // Update admin panel data when admin section is opened
                     if (sectionId === 'admin') {
@@ -4003,46 +3590,6 @@
 
             // Initialize infrastructure alerts (FROM CODE1)
             updateInfrastructureAlerts();
-
-            // FIXED: Header navigation functionality
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update active state
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update sidebar active state
-                    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-                    const sectionId = this.getAttribute('data-section');
-                    document.querySelector(`.sidebar-link[data-section="${sectionId}"]`).classList.add('active');
-                    
-                    // Navigate to section
-                    document.querySelectorAll('.section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById(sectionId).classList.add('active');
-                    
-                    // Update admin panel data when admin section is opened
-                    if (sectionId === 'admin') {
-                        updateAdminApplicationsTable();
-                        updateAdminComplaintsTable();
-                        updateAdminUsersTable();
-                        updateAdminStats();
-                        initAdminCharts();
-                        updateInfrastructureAlerts();
-                    }
-                    
-                    // Update infrastructure data when infrastructure section is opened
-                    if (sectionId === 'infrastructure') {
-                        updateWaterLevelDisplay();
-                        initPatnaMap();
-                        initWaterPipelineMap();
-                        initGasPipelineMap();
-                    }
-                });
-            });
 
             // ... (rest of the code2 functionality remains the same)
             // Service category cards
@@ -5157,6 +4704,15 @@
 
             document.getElementById('closeLoginModal').addEventListener('click', function() {
                 document.getElementById('loginModal').style.display = 'none';
+            });
+
+            document.getElementById('adminLoginBtn').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminLoginModal').style.display = 'flex';
+            });
+
+            document.getElementById('closeAdminLoginModal').addEventListener('click', function() {
+                document.getElementById('adminLoginModal').style.display = 'none';
             });
 
             document.getElementById('registerBtn').addEventListener('click', function() {
