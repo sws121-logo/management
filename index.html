@@ -140,6 +140,86 @@
         }
         
        /* NEW STYLES FOR ADMIN LOGIN AND SIDEBAR */
+        .admin-interface {
+            display: none;
+        }
+        
+        .admin-interface.active {
+            display: block;
+        }
+        
+        .admin-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-header .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .admin-header .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .admin-logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+        
+        .admin-logout-btn:hover {
+            background: #c0392b;
+        }
+        
+        /* Hide regular content when admin is logged in */
+        body.admin-mode .container > header,
+        body.admin-mode .sidebar-toggle,
+        body.admin-mode .sidebar-overlay,
+        body.admin-mode .sidebar,
+        body.admin-mode .section:not(#admin),
+        body.admin-mode .chatbot-container,
+        body.admin-mode footer {
+            display: none !important;
+        }
+        
+        body.admin-mode .container {
+            padding: 10px;
+        }
+        
+        /* Update admin panel styles for full view */
+        body.admin-mode #admin.section {
+            display: block;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        
+        body.admin-mode .admin-panel {
+            min-height: calc(100vh - 100px);
+        }
 .admin-login-container {
     position: relative;
 }
