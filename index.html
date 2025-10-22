@@ -1432,7 +1432,17 @@
                 </div>
             </div>
         </header>
-
+         <!-- Admin Interface (shown only when admin is logged in) -->
+        <div class="admin-interface" id="adminInterface">
+            <div class="admin-header">
+                <div class="logo">
+                    <i class="fas fa-city"></i>
+                    <h1>MSP - Admin Panel</h1>
+                </div>
+                <button class="admin-logout-btn" id="adminLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         <!-- NEW SIDEBAR -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
         <div class="sidebar" id="sidebar">
@@ -3527,7 +3537,12 @@
             `
         };
 
-       document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if admin is already logged in
+            if (isAdmin) {
+                activateAdminInterface();
+            }
+
             // Admin login form in header
             const adminHeaderBtn = document.getElementById('adminHeaderBtn');
             const adminLoginForm = document.getElementById('adminLoginForm');
@@ -3552,7 +3567,7 @@
                 }
             });
             
-            // Handle admin login from header form
+            // Handle admin login from header form - MODIFIED
             headerAdminLoginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('headerAdminUsername').value;
@@ -3563,17 +3578,61 @@
                     localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
                     adminLoginForm.classList.remove('active');
                     alert('Welcome, Admin!');
-                    updateUIForUser();
                     
-                    // Navigate to admin panel
-                    document.querySelectorAll('.section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById('admin').classList.add('active');
+                    // Activate admin interface
+                    activateAdminInterface();
                 } else {
                     alert('Invalid admin credentials. Please try again.');
                 }
             });
+
+            // Admin logout functionality - NEW
+            document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+                isAdmin = false;
+                localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+                deactivateAdminInterface();
+                alert('You have been logged out from admin panel.');
+                
+                // Navigate to home section
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById('home').classList.add('active');
+                
+                // Update navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector('[data-section="home"]').classList.add('active');
+            });
+
+            // Function to activate admin interface - NEW
+            function activateAdminInterface() {
+                document.body.classList.add('admin-mode');
+                document.getElementById('adminInterface').classList.add('active');
+                
+                // Hide all regular sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show admin section
+                document.getElementById('admin').classList.add('active');
+                
+                // Update admin panel data
+                updateAdminApplicationsTable();
+                updateAdminComplaintsTable();
+                updateAdminUsersTable();
+                updateAdminStats();
+                initAdminCharts();
+                updateInfrastructureAlerts();
+            }
+
+            // Function to deactivate admin interface - NEW
+            function deactivateAdminInterface() {
+                document.body.classList.remove('admin-mode');
+                document.getElementById('adminInterface').classList.remove('active');
+            }
             
             // Sidebar functionality
             const sidebarToggle = document.querySelector('.sidebar-toggle');
