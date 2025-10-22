@@ -157,6 +157,7 @@
         }
         
         .admin-login-form {
+            display: none;
             position: absolute;
             top: 100%;
             right: 0;
@@ -1498,6 +1499,7 @@
                     <i class="fas fa-id-card category-icon"></i>
                     <h3>License Application</h3>
                     <p>Apply for various licenses including business, trade, and professional licenses</p>
+                </div>
                 <div class="category-card" data-service="license-renewal">
                     <i class="fas fa-sync-alt category-icon"></i>
                     <h3>License Renewal</h3>
@@ -3941,6 +3943,46 @@
 
             // Initialize infrastructure alerts (FROM CODE1)
             updateInfrastructureAlerts();
+
+            // FIXED: Header navigation functionality
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update sidebar active state
+                    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                    const sectionId = this.getAttribute('data-section');
+                    document.querySelector(`.sidebar-link[data-section="${sectionId}"]`).classList.add('active');
+                    
+                    // Navigate to section
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // Update admin panel data when admin section is opened
+                    if (sectionId === 'admin') {
+                        updateAdminApplicationsTable();
+                        updateAdminComplaintsTable();
+                        updateAdminUsersTable();
+                        updateAdminStats();
+                        initAdminCharts();
+                        updateInfrastructureAlerts();
+                    }
+                    
+                    // Update infrastructure data when infrastructure section is opened
+                    if (sectionId === 'infrastructure') {
+                        updateWaterLevelDisplay();
+                        initPatnaMap();
+                        initWaterPipelineMap();
+                        initGasPipelineMap();
+                    }
+                });
+            });
 
             // ... (rest of the code2 functionality remains the same)
             // Service category cards
