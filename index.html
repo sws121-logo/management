@@ -1213,6 +1213,168 @@
             font-weight: 600;
         }
         
+        /* NEW STYLES FOR LIVE CHAT */
+        .live-chat-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .live-chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--success);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .live-chat-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .live-chat-window {
+            position: absolute;
+            bottom: 70px;
+            left: 0;
+            width: 350px;
+            max-width: 90vw;
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .live-chat-header {
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .live-chat-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2ecc71;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .live-chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .chat-message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .officer-message {
+            background: #e3f2fd;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background: var(--success);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .live-chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .live-chat-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin-right: 10px;
+        }
+        
+        .live-chat-input button {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #7f8c8d;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
         /* Mobile-first responsive design */
         @media (max-width: 768px) {
             .container {
@@ -1277,6 +1439,11 @@
             .chatbot-window {
                 width: 95vw;
                 right: -10px;
+            }
+            
+            .live-chat-window {
+                width: 95vw;
+                left: -10px;
             }
             
             .modal-content {
@@ -2192,6 +2359,43 @@
                 <div class="chatbot-input">
                     <input type="text" id="chatbotInput" placeholder="Type your message...">
                     <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW LIVE CHAT WITH MUNICIPALITY OFFICER -->
+        <div class="live-chat-container">
+            <div class="live-chat-toggle" id="liveChatToggle">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="live-chat-window" id="liveChatWindow">
+                <div class="live-chat-header">
+                    <div>
+                        <h3>Live Chat Support</h3>
+                        <div class="live-chat-status">
+                            <div class="status-indicator"></div>
+                            <span>Municipality Officer Online</span>
+                        </div>
+                    </div>
+                    <button id="closeLiveChat"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="live-chat-messages" id="liveChatMessages">
+                    <div class="chat-message officer-message">
+                        <div>Hello! I'm Officer Sharma from the Municipality Department. How can I assist you today?</div>
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                </div>
+                <div class="typing-indicator" id="officerTyping">
+                    <div>Officer Sharma is typing</div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+                <div class="live-chat-input">
+                    <input type="text" id="liveChatInput" placeholder="Type your message to the officer...">
+                    <button id="sendLiveMessage"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
@@ -5088,6 +5292,117 @@
                     
                     document.getElementById('chatbotMessages').appendChild(quickActionsContainer);
                 }
+            }
+
+            // NEW LIVE CHAT WITH MUNICIPALITY OFFICER
+            document.getElementById('liveChatToggle').addEventListener('click', function() {
+                document.getElementById('liveChatWindow').style.display = 'flex';
+            });
+
+            document.getElementById('closeLiveChat').addEventListener('click', function() {
+                document.getElementById('liveChatWindow').style.display = 'none';
+            });
+
+            document.getElementById('sendLiveMessage').addEventListener('click', sendLiveMessage);
+            document.getElementById('liveChatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendLiveMessage();
+                }
+            });
+
+            function sendLiveMessage() {
+                const input = document.getElementById('liveChatInput');
+                const message = input.value.trim();
+                
+                if (message) {
+                    // Add user message
+                    addLiveMessage(message, 'user');
+                    input.value = '';
+                    
+                    // Show typing indicator
+                    document.getElementById('officerTyping').style.display = 'flex';
+                    
+                    // Simulate officer response after a delay
+                    setTimeout(() => {
+                        document.getElementById('officerTyping').style.display = 'none';
+                        const response = generateOfficerResponse(message);
+                        addLiveMessage(response, 'officer');
+                    }, 1500 + Math.random() * 2000); // Random delay between 1.5-3.5 seconds
+                }
+            }
+
+            function addLiveMessage(text, sender) {
+                const messagesContainer = document.getElementById('liveChatMessages');
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', `${sender}-message`);
+                
+                const currentTime = new Date();
+                const timeString = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageElement.innerHTML = `
+                    <div>${text}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            function generateOfficerResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Greeting responses
+                if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                    return "Hello! I'm Officer Sharma from the Municipality Department. How can I assist you with your municipal services today?";
+                }
+                
+                // Application status inquiries
+                if (lowerMessage.includes('status') || lowerMessage.includes('application') || lowerMessage.includes('track')) {
+                    return "I can help you check the status of your application. Please provide your application ID, and I'll look it up for you in our system.";
+                }
+                
+                // Complaint inquiries
+                if (lowerMessage.includes('complaint') || lowerMessage.includes('issue') || lowerMessage.includes('problem')) {
+                    return "I understand you're facing an issue. Could you please provide more details about your complaint? I'll check its current status and see how we can help resolve it.";
+                }
+                
+                // Document requirements
+                if (lowerMessage.includes('document') || lowerMessage.includes('require') || lowerMessage.includes('need')) {
+                    return "I can provide you with the specific document requirements for any municipal service. Please let me know which service you're applying for, and I'll list the required documents.";
+                }
+                
+                // Payment inquiries
+                if (lowerMessage.includes('payment') || lowerMessage.includes('fee') || lowerMessage.includes('cost')) {
+                    return "I can help you with payment-related queries. Please specify which service fee you're inquiring about, and I'll provide the current fee structure.";
+                }
+                
+                // Processing time
+                if (lowerMessage.includes('time') || lowerMessage.includes('how long') || lowerMessage.includes('duration')) {
+                    return "Processing times vary depending on the service. For most license applications, it takes 7-10 working days. Building permits may take 15-20 working days. Is there a specific service you'd like to know about?";
+                }
+                
+                // Urgent requests
+                if (lowerMessage.includes('urgent') || lowerMessage.includes('emergency') || lowerMessage.includes('asap')) {
+                    return "I understand this is urgent. Please provide your application or complaint ID, and I'll prioritize it for immediate attention.";
+                }
+                
+                // General municipality services
+                if (lowerMessage.includes('service') || lowerMessage.includes('municipality') || lowerMessage.includes('help')) {
+                    return "Our municipality provides various services including license applications, property tax payments, birth/death certificates, building permits, and more. What specific service do you need assistance with?";
+                }
+                
+                // Contact information
+                if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
+                    return "You can reach our main office at 1800-123-4567 during business hours (9 AM to 6 PM, Monday to Saturday). For email support, write to support@municipality.gov. Is there anything specific I can help you with right now?";
+                }
+                
+                // Office locations
+                if (lowerMessage.includes('office') || lowerMessage.includes('location') || lowerMessage.includes('where')) {
+                    return "Our main municipal office is located at City Center, Sector 5. We also have branch offices in all major sectors. Which area are you located in? I can direct you to the nearest office.";
+                }
+                
+                // Default response
+                return "Thank you for your message. I'm here to assist you with municipal services. Could you please provide more details about your query so I can help you better?";
             }
 
             // Login/Register functionality
