@@ -4602,6 +4602,7 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
+            // Enhanced chatbot response generation
             function generateBotResponse(message) {
                 const lowerMessage = message.toLowerCase();
                 
@@ -4621,9 +4622,205 @@
                             "Water Connection",
                             "Electricity Connection",
                             "Document Requirements",
-                            "File a Complaint"
+                            "File a Complaint",
+                            "Check Complaint Status",
+                            "Check Application Status"
                         ]
                     };
+                }
+                
+                // Complaint status check
+                if (lowerMessage.includes('complaint status') || lowerMessage.includes('check complaint') || 
+                    lowerMessage.includes('complaint id') || lowerMessage.includes('complaint number')) {
+                    
+                    // Extract complaint ID from message
+                    const complaintIdMatch = message.match(/\d+/);
+                    let complaintId = complaintIdMatch ? parseInt(complaintIdMatch[0]) : null;
+                    
+                    // If no ID found in message, check if user is logged in
+                    if (!complaintId && currentUser) {
+                        const userComplaints = complaints.filter(c => c.userId === currentUser.id);
+                        if (userComplaints.length > 0) {
+                            // Show user's complaints
+                            let complaintDetails = '<div class="service-steps"><h4>Your Complaints:</h4><ul>';
+                            userComplaints.forEach(complaint => {
+                                const statusClass = `status-${complaint.status}`;
+                                complaintDetails += `
+                                    <li>
+                                        <strong>ID: ${complaint.id}</strong> - ${complaint.title}
+                                        <span class="status ${statusClass}">${complaint.status}</span>
+                                    </li>
+                                `;
+                            });
+                            complaintDetails += '</ul></div>';
+                            
+                            return {
+                                text: "Here are your complaints:",
+                                details: complaintDetails
+                            };
+                        } else {
+                            return {
+                                text: "You haven't filed any complaints yet."
+                            };
+                        }
+                    } else if (complaintId) {
+                        // Find specific complaint
+                        const complaint = complaints.find(c => c.id === complaintId);
+                        if (complaint) {
+                            const statusClass = `status-${complaint.status}`;
+                            return {
+                                text: `Complaint ID ${complaintId} Status:`,
+                                details: `
+                                    <div class="service-steps">
+                                        <h4>Complaint Details:</h4>
+                                        <p><strong>Title:</strong> ${complaint.title}</p>
+                                        <p><strong>Type:</strong> ${complaintCategories[complaint.type].title}</p>
+                                        <p><strong>Status:</strong> <span class="status ${statusClass}">${complaint.status}</span></p>
+                                        <p><strong>Date:</strong> ${complaint.date}</p>
+                                        <p><strong>Location:</strong> ${complaint.location}</p>
+                                        ${complaint.adminNotes ? `<p><strong>Admin Notes:</strong> ${complaint.adminNotes}</p>` : ''}
+                                    </div>
+                                `
+                            };
+                        } else {
+                            return {
+                                text: `Complaint with ID ${complaintId} not found. Please check the ID and try again.`
+                            };
+                        }
+                    } else {
+                        return {
+                            text: "To check complaint status, please provide your complaint ID or login to view all your complaints.",
+                            quickActions: [
+                                "Login to Check Complaints",
+                                "File New Complaint"
+                            ]
+                        };
+                    }
+                }
+                
+                // Application status check
+                if (lowerMessage.includes('application status') || lowerMessage.includes('check application') || 
+                    lowerMessage.includes('application id') || lowerMessage.includes('application number')) {
+                    
+                    // Extract application ID from message
+                    const applicationIdMatch = message.match(/\d+/);
+                    let applicationId = applicationIdMatch ? parseInt(applicationIdMatch[0]) : null;
+                    
+                    // If no ID found in message, check if user is logged in
+                    if (!applicationId && currentUser) {
+                        const userApplications = applications.filter(a => a.userId === currentUser.id);
+                        if (userApplications.length > 0) {
+                            // Show user's applications
+                            let applicationDetails = '<div class="service-steps"><h4>Your Applications:</h4><ul>';
+                            userApplications.forEach(application => {
+                                const statusClass = `status-${application.status.replace(' ', '-')}`;
+                                applicationDetails += `
+                                    <li>
+                                        <strong>ID: ${application.id}</strong> - ${getServiceDisplayName(application.serviceType)}
+                                        <span class="status ${statusClass}">${application.status}</span>
+                                    </li>
+                                `;
+                            });
+                            applicationDetails += '</ul></div>';
+                            
+                            return {
+                                text: "Here are your applications:",
+                                details: applicationDetails
+                            };
+                        } else {
+                            return {
+                                text: "You haven't submitted any applications yet."
+                            };
+                        }
+                    } else if (applicationId) {
+                        // Find specific application
+                        const application = applications.find(a => a.id === applicationId);
+                        if (application) {
+                            const statusClass = `status-${application.status.replace(' ', '-')}`;
+                            return {
+                                text: `Application ID ${applicationId} Status:`,
+                                details: `
+                                    <div class="service-steps">
+                                        <h4>Application Details:</h4>
+                                        <p><strong>Service:</strong> ${getServiceDisplayName(application.serviceType)}</p>
+                                        <p><strong>Status:</strong> <span class="status ${statusClass}">${application.status}</span></p>
+                                        <p><strong>Date:</strong> ${application.date}</p>
+                                        ${application.adminNotes ? `<p><strong>Admin Notes:</strong> ${application.adminNotes}</p>` : ''}
+                                    </div>
+                                `
+                            };
+                        } else {
+                            return {
+                                text: `Application with ID ${applicationId} not found. Please check the ID and try again.`
+                            };
+                        }
+                    } else {
+                        return {
+                            text: "To check application status, please provide your application ID or login to view all your applications.",
+                            quickActions: [
+                                "Login to Check Applications",
+                                "Submit New Application"
+                            ]
+                        };
+                    }
+                }
+                
+                // User registration/mobile number check
+                if (lowerMessage.includes('mobile') || lowerMessage.includes('phone') || 
+                    lowerMessage.includes('register') || lowerMessage.includes('user id')) {
+                    
+                    // Extract phone number from message
+                    const phoneMatch = message.match(/\d{10}/);
+                    let phoneNumber = phoneMatch ? phoneMatch[0] : null;
+                    
+                    if (phoneNumber) {
+                        const user = users.find(u => u.phone === phoneNumber);
+                        if (user) {
+                            return {
+                                text: `User found with phone number ${phoneNumber}:`,
+                                details: `
+                                    <div class="service-steps">
+                                        <h4>User Details:</h4>
+                                        <p><strong>Name:</strong> ${user.name}</p>
+                                        <p><strong>Email:</strong> ${user.email}</p>
+                                        <p><strong>Applications:</strong> ${user.applications || 0}</p>
+                                        <p><strong>Complaints:</strong> ${user.complaints || 0}</p>
+                                        <p><strong>Status:</strong> <span class="status status-${user.status}">${user.status}</span></p>
+                                    </div>
+                                `
+                            };
+                        } else {
+                            return {
+                                text: `No user found with phone number ${phoneNumber}. Would you like to register?`,
+                                quickActions: [
+                                    "Register New User",
+                                    "Login Instead"
+                                ]
+                            };
+                        }
+                    } else if (currentUser) {
+                        return {
+                            text: "Your user information:",
+                            details: `
+                                <div class="service-steps">
+                                    <h4>Your Details:</h4>
+                                    <p><strong>Name:</strong> ${currentUser.name}</p>
+                                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                                    <p><strong>Phone:</strong> ${currentUser.phone}</p>
+                                    <p><strong>Applications:</strong> ${currentUser.applications || 0}</p>
+                                    <p><strong>Complaints:</strong> ${currentUser.complaints || 0}</p>
+                                </div>
+                            `
+                        };
+                    } else {
+                        return {
+                            text: "To check user information, please provide your phone number or login to your account.",
+                            quickActions: [
+                                "Register New User",
+                                "Login to Account"
+                            ]
+                        };
+                    }
                 }
                 
                 // License application information
@@ -4654,36 +4851,6 @@
                             </div>
                         `,
                         action: "license"
-                    };
-                }
-                
-                // License renewal information
-                if (lowerMessage.includes('license') && lowerMessage.includes('renew')) {
-                    return {
-                        text: "For License Renewal, here's the process:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>License Renewal Process:</h4>
-                                <ol>
-                                    <li>Enter your existing license number</li>
-                                    <li>Select renewal type (Annual, Biannual, Lifetime)</li>
-                                    <li>Update any changed information</li>
-                                    <li>Upload existing license copy and updated documents</li>
-                                    <li>Pay renewal fee and submit application</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Existing license certificate</li>
-                                    <li>Updated proof of identity</li>
-                                    <li>Updated proof of address</li>
-                                    <li>Recent passport-sized photographs</li>
-                                    <li>Payment receipt of renewal fee</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "license-renewal"
                     };
                 }
                 
@@ -4751,229 +4918,6 @@
                     };
                 }
                 
-                // Trade license information
-                if (lowerMessage.includes('trade license') || lowerMessage.includes('business license')) {
-                    return {
-                        text: "For Trade License Application, here's what you need:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Trade License Process:</h4>
-                                <ol>
-                                    <li>Enter business name and type</li>
-                                    <li>Provide business address details</li>
-                                    <li>Enter owner information</li>
-                                    <li>Upload business proof and identification documents</li>
-                                    <li>Submit application for approval</li>
-                                    <li>Track application status</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Business address proof</li>
-                                    <li>Partnership deed (if applicable)</li>
-                                    <li>Company incorporation certificate (if applicable)</li>
-                                    <li>No objection certificate from property owner</li>
-                                    <li>Site plan of business premises</li>
-                                    <li>Proof of identity and address of owner</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "trade-license"
-                    };
-                }
-                
-                // Building permit information
-                if (lowerMessage.includes('building permit') || lowerMessage.includes('construction')) {
-                    return {
-                        text: "For Building Permit Application, here's the procedure:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Building Permit Process:</h4>
-                                <ol>
-                                    <li>Provide property location details</li>
-                                    <li>Select building type (Residential, Commercial, Industrial)</li>
-                                    <li>Enter building specifications (Area, Floors)</li>
-                                    <li>Provide owner and architect details</li>
-                                    <li>Upload site plan and building drawings</li>
-                                    <li>Submit for municipal approval</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Land ownership documents</li>
-                                    <li>Site plan and building drawings</li>
-                                    <li>Structural stability certificate</li>
-                                    <li>No objection certificate from neighbors (if required)</li>
-                                    <li>Environmental clearance (if applicable)</li>
-                                    <li>Proof of identity and address</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "building-permit"
-                    };
-                }
-                
-                // Birth certificate information
-                if (lowerMessage.includes('birth certificate') || lowerMessage.includes('birth')) {
-                    return {
-                        text: "For Birth Certificate Application, here's the process:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Birth Certificate Process:</h4>
-                                <ol>
-                                    <li>Enter child's details (Name, Gender, Date of Birth)</li>
-                                    <li>Provide place of birth information</li>
-                                    <li>Enter parents' details</li>
-                                    <li>Upload hospital birth record and parent documents</li>
-                                    <li>Submit application for certificate issuance</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Hospital birth record or delivery slip</li>
-                                    <li>Proof of identity of parents</li>
-                                    <li>Proof of address of parents</li>
-                                    <li>Marriage certificate of parents</li>
-                                    <li>Affidavit for delayed registration (if applicable)</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "birth-certificate"
-                    };
-                }
-                
-                // Death certificate information
-                if (lowerMessage.includes('death certificate') || lowerMessage.includes('death')) {
-                    return {
-                        text: "For Death Certificate Application, here's what you need:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Death Certificate Process:</h4>
-                                <ol>
-                                    <li>Enter deceased person's details</li>
-                                    <li>Provide date and place of death information</li>
-                                    <li>Enter cause of death</li>
-                                    <li>Provide applicant details and relationship</li>
-                                    <li>Upload hospital death record and identification</li>
-                                    <li>Submit application for certificate</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Hospital death record or medical certificate</li>
-                                    <li>Proof of identity of applicant</li>
-                                    <li>Proof of address of applicant</li>
-                                    <li>Proof of identity of deceased</li>
-                                    <li>Affidavit for delayed registration (if applicable)</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "death-certificate"
-                    };
-                }
-                
-                // NEW SERVICES CHATBOT RESPONSES
-                // Marriage registration information
-                if (lowerMessage.includes('marriage') || lowerMessage.includes('marriage registration')) {
-                    return {
-                        text: "For Marriage Registration, here's what you need to know:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Marriage Registration Process:</h4>
-                                <ol>
-                                    <li>Fill out the marriage registration form with details of both spouses</li>
-                                    <li>Provide marriage date and place information</li>
-                                    <li>Enter witness details</li>
-                                    <li>Upload required documents including ID proofs and marriage proof</li>
-                                    <li>Submit application for certificate issuance</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Proof of identity of both spouses (Aadhar Card, Passport, etc.)</li>
-                                    <li>Proof of address of both spouses (Aadhar Card, Utility Bill, etc.)</li>
-                                    <li>Marriage invitation card or wedding photographs</li>
-                                    <li>Age proof of both spouses</li>
-                                    <li>Marriage affidavit</li>
-                                    <li>Passport-sized photographs of both spouses</li>
-                                    <li>Witness details and identity proof</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "marriage-registration"
-                    };
-                }
-                
-                // Water connection information
-                if (lowerMessage.includes('water') || lowerMessage.includes('water connection')) {
-                    return {
-                        text: "For Water Connection Application, here's the process:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Water Connection Process:</h4>
-                                <ol>
-                                    <li>Fill out the water connection application form</li>
-                                    <li>Provide property details and address</li>
-                                    <li>Select connection type and size</li>
-                                    <li>Upload required property and identity documents</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Pay connection charges</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
-                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
-                                    <li>Property ownership documents</li>
-                                    <li>Building plan approval</li>
-                                    <li>No objection certificate from neighbors (if required)</li>
-                                    <li>Payment receipt of connection charges</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "water-connection"
-                    };
-                }
-                
-                // Electricity connection information
-                if (lowerMessage.includes('electricity') || lowerMessage.includes('electricity connection')) {
-                    return {
-                        text: "For Electricity Connection Application, here's what you need:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Electricity Connection Process:</h4>
-                                <ol>
-                                    <li>Fill out the electricity connection application form</li>
-                                    <li>Provide property details and address</li>
-                                    <li>Select connection type and voltage level</li>
-                                    <li>Specify required load in kW</li>
-                                    <li>Upload required property and identity documents</li>
-                                    <li>Submit application for processing</li>
-                                    <li>Pay connection charges</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Required Documents:</h4>
-                                <ul>
-                                    <li>Proof of identity (Aadhar Card, Passport, etc.)</li>
-                                    <li>Proof of address (Aadhar Card, Utility Bill, etc.)</li>
-                                    <li>Property ownership documents</li>
-                                    <li>Building completion certificate</li>
-                                    <li>Load calculation details</li>
-                                    <li>Payment receipt of connection charges</li>
-                                </ul>
-                            </div>
-                        `,
-                        action: "electricity-connection"
-                    };
-                }
-                
                 // Grievance redressal information
                 if (lowerMessage.includes('grievance') || lowerMessage.includes('complaint') || lowerMessage.includes('issue')) {
                     return {
@@ -4998,169 +4942,6 @@
                             "Water Problem",
                             "Electricity Issue"
                         ]
-                    };
-                }
-                
-                // Document upload information
-                if (lowerMessage.includes('document') || lowerMessage.includes('upload') || lowerMessage.includes('aadhar')) {
-                    return {
-                        text: "For Document Upload, here's what you need to know:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Document Upload Process:</h4>
-                                <ol>
-                                    <li>Click on the file upload area for each required document</li>
-                                    <li>Select the file from your device</li>
-                                    <li>Supported formats: JPG, PNG, PDF (Images are preferred for quick verification)</li>
-                                    <li>For Aadhar Card: Upload both front and back sides clearly</li>
-                                    <li>Ensure documents are clear and readable</li>
-                                    <li>Maximum file size: 5MB per document</li>
-                                    <li>You can preview uploaded documents before submission</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>General Document Requirements:</h4>
-                                <ul>
-                                    <li><strong>Aadhar Card:</strong> Both front and back sides required</li>
-                                    <li><strong>Passport Photo:</strong> Recent white background photo</li>
-                                    <li><strong>Address Proof:</strong> Utility bill, rental agreement, etc.</li>
-                                    <li><strong>Property Documents:</strong> Clear copies of ownership papers</li>
-                                    <li><strong>Educational Certificates:</strong> If required for license</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Application status and tracking
-                if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('application status')) {
-                    return {
-                        text: "For Application Tracking, here's how it works:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Application Tracking:</h4>
-                                <ol>
-                                    <li>Go to 'My Applications' section after login</li>
-                                    <li>View all your submitted applications</li>
-                                    <li>Check current status (Pending, In Progress, Approved, Rejected)</li>
-                                    <li>Click 'View Details' for detailed information</li>
-                                    <li>Admin notes will be visible if application is processed</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Status Meanings:</h4>
-                                <ul>
-                                    <li><strong>Pending:</strong> Application submitted, awaiting review</li>
-                                    <li><strong>In Progress:</strong> Under processing by municipality</li>
-                                    <li><strong>Approved:</strong> Application approved, certificate ready</li>
-                                    <li><strong>Rejected:</strong> Application rejected with reasons provided</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Complaint status and tracking
-                if (lowerMessage.includes('complaint status') || lowerMessage.includes('complaint track')) {
-                    return {
-                        text: "For Complaint Tracking, here's how it works:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Complaint Tracking:</h4>
-                                <ol>
-                                    <li>Go to 'My Complaints' section after login</li>
-                                    <li>View all your submitted complaints</li>
-                                    <li>Check current status (Open, Investigation, Resolved, Closed)</li>
-                                    <li>Click 'View Details' for detailed information</li>
-                                    <li>Admin notes will be visible if complaint is processed</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Status Meanings:</h4>
-                                <ul>
-                                    <li><strong>Open:</strong> Complaint submitted, awaiting review</li>
-                                    <li><strong>Investigation:</strong> Under investigation by municipality</li>
-                                    <li><strong>Resolved:</strong> Complaint resolved, issue fixed</li>
-                                    <li><strong>Closed:</strong> Complaint closed with resolution</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Admin panel information
-                if (lowerMessage.includes('admin') || lowerMessage.includes('manage')) {
-                    return {
-                        text: "For Admin Panel Access, here's what you can do:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Admin Panel Features:</h4>
-                                <ol>
-                                    <li><strong>Dashboard:</strong> View overall statistics and metrics</li>
-                                    <li><strong>Applications Management:</strong> Review, approve, or reject applications</li>
-                                    <li><strong>Complaints Management:</strong> Review and update complaint status</li>
-                                    <li><strong>User Management:</strong> Manage registered users</li>
-                                    <li><strong>Reports:</strong> Generate analytics and reports</li>
-                                    <li><strong>Settings:</strong> Configure system settings</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Admin Login:</h4>
-                                <ul>
-                                    <li>Use admin credentials to access the panel</li>
-                                    <li>Manage all user applications efficiently</li>
-                                    <li>Update application and complaint status with notes</li>
-                                    <li>Monitor system performance</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Infrastructure monitoring
-                if (lowerMessage.includes('water level') || lowerMessage.includes('flood') || lowerMessage.includes('river')) {
-                    return {
-                        text: "For River Water Level Monitoring, here's what you can do:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Water Level Monitoring:</h4>
-                                <ol>
-                                    <li>Visit the Infrastructure section to view current water levels</li>
-                                    <li>Select different rivers from the dropdown menu</li>
-                                    <li>View the water level indicator with color-coded alerts</li>
-                                    <li>Check the current alert status (Normal, Warning, Danger)</li>
-                                    <li>Refresh data to get the latest water level readings</li>
-                                </ol>
-                            </div>
-                            <div class="document-list">
-                                <h4>Alert Levels:</h4>
-                                <ul>
-                                    <li><strong>Normal:</strong> Water level below 4 meters</li>
-                                    <li><strong>Warning:</strong> Water level between 4-6 meters</li>
-                                    <li><strong>Danger:</strong> Water level above 6 meters (flood risk)</li>
-                                </ul>
-                            </div>
-                        `
-                    };
-                }
-                
-                // Pipeline mapping
-                if (lowerMessage.includes('pipeline') || lowerMessage.includes('water pipe') || lowerMessage.includes('gas pipe')) {
-                    return {
-                        text: "For Pipeline Network Information, here's what's available:",
-                        details: `
-                            <div class="service-steps">
-                                <h4>Pipeline Networks:</h4>
-                                <ul>
-                                    <li><strong>Water Pipeline Network:</strong> View the city's water distribution system</li>
-                                    <li><strong>Gas Pipeline Network:</strong> View the city's gas distribution system</li>
-                                    <li>Toggle between different pipeline views</li>
-                                    <li>See maintenance areas and safety zones</li>
-                                    <li>Check pipeline inspection schedules</li>
-                                </ul>
-                            </div>
-                            <p>Visit the Infrastructure section to explore the pipeline networks.</p>
-                        `
                     };
                 }
                 
@@ -5199,6 +4980,8 @@
                                     <li>Explain application and complaint tracking</li>
                                     <li>Provide admin panel information</li>
                                     <li>Share infrastructure monitoring details</li>
+                                    <li>Check complaint and application status</li>
+                                    <li>Help with user registration and login</li>
                                 </ol>
                             </div>
                             <p>You can ask me about:</p>
@@ -5217,10 +5000,17 @@
                                 <li>Filing complaints</li>
                                 <li>Document requirements</li>
                                 <li>Application and complaint status</li>
+                                <li>User registration and login</li>
                                 <li>River water levels and flood monitoring</li>
                                 <li>Water and gas pipeline networks</li>
                             </ul>
-                        `
+                        `,
+                        quickActions: [
+                            "Check Complaint Status",
+                            "Check Application Status",
+                            "User Registration",
+                            "Login Help"
+                        ]
                     };
                 }
                 
@@ -5244,6 +5034,7 @@
                                 <li>Filing complaints about municipal issues</li>
                                 <li>Document upload requirements</li>
                                 <li>Application and complaint tracking</li>
+                                <li>User registration and login</li>
                                 <li>Admin panel features</li>
                                 <li>River water level monitoring</li>
                                 <li>Pipeline network information</li>
@@ -5264,8 +5055,9 @@
                         "Electricity Connection",
                         "Public Hall Booking",
                         "File Complaint",
-                        "Document Upload",
-                        "Water Level Info"
+                        "Check Complaint Status",
+                        "Check Application Status",
+                        "User Registration"
                     ]
                 };
             }
